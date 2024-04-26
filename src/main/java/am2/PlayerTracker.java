@@ -176,10 +176,24 @@ public class PlayerTracker{
 
 			SkillData.For(event.player).loadNBTData(stored);
 		}
+		//================================================================================
+		//soulbound items
+		//================================================================================
+		if (soulbound_Storage.containsKey(event.player.getUniqueID())){
+			HashMap<Integer, ItemStack> soulboundItems = soulbound_Storage.get(event.player.getUniqueID());
+			for (Integer i : soulboundItems.keySet()){
+				if (i < event.player.inventory.getSizeInventory() && event.player.inventory.getStackInSlot(i) == null)
+					event.player.inventory.setInventorySlotContents(i, soulboundItems.get(i));
+				else
+					event.player.entityDropItem(soulboundItems.get(i), 0);
+			}
+		}
+		//================================================================================
 	}
 
 	public void onPlayerDeath(EntityPlayer player){
 		storeExtendedPropertiesForRespawn(player);
+		storeSoulboundItemsForRespawn(player);
 	}
 
 	public static void storeExtendedPropertiesForRespawn(EntityPlayer player){

@@ -148,8 +148,8 @@ public class ArmorHelper{
 	//======================================================================================================
 	// Armor Effects
 	//======================================================================================================
-	public static void HandleArmorEffects(EntityPlayer player, World world){
-		if (world.isRemote){
+	public static void HandleArmorEffects(EntityPlayer player){
+		if (player.worldObj.isRemote){
 			return;
 		}
 		ExtendedProperties extendedProperties = ExtendedProperties.For(player);
