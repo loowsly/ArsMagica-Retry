@@ -207,21 +207,21 @@ public class EntityManager implements IEntityManager{
 		SpawnListEntry earthElementals = new SpawnListEntry(EntityEarthElemental.class, AMCore.config.GetEarthElementalSpawnRate(), 1, 2);
 		SpawnListEntry fireElementals = new SpawnListEntry(EntityFireElemental.class, AMCore.config.GetFireElementalSpawnRate(), 1, 1);
 
-		initSpawnsForBiomeTypes(manaElementals, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.DESERT, Type.FOREST, Type.FROZEN, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
+		initSpawnsForBiomeTypes(manaElementals, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.SANDY, Type.FOREST, Type.SNOWY, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 
-		initSpawnsForBiomeTypes(dryads, EnumCreatureType.creature, new Type[]{Type.BEACH, Type.FOREST, Type.MAGICAL, Type.HILLS, Type.JUNGLE, Type.MOUNTAIN, Type.PLAINS}, new Type[]{Type.END, Type.FROZEN, Type.MUSHROOM, Type.NETHER, Type.WASTELAND, Type.SWAMP, Type.DESERT});
+		initSpawnsForBiomeTypes(dryads, EnumCreatureType.creature, new Type[]{Type.BEACH, Type.FOREST, Type.MAGICAL, Type.HILLS, Type.JUNGLE, Type.MOUNTAIN, Type.PLAINS}, new Type[]{Type.END, Type.SNOWY, Type.MUSHROOM, Type.NETHER, Type.WASTELAND, Type.SWAMP, Type.SANDY, Type.DEAD, Type.WASTELAND});
 
-		initSpawnsForBiomeTypes(hecates_nonHell, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.DESERT, Type.FOREST, Type.FROZEN, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
+		initSpawnsForBiomeTypes(hecates_nonHell, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.SANDY, Type.FOREST, Type.SNOWY, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 
 		initSpawnsForBiomeTypes(hecates_hell, EnumCreatureType.monster, new Type[]{Type.NETHER}, new Type[]{Type.MUSHROOM});
 
 		initSpawnsForBiomeTypes(darklings, EnumCreatureType.monster, new Type[]{Type.NETHER}, new Type[]{Type.MUSHROOM});
 
-		initSpawnsForBiomeTypes(manaCreepers, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.DESERT, Type.FOREST, Type.FROZEN, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
+		initSpawnsForBiomeTypes(manaCreepers, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.SANDY, Type.FOREST, Type.SNOWY, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 
-		initSpawnsForBiomeTypes(lightMages, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.DESERT, Type.FOREST, Type.FROZEN, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
+		initSpawnsForBiomeTypes(lightMages, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.SANDY, Type.FOREST, Type.SNOWY, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 
-		initSpawnsForBiomeTypes(darkMages, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.DESERT, Type.FOREST, Type.FROZEN, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
+		initSpawnsForBiomeTypes(darkMages, EnumCreatureType.monster, new Type[]{Type.BEACH, Type.SANDY, Type.FOREST, Type.SNOWY, Type.HILLS, Type.JUNGLE, Type.MAGICAL, Type.MOUNTAIN, Type.PLAINS, Type.SWAMP, Type.WASTELAND}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 
 		initSpawnsForBiomeTypes(waterElementals, EnumCreatureType.monster, new Type[]{Type.WATER}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
 		initSpawnsForBiomeTypes(waterElementals, EnumCreatureType.waterCreature, new Type[]{Type.WATER}, new Type[]{Type.END, Type.NETHER, Type.MUSHROOM});
