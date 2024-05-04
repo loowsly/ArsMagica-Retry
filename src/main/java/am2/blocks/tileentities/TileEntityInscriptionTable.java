@@ -548,8 +548,10 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 
 		ArrayList<ArrayList<ISpellPart>> stages = SpellValidator.splitToStages(currentRecipe);
 		if (stages.size() == 0) return;
-		ArrayList<ISpellPart> currentStage = stages.get(stages.size() - 1);
-		countModifiersInList(currentStage);
+
+		for (ArrayList<ISpellPart> currentStage : stages){
+			countModifiersInList(currentStage);
+		}
 	}
 
 	private void countModifiersInList(ArrayList<ISpellPart> currentStage){
