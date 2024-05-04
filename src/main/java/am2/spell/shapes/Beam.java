@@ -159,7 +159,14 @@ public class Beam implements ISpellShape{
 
 	@Override
 	public float manaCostMultiplier(ItemStack spellStack){
-		return 0.1f;
+		int stages = SpellUtils.instance.numStages(spellStack);
+
+		for (int i = 0; i < stages; ++i){
+			ISpellShape shape = SpellUtils.instance.getShapeForStage(spellStack, i);
+			if (shape.getClass() == Wave.class) {
+				return 1.0f;
+			}
+		} return 0.1f;
 	}
 
 	@Override
