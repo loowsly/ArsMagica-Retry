@@ -693,7 +693,7 @@ public class TileEntityCraftingAltar extends TileEntityAMPower implements IMulti
 
 		// ADD INSTABILITY
 
-		if (worldObj.isThundering()) instability += 1F;
+		if (worldObj.getWorldInfo().isThundering()) instability += 1F;
 
 		instability += (this.getNumPartsInSpell() / 2); // half of number of spell components
 		if (outputCombo != null){

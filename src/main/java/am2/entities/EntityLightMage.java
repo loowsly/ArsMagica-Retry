@@ -184,7 +184,7 @@ public class EntityLightMage extends EntityCreature{
 		}else{
 			int var4 = this.worldObj.getBlockLightValue(var1, var2, var3);
 
-			if (this.worldObj.isThundering()){
+			if (this.worldObj.getWorldInfo().isThundering()){
 				int var5 = this.worldObj.skylightSubtracted;
 				this.worldObj.skylightSubtracted = 10;
 				var4 = this.worldObj.getBlockLightValue(var1, var2, var3);

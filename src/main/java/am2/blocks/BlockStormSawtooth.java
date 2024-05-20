@@ -124,7 +124,7 @@ public class BlockStormSawtooth extends BlockBush
     {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 
-        if (metadata >= 3 && world.isThundering())
+        if (metadata >= 3 && world.getWorldInfo().isThundering())
         {
             ret.add(new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_STORMSAWTOOTH));
         }
