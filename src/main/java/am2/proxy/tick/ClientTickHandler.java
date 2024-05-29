@@ -43,6 +43,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -67,6 +68,8 @@ public class ClientTickHandler{
 	private int mouseWheelValue = 0;
 	private int currentSlot = -1;
 	private boolean usingItem;
+	private boolean hasPathsVisuals = false;
+	private int delayEquipmentCheck = 20;
 
 	public static String worldName;
 
@@ -164,27 +167,36 @@ public class ClientTickHandler{
 	}
 
 	private void spawnPowerPathVisuals(){
-		if (Minecraft.getMinecraft().thePlayer.getCurrentArmor(3) != null &&
-				(Minecraft.getMinecraft().thePlayer.getCurrentArmor(3).getItem() == ItemsCommonProxy.magitechGoggles ||
-						ArmorHelper.isInfusionPreset(Minecraft.getMinecraft().thePlayer.getCurrentArmor(3), GenericImbuement.magitechGoggleIntegration))
-				){
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
+		HashMap<PowerTypes, ArrayList<LinkedList<AMVector3>>> paths = null;
+		ArrayList<LinkedList<AMVector3>> pathList = null;
+
+		delayEquipmentCheck++;
+
+		if (canSeePaths(player)){
 			if (arcSpawnCounter++ >= arcSpawnFrequency){
 				arcSpawnCounter = 0;
 
 				AMVector3 playerPos = new AMVector3(Minecraft.getMinecraft().thePlayer);
 
-				HashMap<PowerTypes, ArrayList<LinkedList<AMVector3>>> paths = AMCore.proxy.getPowerPathVisuals();
+				paths = AMCore.proxy.getPowerPathVisuals();
 				if (paths != null){
 					for (PowerTypes type : paths.keySet()){
+						String texture;
+						switch (type.name()){
+						case "Light":
+							texture = "textures/blocks/oreblockbluetopaz.png";
+							break;
+						case "Neutral":
+							texture = "textures/blocks/oreblockvinteum.png";
+							break;
+						default:
+							texture ="textures/blocks/oreblocksunstone.png";
+							break;
+						}
 
-						String texture =
-								type == PowerTypes.LIGHT ? "textures/blocks/oreblockbluetopaz.png" :
-										type == PowerTypes.NEUTRAL ? "textures/blocks/oreblockvinteum.png" :
-												type == PowerTypes.DARK ? "textures/blocks/oreblocksunstone.png" :
-														"textures/blocks/oreblocksunstone.png";
-
-						ArrayList<LinkedList<AMVector3>> pathList = paths.get(type);
+						pathList = paths.get(type);
 						for (LinkedList<AMVector3> individualPath : pathList){
 							for (int i = 0; i < individualPath.size() - 1; ++i){
 								AMVector3 start = individualPath.get(i + 1);
@@ -224,10 +236,11 @@ public class ClientTickHandler{
 								}
 							}
 						}
+
 					}
 				}
 			}
-		}else{
+		} else if (!arcs.isEmpty()){
 			Iterator<AMLineArc> it = arcs.iterator();
 			while (it.hasNext()){
 				AMLineArc arc = it.next();
@@ -460,4 +473,16 @@ public class ClientTickHandler{
 	public void addDeferredTarget(EntityLiving ent, EntityLivingBase target){
 		targetsToSet.put(ent, target);
 	}
+
+	private boolean canSeePaths(EntityPlayer player) {
+		delayEquipmentCheck++;
+
+		if (delayEquipmentCheck == 20) {
+			delayEquipmentCheck = 0;
+			hasPathsVisuals = player.getCurrentArmor(3) != null &&
+					(player.getCurrentArmor(3).getItem() == ItemsCommonProxy.magitechGoggles ||
+							ArmorHelper.isInfusionPreset(player.getCurrentArmor(3), GenericImbuement.magitechGoggleIntegration));
+		}
+		return hasPathsVisuals;
+	};
 }
