@@ -1561,10 +1561,11 @@ public class AMEventHandler{
 				event.setCanceled(true);
 				return;
 			}
-		} else if (event.entityLiving instanceof EntityPlayer && ((EntityPlayer)event.entityLiving).inventory.armorInventory[3] != null && ((EntityPlayer)event.entityLiving).inventory.armorInventory[3].getItem() == ItemsCommonProxy.archmageHood) {
-			if (event.source.getEntity() != null) {
-				event.source.getEntity().attackEntityFrom(new DamageSourceFire(event.entityLiving), event.entityLiving.worldObj.rand.nextInt(3));
-				event.source.getEntity().setFire(8);
+		} else if (!event.source.isMagicDamage() && event.entityLiving instanceof EntityPlayer && ((EntityPlayer)event.entityLiving).inventory.armorInventory[3] != null && ((EntityPlayer)event.entityLiving).inventory.armorInventory[3].getItem() == ItemsCommonProxy.archmageHood) {
+			Entity attacker = event.source.getEntity();
+			if (attacker != null) {
+				attacker.attackEntityFrom(new DamageSourceFire(event.entityLiving), event.entityLiving.worldObj.rand.nextInt(3));
+				attacker.setFire(8);
 			}
 		}
 
