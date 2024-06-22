@@ -702,13 +702,6 @@ public class AMEventHandler{
 			}
 		}
 
-		if (event.entityLiving.worldObj.isMaterialInBB(event.entityLiving.boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), liquidEssenceMaterial)) {
-			handleEtherMovement(event.entityLiving);
-		} else {
-			wasInEther = false;
-			etherTicks++;
-		}
-
 		//watery grave
 		if (event.entityLiving.isPotionActive(BuffList.wateryGrave)){
 			if (event.entityLiving.isInWater()){
@@ -1466,56 +1459,7 @@ public class AMEventHandler{
 	}
 
 	private static Random rand = new Random();
-
-	private boolean wasInEther = false;
-	private int etherTicks = 0;
-
-	public void handleEtherMovement(EntityLivingBase e){
-		double d0 = e.posY;
-		e.moveEntity(e.motionX, e.motionY, e.motionZ);
-		e.motionX *= 0.500000011920929D;
-		e.motionY *= 0.0500000011920929D;
-		e.motionZ *= 0.500000011920929D;
-		e.motionY += 0.05D;
-
-		if (e.isCollidedHorizontally && e.isOffsetPositionInLiquid(e.motionX, e.motionY + 0.6000000238418579D - e.posY + d0, e.motionZ)) {
-			e.motionY = 0.30000001192092896D;
-		}
-
-		float f = MathHelper.sqrt_double(e.motionX * e.motionX * 0.20000000298023224D + e.motionY * e.motionY + e.motionZ * e.motionZ * 0.20000000298023224D) * 0.2F;
-
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		float f1 = (float)MathHelper.floor_double(e.boundingBox.minY);
-		int i;
-		float f2;
-		float f3;
-
-		if (!wasInEther && etherTicks > 1000) {
-			e.playSound("game.neutral.swim.splash", 0.13f, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()));
-			wasInEther = true;
-		}
-
-		etherTicks = 0;
-
-		for (i = 0; (float)i < 1.0F + e.width * 20.0F; ++i) {
-			f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * e.width;
-			f3 = (this.rand.nextFloat() * 2.0F - 1.0F) * e.width;
-			e.worldObj.spawnParticle("bubble", e.posX + (double)f2, (double)(f1 + 1.0F), e.posZ + (double)f3, e.motionX, e.motionY - (double)(this.rand.nextFloat() * 0.2F), e.motionZ);
-		}
-
-		for (i = 0; (float)i < 1.0F + e.width * 20.0F; ++i) {
-			f2 = (this.rand.nextFloat() * 2.0F - 1.0F) * e.width;
-			f3 = (this.rand.nextFloat() * 2.0F - 1.0F) * e.width;
-			e.worldObj.spawnParticle("splash", e.posX + (double)f2, (double)(f1 + 1.0F), e.posZ + (double)f3, e.motionX, e.motionY, e.motionZ);
-		}
-
-		e.fallDistance = 0;
-		if (e.isBurning()) e.extinguish();
-	}
-
+	
 	@SubscribeEvent
 	public void onBucketFill(FillBucketEvent event){
 		ItemStack result = attemptFill(event.world, event.target);
