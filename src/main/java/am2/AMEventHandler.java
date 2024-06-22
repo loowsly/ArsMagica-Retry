@@ -22,6 +22,7 @@ import am2.damage.DamageSources;
 import am2.entities.EntityFlicker;
 import am2.entities.EntityHallucination;
 import am2.entities.EntitySpecificHallucinations;
+import am2.items.ItemOre;
 import am2.items.ItemSoulspike;
 import am2.items.ItemsCommonProxy;
 import am2.network.AMNetHandler;
@@ -85,8 +86,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-
-import static am2.blocks.liquid.BlockLiquidEssence.liquidEssenceMaterial;
 
 public class AMEventHandler{
 
@@ -210,7 +209,7 @@ public class AMEventHandler{
 					}
 					if (rareCount >= 5) {
 						EntityItem fragment = new EntityItem(player.worldObj);
-						ItemStack stack = new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_SOULFRAGMENT);
+						ItemStack stack = new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_SOULFRAGMENT);
 						fragment.setPosition(player.posX+rand.nextInt(5)-2, player.posY + 10, player.posZ+rand.nextInt(5)-2);
 						fragment.setEntityItemStack(stack);
 						player.worldObj.spawnEntityInWorld(fragment);
@@ -301,7 +300,7 @@ public class AMEventHandler{
 	@SubscribeEvent
 	public void onPlayerGetAchievement(AchievementEvent event){
 		if (!event.entityPlayer.worldObj.isRemote && event.achievement == AchievementList.theEnd2){
-			AMCore.instance.proxy.playerTracker.storeExtendedPropertiesForRespawn(event.entityPlayer);
+			PlayerTracker.storeExtendedPropertiesForRespawn(event.entityPlayer);
 			// AMCore.instance.proxy.playerTracker.storeSoulboundItemsForRespawn(event.entityPlayer);
 		}
 	}
@@ -316,7 +315,7 @@ public class AMEventHandler{
 		}
 		if (!event.entityLiving.worldObj.isRemote && event.entityLiving instanceof EntityPig && event.entityLiving.getRNG().nextDouble() < 0.3f){
 			EntityItem animalFat = new EntityItem(event.entityLiving.worldObj);
-			ItemStack stack = new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_ANIMALFAT);
+			ItemStack stack = new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_ANIMALFAT);
 			animalFat.setPosition(event.entity.posX, event.entity.posY, event.entity.posZ);
 			animalFat.setEntityItemStack(stack);
 			event.drops.add(animalFat);
@@ -722,7 +721,7 @@ public class AMEventHandler{
 
 	private void HandlePlayerSpellExtendedProperties(EntityPlayer player, ExtendedProperties extendedProperties){
 		if (extendedProperties.hasExtraVariable("ethereal")){ // ethereal form handling
-			int durationLeft = Integer.valueOf(extendedProperties.getExtraVariable("ethereal"));
+			int durationLeft = Integer.parseInt(extendedProperties.getExtraVariable("ethereal"));
 			if (durationLeft < 3){
 				// deactivate form
 				ItemSoulspike.removeTagFromBoots(player.inventory.armorInventory[0]);
@@ -748,16 +747,16 @@ public class AMEventHandler{
 			// accelerated blocks and entities are done outside the 5-tick performance optimisation to make them smooth
 			acceleratedBlocks = extendedProperties.getExtraVariablesContains("accelerated_fast_tile_");
 			for (Map.Entry<String, String> entry : acceleratedBlocks.entrySet()){
-				if (Integer.valueOf(entry.getValue()) < 3){
+				if (Integer.parseInt(entry.getValue()) < 3){
 					extendedProperties.removeFromExtraVariables(entry.getKey());
 				}else{
-					extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.valueOf(entry.getValue()) - 1));
+					extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.parseInt(entry.getValue()) - 1));
 					String[] entryvalues = entry.getKey().split("_");
-					int x = Integer.valueOf(entryvalues[3]);
-					int y = Integer.valueOf(entryvalues[4]);
-					int z = Integer.valueOf(entryvalues[5]);
-					int dim = Integer.valueOf(entryvalues[6]);
-					int power = Integer.valueOf(entryvalues[7]);
+					int x = Integer.parseInt(entryvalues[3]);
+					int y = Integer.parseInt(entryvalues[4]);
+					int z = Integer.parseInt(entryvalues[5]);
+					int dim = Integer.parseInt(entryvalues[6]);
+					int power = Integer.parseInt(entryvalues[7]);
 					World wrld = DimensionManager.getWorld(dim);
 					if (wrld != null){
 						for (int i = 0; i < power; i++){
@@ -847,14 +846,14 @@ public class AMEventHandler{
 
 					for (Map.Entry<String, String> entry : slowedBlocks.entrySet()){
 						String[] entryvalues = entry.getKey().split("_");
-						if (Integer.valueOf(entry.getValue()) < 3){
+						if (Integer.parseInt(entry.getValue()) < 3){
 							extendedProperties.removeFromExtraVariables(entry.getKey());
 							slowedTiles.remove(entryvalues[3] + "_" + entryvalues[4] + "_" + entryvalues[5] + "_" + entryvalues[6]);
 						}else{
 							String represent = Integer.valueOf(entryvalues[3]) + "_" + Integer.valueOf(entryvalues[4]) + "_" + Integer.valueOf(entryvalues[5]) + "_" + Integer.valueOf(entryvalues[6]);
 							if (!(slowedTiles.containsKey(represent)))
 								slowedTiles.put(represent, Integer.valueOf(entryvalues[7])); // 7 is power
-							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.valueOf(entry.getValue()) - 5));
+							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.parseInt(entry.getValue()) - 5));
 						}
 					}
 				}
@@ -871,10 +870,10 @@ public class AMEventHandler{
 						int vIndex = 0;
 						for (Map.Entry<String, String> entry : spatialVortices.entrySet()){
 							String[] entryvalues = entry.getKey().split("_");
-							int x = Integer.valueOf(entryvalues[1]);
-							int y = Integer.valueOf(entryvalues[2]);
-							int z = Integer.valueOf(entryvalues[3]);
-							World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+							int x = Integer.parseInt(entryvalues[1]);
+							int y = Integer.parseInt(entryvalues[2]);
+							int z = Integer.parseInt(entryvalues[3]);
+							World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 							totalenergy[vIndex] = 0;
 							totaletheriumdark[vIndex] = 0;
 							totaletheriumlight[vIndex] = 0;
@@ -944,10 +943,10 @@ public class AMEventHandler{
 								}
 								if (tIndex == minE[0]){
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -983,10 +982,10 @@ public class AMEventHandler{
 							for (Map.Entry<String, String> entry : spatialVortices.entrySet()){
 								if (localIndex == maxE[0]){
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1008,10 +1007,10 @@ public class AMEventHandler{
 							for (Map.Entry<String, String> entry : spatialVortices.entrySet()){
 								if (localIndex == maxD[0]){
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1033,10 +1032,10 @@ public class AMEventHandler{
 							for (Map.Entry<String, String> entry : spatialVortices.entrySet()){
 								if (localIndex == maxL[0]){
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1059,10 +1058,10 @@ public class AMEventHandler{
 							for (Map.Entry<String, String> entry : spatialVortices.entrySet()){
 								if (fIndex == minE[0] && ELeft){
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1081,10 +1080,10 @@ public class AMEventHandler{
 										System.out.println(fIndex + " fIndex when minD");
 									}
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1103,10 +1102,10 @@ public class AMEventHandler{
 										System.out.println(fIndex + " fIndex when minL");
 									}
 									String[] entryvalues = entry.getKey().split("_");
-									int x = Integer.valueOf(entryvalues[1]);
-									int y = Integer.valueOf(entryvalues[2]);
-									int z = Integer.valueOf(entryvalues[3]);
-									World thisdim = DimensionManager.getWorld(Integer.valueOf(entryvalues[4]));
+									int x = Integer.parseInt(entryvalues[1]);
+									int y = Integer.parseInt(entryvalues[2]);
+									int z = Integer.parseInt(entryvalues[3]);
+									World thisdim = DimensionManager.getWorld(Integer.parseInt(entryvalues[4]));
 									for (int xadd = -1; xadd <= 1; xadd += 2){
 										for (int zadd = -1; zadd <= 1; zadd += 2){
 											TileEntity te = thisdim.getTileEntity(x + xadd, y, z + zadd);
@@ -1130,19 +1129,19 @@ public class AMEventHandler{
 					Map<String, String> loadedBlocks = extendedProperties.getExtraVariablesContains("timefortified_tile_");
 
 					for (Map.Entry<String, String> entry : loadedBlocks.entrySet()){
-						if (Integer.valueOf(entry.getValue()) < 3){
+						if (Integer.parseInt(entry.getValue()) < 3){
 							extendedProperties.removeFromExtraVariables(entry.getKey());
 							if (!player.worldObj.isRemote){
 								String[] entryvalues = entry.getKey().split("_");
-								int x = Integer.valueOf(entryvalues[2]);
-								int y = Integer.valueOf(entryvalues[3]);
-								int z = Integer.valueOf(entryvalues[4]);
-								int dim = Integer.valueOf(entryvalues[5]);
+								int x = Integer.parseInt(entryvalues[2]);
+								int y = Integer.parseInt(entryvalues[3]);
+								int z = Integer.parseInt(entryvalues[4]);
+								int dim = Integer.parseInt(entryvalues[5]);
 								if (DimensionManager.getWorld(dim) != null)
 									AMChunkLoader.INSTANCE.releaseStaticChunkLoad(DimensionManager.getWorld(dim).getTileEntity(x, y, z).getClass(), x, y, z, DimensionManager.getWorld(dim));
 							}
 						}else{
-							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.valueOf(entry.getValue()) - 5));
+							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.parseInt(entry.getValue()) - 5));
 						}
 					}
 				}
@@ -1150,21 +1149,21 @@ public class AMEventHandler{
 					Map<String, String> shieldedBlocks = extendedProperties.getExtraVariablesContains("shielded_tile_");
 
 					for (Map.Entry<String, String> entry : shieldedBlocks.entrySet()){
-						if (Integer.valueOf(entry.getValue()) < 3){
+						if (Integer.parseInt(entry.getValue()) < 3){
 							extendedProperties.removeFromExtraVariables(entry.getKey());
 							if (!player.worldObj.isRemote){
 								String[] entryvalues = entry.getKey().split("_");
-								int x = Integer.valueOf(entryvalues[2]);
-								int y = Integer.valueOf(entryvalues[3]);
-								int z = Integer.valueOf(entryvalues[4]);
-								int dim = Integer.valueOf(entryvalues[5]);
+								int x = Integer.parseInt(entryvalues[2]);
+								int y = Integer.parseInt(entryvalues[3]);
+								int z = Integer.parseInt(entryvalues[4]);
+								int dim = Integer.parseInt(entryvalues[5]);
 								forceShielded.remove(x + "_" + y + "_" + z + "_" + dim);
 							}
 						}else{
 							String[] entryvalues = entry.getKey().split("_");
 							String represent = Integer.valueOf(entryvalues[2]) + "_" + Integer.valueOf(entryvalues[3]) + "_" + Integer.valueOf(entryvalues[4]) + "_" + Integer.valueOf(entryvalues[5]);
 							if (!(forceShielded.contains(represent))) forceShielded.add(represent);
-							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.valueOf(entry.getValue()) - 5));
+							extendedProperties.addToExtraVariables(entry.getKey(), String.valueOf(Integer.parseInt(entry.getValue()) - 5));
 						}
 					}
 				}
@@ -1270,7 +1269,7 @@ public class AMEventHandler{
 		int y = MathHelper.floor_double(player.posY);
 		int z = MathHelper.floor_double(player.posZ);
 		if(player.worldObj.rand.nextInt(550) == 0) {
-			Class halclass = null;
+			Class halclass;
 			switch (player.worldObj.rand.nextInt(5)) {
 				case 0:
 				default:
@@ -1299,7 +1298,7 @@ public class AMEventHandler{
 		if(player.worldObj.rand.nextInt(100) == 0) { // dust
 			EntityItem item = new EntityItem(player.worldObj);
 			item.setPosition((x-15) + player.worldObj.rand.nextInt(16), y + player.worldObj.rand.nextInt(6), (z-15) + player.worldObj.rand.nextInt(16));
-			item.setEntityItemStack(new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_COGNITIVEDUST));
+			item.setEntityItemStack(new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_COGNITIVEDUST));
 			player.worldObj.spawnEntityInWorld(item);
 			if (dustMap.get(player) == null) {
 				dustMap.put(player, new ArrayList<EntityItem>());
@@ -1458,8 +1457,8 @@ public class AMEventHandler{
 		return null;
 	}
 
-	private static Random rand = new Random();
-	
+	private static final Random rand = new Random();
+
 	@SubscribeEvent
 	public void onBucketFill(FillBucketEvent event){
 		ItemStack result = attemptFill(event.world, event.target);
@@ -1501,7 +1500,7 @@ public class AMEventHandler{
 	public void onEntityAttacked(LivingAttackEvent event){
 		if (event.source.isFireDamage() && event.entityLiving instanceof EntityPlayer && ((EntityPlayer)event.entityLiving).inventory.armorInventory[3] != null){
 			if (((EntityPlayer)event.entityLiving).inventory.armorInventory[3].getItem() == ItemsCommonProxy.fireEars || ((EntityPlayer)event.entityLiving).inventory.armorInventory[3].getItem() == ItemsCommonProxy.archmageHood){
-				((EntityPlayer)event.entityLiving).setFire(0);
+				event.entityLiving.setFire(0);
 				event.setCanceled(true);
 				return;
 			}
@@ -1527,7 +1526,6 @@ public class AMEventHandler{
 							event.entityLiving.posZ - 1 + event.entityLiving.worldObj.rand.nextFloat() * 2, 6, -1);
 				event.entityLiving.worldObj.playSoundAtEntity(event.entityLiving, "arsmagica2:spell.cast.arcane", 1.0f, event.entityLiving.worldObj.rand.nextFloat() + 0.5f);
 				event.setCanceled(true);
-				return;
 			}
 		}
 	}
@@ -1567,7 +1565,7 @@ public class AMEventHandler{
 		PotionEffect magicShield = event.entityLiving.getActivePotionEffect(BuffList.magicShield);
 		if (magicShield != null){
 			event.ammount *= 0.5f;
-			event.ammount *= (1 / (magicShield.getAmplifier() + 1));
+			event.ammount *= (1.0 / (magicShield.getAmplifier() + 1));
 		}
 
 		if (event.entityLiving.isPotionActive(BuffList.manaShield)){
@@ -1600,8 +1598,8 @@ public class AMEventHandler{
 			double deltaZ = event.entityLiving.posZ - entitySource.posZ;
 			double deltaX = event.entityLiving.posX - entitySource.posX;
 			double angle = Math.atan2(deltaZ, deltaX);
-			double speed = ((EntityPlayer)entitySource).isSprinting() ? 3 : 2;
-			double vertSpeed = ((EntityPlayer)entitySource).isSprinting() ? 0.5 : 0.325;
+			double speed = entitySource.isSprinting() ? 3 : 2;
+			double vertSpeed = entitySource.isSprinting() ? 0.5 : 0.325;
 
 			if (event.entityLiving instanceof EntityPlayer){
 				AMNetHandler.INSTANCE.sendVelocityAddPacket(event.entityLiving.worldObj, event.entityLiving, speed * Math.cos(angle), vertSpeed, speed * Math.sin(angle));
@@ -1620,8 +1618,8 @@ public class AMEventHandler{
 			double deltaZ = event.entityLiving.posZ - entitySource.posZ;
 			double deltaX = event.entityLiving.posX - entitySource.posX;
 			double angle = Math.atan2(deltaZ, deltaX);
-			double speed = ((EntityPlayer)entitySource).isSprinting() ? 5 : 3;
-			double vertSpeed = ((EntityPlayer)entitySource).isSprinting() ? 1 : 0.65;
+			double speed = entitySource.isSprinting() ? 5 : 3;
+			double vertSpeed = entitySource.isSprinting() ? 1 : 0.65;
 
 			if (event.entityLiving instanceof EntityPlayer){
 				AMNetHandler.INSTANCE.sendVelocityAddPacket(event.entityLiving.worldObj, event.entityLiving, speed * Math.cos(angle), vertSpeed, speed * Math.sin(angle));
@@ -1665,7 +1663,7 @@ public class AMEventHandler{
 			event.ammount /= 2;
 	}
 
-	private static Map<ExtendedProperties, Integer> tempFlipped = new HashMap<ExtendedProperties, Integer>();
+	private static final Map<ExtendedProperties, Integer> tempFlipped = new HashMap<ExtendedProperties, Integer>();
 
 	@SubscribeEvent
 	public void onBlockOverlay(RenderBlockOverlayEvent event) {
@@ -1674,7 +1672,7 @@ public class AMEventHandler{
 				event.setCanceled(true);
 			}
 		} else if (event.overlayType == RenderBlockOverlayEvent.OverlayType.FIRE) {
-			if (event.player instanceof EntityPlayer && ((EntityPlayer)event.player).inventory.armorInventory[3] != null && ((EntityPlayer)event.player).inventory.armorInventory[3].getItem() == ItemsCommonProxy.archmageHood) {
+			if (event.player != null && event.player.inventory.armorInventory[3] != null && event.player.inventory.armorInventory[3].getItem() == ItemsCommonProxy.archmageHood) {
 				event.setCanceled(true);
 			}
 		}
