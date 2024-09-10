@@ -686,7 +686,8 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 				if (currentFatigue > 950){ // lvl 95+
 					int roll = random.nextInt(3);
 					if (roll == 2){
-						this.entity.setDead();
+						this.entity.setHealth(0);
+						this.entity.onDeath(DamageSource.magic);
 					}
 				}
 			}
