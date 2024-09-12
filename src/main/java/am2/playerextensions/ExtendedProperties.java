@@ -607,7 +607,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		if (currentFatigue >= getMaxFatigue()) {
 			currentFatigue = getMaxFatigue() - 1;
 			// BURNOUT NEGATIVE EFFECTS
-			if (this.entity instanceof EntityPlayer && !((EntityPlayer)this.entity).capabilities.isCreativeMode){
+			if (this.entity instanceof EntityPlayer && !((EntityPlayer)this.entity).capabilities.isCreativeMode && AMCore.config.getBurnoutEffects()){
 				Random random = new Random();
 				if (currentFatigue > 50){ // lvl 5+
 					int roll = random.nextInt(4);
