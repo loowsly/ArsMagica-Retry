@@ -18,5 +18,14 @@ public class EnchantMagicResist extends Enchantment{
 		return 5;
 	}
 
+	@Override
+	public int getMinEnchantability(int level) {
+		return 1 + 10 * (level - 1);
+	}
+
+	@Override
+	public int getMaxEnchantability(int level) {
+		return super.getMinEnchantability(level) + 10;
+	}
 
 }
