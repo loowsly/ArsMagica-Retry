@@ -2,6 +2,9 @@ package am2.bosses;
 
 import am2.AMCore;
 import am2.bosses.ai.*;
+import am2.damage.DamageSourceFire;
+import am2.damage.DamageSourceFrost;
+import am2.damage.DamageSourceLightning;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleHoldPosition;
@@ -136,7 +139,13 @@ public class EntityLightningGuardian extends AM2Boss implements IAnimatedEntity{
 			damageAmt *= -1;
 		return damageAmt;
 	}
-
+	@Override
+	protected int modifyHurtTime(DamageSource source, int Hurttime){
+		if (source == DamageSource.drown || source.isMagicDamage()){
+			Hurttime = 15;
+		}
+		return Hurttime;
+	}
 	@Override
 	protected String getHurtSound(){
 		return "arsmagica2:mob.lightningguardian.hit";
