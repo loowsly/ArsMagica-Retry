@@ -55,6 +55,7 @@ public class EntityWaterGuardian extends AM2Boss{
 			if (!worldObj.isRemote){
 				ExtendedProperties.For(p).guardian1 = true;
 				ExtendedProperties.For(p).setUpdateFlag(UPD_CURRENT_MANA_FATIGUE);
+				ExtendedProperties.For(p).addMagicXP(10);
 			}
 		}
 	}

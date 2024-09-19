@@ -47,6 +47,7 @@ public class EntityEarthGuardian extends AM2Boss{
 			if (!worldObj.isRemote){
 				ExtendedProperties.For(p).guardian2 = true;
 				ExtendedProperties.For(p).setUpdateFlag(UPD_CURRENT_MANA_FATIGUE);
+				ExtendedProperties.For(p).addMagicXP(20);
 			}
 		}
 	}

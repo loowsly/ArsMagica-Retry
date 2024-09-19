@@ -53,6 +53,7 @@ public class EntityFireGuardian extends AM2Boss{
 			if (!worldObj.isRemote){
 				ExtendedProperties.For(p).guardian9 = true;
 				ExtendedProperties.For(p).setUpdateFlag(UPD_CURRENT_MANA_FATIGUE);
+				ExtendedProperties.For(p).addMagicXP(90);
 			}
 		}
 	}

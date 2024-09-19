@@ -60,6 +60,7 @@ public class EntityLightningGuardian extends AM2Boss implements IAnimatedEntity{
 			if (!worldObj.isRemote){
 				ExtendedProperties.For(p).guardian7 = true;
 				ExtendedProperties.For(p).setUpdateFlag(UPD_CURRENT_MANA_FATIGUE);
+				ExtendedProperties.For(p).addMagicXP(70);
 			}
 		}
 	}
