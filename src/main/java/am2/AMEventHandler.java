@@ -1550,14 +1550,7 @@ public class AMEventHandler{
 				event.source.getEntity().setFire(8);
 			}
 		}
-	else if (event.source.isMagicDamage() && event.entityLiving instanceof EntityPlayer){
-		EntityPlayer player = (EntityPlayer)event.entityLiving;
-		int Magicresistlvl = AMEnchantmentHelper.getArmorMagicResistLevel(player);
-		if (Magicresistlvl > 0){
-			event.ammount -=MathHelper.floor_float(event.ammount * Magicresistlvl * 0.03F);
 
-		}
-	}
 
 
 		if (event.entityLiving instanceof EntityPlayer && ((EntityPlayer)event.entityLiving).inventory.armorInventory[2] != null){
