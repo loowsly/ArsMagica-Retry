@@ -499,7 +499,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		if (entity instanceof EntityLifeGuardian)
 			return true;
 
-		int maxSummons = 1;
+		int maxSummons = AMCore.config.getMaxSummons();
 		if (entity instanceof EntityPlayer && SkillData.For((EntityPlayer)entity).isEntryKnown(SkillTreeManager.instance.getSkillTreeEntry(SkillManager.instance.getSkill("ExtraSummon"))))
 			maxSummons++;
 

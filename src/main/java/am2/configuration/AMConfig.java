@@ -25,6 +25,7 @@ public class AMConfig extends Configuration{
 	private final String KEY_DisplayManaInInventory = "DisplayManaInInventory";
 	private final String KEY_SpellBookUIPosition = "SpellBookUIPosition";
 	private final String KEY_ManaCap = "Mana_Cap";
+	private final String KEY_MaxSummons = "Max Summons";
 	private final String KEY_mageSpawnRate = "MageSpawnRate";
 	private final String KEY_waterElementalSpawnRate = "WaterElementalSpawnRate";
 	private final String KEY_hecateSpawnRate = "HecateSpawnRate";
@@ -260,6 +261,7 @@ public class AMConfig extends Configuration{
 	private boolean AuraDefaultColor;
 	private double ArmorXPInfusionFactor;
 	private double manaCap;
+	private int MaxSummons;
 	private int enderAffinityAbilityCooldown;
 
 	private AMVector2 manaHudPosition;
@@ -424,6 +426,7 @@ public class AMConfig extends Configuration{
 		disarmAffectsPlayers = get(CATEGORY_GENERAL, KEY_DisarmAffectsPlayers, true, "If false, disarm won't work on players.").getBoolean(true);
 		BurnoutEffects = get(CATEGORY_GENERAL,KEY_NewBurnoutEffects,true,"Set this to false to disable new Burnout effects.").getBoolean(true);
 		manaCap = get(CATEGORY_GENERAL, KEY_ManaCap, 0, "Sets the maximum mana a player can have (0 for no cap)").getDouble(0);
+		MaxSummons = get(CATEGORY_GENERAL,KEY_MaxSummons, 0, "Set the maximum amount of summons players can have ").getInt(0);
 
 		digBreaksTileEntities = get(CATEGORY_GENERAL, KEY_DigBreaksTEs, true, "Can the dig component break blocks that have a tile entity?").getBoolean(true);
 
@@ -813,9 +816,11 @@ public class AMConfig extends Configuration{
 		return BurnoutEffects;
 	}
 
+
 	public double getManaCap(){
 		return manaCap;
 	}
+	public int getMaxSummons() {return MaxSummons;}
 
 	public boolean getDigBreaksTileEntities(){
 		return digBreaksTileEntities;
