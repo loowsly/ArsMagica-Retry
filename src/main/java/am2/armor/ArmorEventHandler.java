@@ -5,15 +5,9 @@ import am2.LogHelper;
 import am2.api.items.armor.ArmorTextureEvent;
 import am2.api.items.armor.IArmorImbuement;
 import am2.api.items.armor.ImbuementApplicationTypes;
-import am2.bosses.EntityAirGuardian;
-import am2.bosses.EntityArcaneGuardian;
-import am2.bosses.EntityEnderGuardian;
-import am2.bosses.EntityNatureGuardian;
+import am2.bosses.*;
 import am2.items.ItemBoxOfIllusions;
-import am2.items.ItemSoulspike;
 import am2.items.ItemsCommonProxy;
-import am2.particles.AMParticle;
-import am2.particles.ParticleFadeOut;
 import am2.playerextensions.ExtendedProperties;
 import am2.proxy.gui.ModelLibrary;
 import am2.texture.ResourceManager;
@@ -39,12 +33,13 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -211,30 +206,79 @@ public class ArmorEventHandler{
 			event.texture = "arsmagica2:textures/models/magitech_1.png";
 		}
 	}
-
+	public enum  Mobs{
+	spider,
+	witch,
+	snowman,
+	creeper,
+	chicken,
+	cow,
+	arcane,
+	enderman,
+	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlayerRenderPre(RenderPlayerEvent.Pre event) { // true invis
 		if (MysteriumPatchesFixesMagicka.isPlayerEthereal(event.entityPlayer)) {event.setCanceled(true); return;}
-		if (MysteriumPatchesFixesMagicka.playerModelMap.get(event.entityPlayer.getCommandSenderName()) != null && !MysteriumPatchesFixesMagicka.playerModelMap.get(event.entityPlayer.getCommandSenderName()).startsWith("maid")) {
+		if (MysteriumPatchesFixesMagicka.playerModelMap.get(event.entityPlayer.getCommandSenderName()) != null && !MysteriumPatchesFixesMagicka.playerModelMap.get(event.entityPlayer.getCommandSenderName()).startsWith("maid")){
 			// custom mobs
 			String toMob = MysteriumPatchesFixesMagicka.playerModelMap.get(event.entityPlayer.getCommandSenderName());
+			World player = event.entityPlayer.worldObj;
 			EntityLivingBase elb = new EntityZombie(event.entityPlayer.worldObj);
-			if (toMob.equalsIgnoreCase("spider")) {
-				elb = new EntitySpider(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("witch")) {
-				elb = new EntityWitch(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("snowman")) {
-				elb = new EntitySnowman(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("creeper")) {
-				elb = new EntityCreeper(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("chicken")) {
-				elb = new EntityChicken(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("cow")) {
-				elb = new EntityCow(event.entityPlayer.worldObj);
-			} else if (toMob.equalsIgnoreCase("ender")) {
-				elb = new EntityArcaneGuardian(event.entityPlayer.worldObj);
+
+			if (toMob.equalsIgnoreCase("spider")){
+				elb = new EntitySpider(player);
+			}else if (toMob.equalsIgnoreCase("witch")){
+				elb = new EntityWitch(player);
+			}else if (toMob.equalsIgnoreCase("snowman")){
+				elb = new EntitySnowman(player);
+			}else if (toMob.equalsIgnoreCase("creeper")){
+				elb = new EntityCreeper(player);
+			}else if (toMob.equalsIgnoreCase("chicken")){
+				elb = new EntityChicken(player);
+			}else if (toMob.equalsIgnoreCase("cow")){
+				elb = new EntityCow(player);
+			}else if (toMob.equalsIgnoreCase("enderman")){
+				elb = new EntityEnderman(player);
+			}else if (toMob.equalsIgnoreCase("skeleton")){
+				elb = new EntitySkeleton(player);
+			}else if (toMob.equalsIgnoreCase("blaze")){
+				elb = new EntityBlaze(player);
+			}else if (toMob.equalsIgnoreCase("magma")){
+				elb = new EntityMagmaCube(player);
+			}else if (toMob.equalsIgnoreCase("pigman")){
+				elb = new EntityPigZombie(player);
+			}else if (toMob.equalsIgnoreCase("horse")){
+				elb = new EntityHorse(player);
+			}else if (toMob.equalsIgnoreCase("arcane")){
+				elb = new EntityArcaneGuardian(player);
+			}else if (toMob.equalsIgnoreCase("earth")){
+				elb = new EntityEarthGuardian(player);
 			}
+			else if (toMob.equalsIgnoreCase("fire")){
+				elb = new EntityFireGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("air")){
+				elb = new EntityAirGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("water")){
+				elb = new EntityWaterGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("ice")){
+				elb = new EntityWinterGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("lightning")){
+				elb = new EntityLightningGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("life")){
+				elb = new EntityLifeGuardian(player);
+			}
+			else if (toMob.equalsIgnoreCase("nature")){
+				elb = new EntityNatureGuardian(player);
+			}else if (toMob.equalsIgnoreCase("end")){
+				elb = new EntityEnderGuardian(player);
+			}
+
 			ItemBoxOfIllusions.Copy(event.entityPlayer, elb);
 			Render rle = RenderManager.instance.getEntityRenderObject(elb);
 			if (rle instanceof RendererLivingEntity) {

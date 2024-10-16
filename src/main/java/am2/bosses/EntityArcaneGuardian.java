@@ -3,10 +3,7 @@ package am2.bosses;
 import am2.bosses.ai.EntityAICastSpell;
 import am2.bosses.ai.EntityAIDispel;
 import am2.bosses.ai.ISpellCastCallback;
-import am2.buffs.BuffEffectSilence;
 import am2.buffs.BuffList;
-import am2.damage.DamageSourceFire;
-import am2.damage.DamageSourceFrost;
 import am2.items.ItemsCommonProxy;
 import am2.network.AMNetHandler;
 import am2.playerextensions.ExtendedProperties;
@@ -113,9 +110,10 @@ public class EntityArcaneGuardian extends AM2Boss{
 	}
 	@Override
 	public void addPotionEffect(PotionEffect effect){
-		if (effect.getPotionID() == BuffList.silence.id)
-			super.addPotionEffect(effect);
-
+		if (!(effect.getPotionID() == BuffList.silence.id)){
+			return;
+		}
+		super.addPotionEffect(effect);
 	}
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
@@ -127,6 +125,7 @@ public class EntityArcaneGuardian extends AM2Boss{
 			return super.attackEntityFrom(par1DamageSource, par2);
 		}
 		return super.attackEntityFrom(par1DamageSource, par2 * 0.8F);
+
 	}
 
 	private boolean checkRuneRetaliation(DamageSource damagesource){
@@ -178,9 +177,6 @@ public class EntityArcaneGuardian extends AM2Boss{
 	}
 	@Override
 	protected int modifyHurtTime(DamageSource source, int Hurttime){
-		if  (isPotionActive(BuffList.silence.id)){
-			Hurttime = 15;
-		}
 		return Hurttime;
 	}
 	private boolean isWithin(float source, float target, float tolerance){

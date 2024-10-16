@@ -42,17 +42,6 @@ public class EntityNatureGuardian extends AM2Boss{
 		hasSickle = true;
 	}
 	@Override
-	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
-		if (super.attackEntityFrom(par1DamageSource, par2) && par1DamageSource instanceof DamageSourceFire || par1DamageSource instanceof DamageSourceFrost ){
-			this.hurtResistantTime = 15;
-			return true;
-		}
-		else if (super.attackEntityFrom(par1DamageSource, par2))
-			this.hurtResistantTime = 30;
-				return true;
-
-	}
-	@Override
 	public void onDeath(DamageSource src)
 	{
 		super.onDeath(src);

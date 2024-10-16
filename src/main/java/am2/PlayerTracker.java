@@ -45,7 +45,7 @@ public class PlayerTracker{
 	public static HashMap<UUID, NBTTagCompound> affinityStorage_dimension;
 	public static HashMap<UUID, NBTTagCompound> spellKnowledgeStorage_dimension;
 
-	public static HashMap<UUID, HashMap<Integer, ItemStack>> soulbound_Storage;
+
 
 	public PlayerTracker(){
 		storedExtProps_death = new HashMap<UUID, NBTTagCompound>();
@@ -58,7 +58,7 @@ public class PlayerTracker{
 		affinityStorage_dimension = new HashMap<UUID, NBTTagCompound>();
 		spellKnowledgeStorage_dimension = new HashMap<UUID, NBTTagCompound>();
 
-		soulbound_Storage = new HashMap<UUID, HashMap<Integer, ItemStack>>();
+
 	}
 
 	public void postInit(){
@@ -173,24 +173,12 @@ public class PlayerTracker{
 
 			SkillData.For(event.player).loadNBTData(stored);
 		}
-		//================================================================================
-		//soulbound items
-		//================================================================================
-		if (soulbound_Storage.containsKey(event.player.getUniqueID())){
-			HashMap<Integer, ItemStack> soulboundItems = soulbound_Storage.get(event.player.getUniqueID());
-			for (Integer i : soulboundItems.keySet()){
-				if (i < event.player.inventory.getSizeInventory() && event.player.inventory.getStackInSlot(i) == null)
-					event.player.inventory.setInventorySlotContents(i, soulboundItems.get(i));
-				else
-					event.player.entityDropItem(soulboundItems.get(i), 0);
-			}
-		}
-		//================================================================================
+
 	}
 
 	public void onPlayerDeath(EntityPlayer player){
 		storeExtendedPropertiesForRespawn(player);
-		storeSoulboundItemsForRespawn(player);
+
 	}
 
 	public static void storeExtendedPropertiesForRespawn(EntityPlayer player){
@@ -233,34 +221,6 @@ public class PlayerTracker{
 
 		spellKnowledgeStorage_death.put(player.getUniqueID(), saveSpellKnowledge);
 		//================================================================================
-	}
-
-	public static void storeSoulboundItemsForRespawn(EntityPlayer player){
-		if (soulbound_Storage.containsKey(player.getUniqueID()))
-			soulbound_Storage.remove(player.getUniqueID());
-
-		HashMap<Integer, ItemStack> soulboundItems = new HashMap<Integer, ItemStack>();
-
-		int slotCount = 0;
-		for (ItemStack stack : player.inventory.mainInventory){
-			int soulbound_level = EnchantmentHelper.getEnchantmentLevel(AMEnchantments.soulbound.effectId, stack);
-			if (soulbound_level > 0){
-				soulboundItems.put(slotCount, stack.copy());
-				player.inventory.setInventorySlotContents(slotCount, null);
-			}
-			slotCount++;
-		}
-		slotCount = 0;
-		for (ItemStack stack : player.inventory.armorInventory){
-			int soulbound_level = EnchantmentHelper.getEnchantmentLevel(AMEnchantments.soulbound.effectId, stack);
-			if (soulbound_level > 0 || ArmorHelper.isInfusionPreset(stack, GenericImbuement.soulbound)){
-				soulboundItems.put(slotCount + player.inventory.mainInventory.length, stack.copy());
-				player.inventory.setInventorySlotContents(slotCount + player.inventory.mainInventory.length, null);
-			}
-			slotCount++;
-		}
-
-		soulbound_Storage.put(player.getUniqueID(), soulboundItems);
 	}
 
 	public static void storeExtendedPropertiesForDimensionChange(EntityPlayer player){
@@ -314,21 +274,7 @@ public class PlayerTracker{
 		//================================================================================
 	}
 
-	public static void storeSoulboundItemForRespawn(EntityPlayer player, ItemStack stack){
-		if (!soulbound_Storage.containsKey(player.getUniqueID()))
-			return;
 
-		HashMap<Integer, ItemStack> soulboundItems = soulbound_Storage.get(player.getUniqueID());
-
-		int slotTest = 0;
-		while (soulboundItems.containsKey(slotTest)){
-			slotTest++;
-			if (slotTest == player.inventory.mainInventory.length)
-				slotTest += player.inventory.armorInventory.length;
-		}
-
-		soulboundItems.put(slotTest, stack);
-	}
 
 	public boolean hasAA(EntityPlayer entity){
 		return getAAL(entity) > 0;

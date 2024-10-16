@@ -1,10 +1,11 @@
 package am2.enchantments;
 
-import am2.items.ItemSpellBook;
+
+
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+
 
 public class EnchantmentSoulbound extends Enchantment{
 
@@ -52,9 +53,4 @@ public class EnchantmentSoulbound extends Enchantment{
 		}
 	}
 
-	@Override
-	public boolean isAllowedOnBooks()
-	{
-		return false;
-	}
 }

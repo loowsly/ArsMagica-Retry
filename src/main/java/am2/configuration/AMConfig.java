@@ -67,6 +67,7 @@ public class AMConfig extends Configuration{
 
 	private final String KEY_witchwoodLeavesFall = "WitchwoodLeafParticles";
 	private final String KEY_alternativeStart = "AlternativeStart";
+	private final String KEY_EasyStart = "EasyStart";
 
 	private final String KEY_CandlesAreRovingLights = "CandlesAreRovingLights";
 	private final String KEY_Appropriation_Block_Blacklist = "Appropriation_Block_Blacklist";
@@ -191,6 +192,7 @@ public class AMConfig extends Configuration{
 	private final String KEY_MobBlacklist = "EntityBlacklist";
 
 	private final String KEY_DebugVortex = "DebugSpatialVortex";
+	private final String KEY_GuardianSilverSpells = "GuardianSilverSpells";
 	/**
 	 * End GUI Config
 	 **/
@@ -218,6 +220,7 @@ public class AMConfig extends Configuration{
 	private boolean forgeSmeltsVillagers;
 	private boolean witchwoodLeafParticles;
 	private boolean alternativeStart;
+	private boolean EasyStart;
 	private boolean debugVortex;
 	private boolean BurnoutEffects;
 	private int everstoneRepairRate;
@@ -295,6 +298,7 @@ public class AMConfig extends Configuration{
 	private boolean disarmAffectsPlayers;
 	private boolean digBreaksTileEntities;
 	private boolean savePowerOnWorldSave;
+	private boolean UnlockSilverSpellWithGuardian;
 
 	private boolean allowCompendiumUpdates;
 	private boolean allowVersionChecks;
@@ -394,9 +398,11 @@ public class AMConfig extends Configuration{
 		mmfDimensionID = get(CATEGORY_GENERAL, KEY_MMFDimensionID, -31, "The dimension ID for Moo Moo Farm. Change this if you run into issues with other mods that add dimensions.").getInt();
 		witchwoodLeafParticles = get(CATEGORY_GENERAL, KEY_witchwoodLeavesFall, true, "Disable this if you experience low FPS in witchwood forests").getBoolean(true);
 		alternativeStart = get(CATEGORY_GENERAL, KEY_alternativeStart, false, "Arcane Compendium creation requires Witchwood Trees instead of Ethereum Lakes").getBoolean(false);
+		EasyStart = get(CATEGORY_GENERAL, KEY_EasyStart, false, "start with 3 basic shapes unlocked (projectile, touch, self)").getBoolean(false);
 		debugVortex = get(CATEGORY_GENERAL, KEY_DebugVortex, false, "Enable if you're having issues with spatial vortices and want to report it. This enables a lot of verbose output about their inner workings at all stages to make it easier for me to debug.").getBoolean(false);
 		enableWitchwoodForest = get(CATEGORY_GENERAL, KEY_EnableWitchwoodForest, true, "Disable this if you prefer the witchwood forest to not generate").getBoolean(true);
 		witchwoodForestRarity = get(CATEGORY_GENERAL, KEY_WitchwoodForestRarity, 6, "Sets how rare witchwood forests are.  Lower is more rare.").getInt();
+		UnlockSilverSpellWithGuardian = get(CATEGORY_GENERAL, KEY_GuardianSilverSpells, true, "Silver Spells are unlocked by killing guardian").getBoolean(true);
 
 		allowCreativeTargets = get(CATEGORY_GENERAL, KEY_allowCreativeTargets, true, "Disable this to prevent spell effects on creative players").getBoolean(true);
 
@@ -775,6 +781,8 @@ public class AMConfig extends Configuration{
 	public boolean isAlternativeStart(){
 		return alternativeStart;
 	}
+	public boolean isEasyStart() {return EasyStart;}
+	public boolean GuardianKill() {return UnlockSilverSpellWithGuardian;}
 
 
 	public boolean colourblindMode(){

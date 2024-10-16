@@ -85,17 +85,14 @@ public class EntityThrownSickle extends EntityLiving{
 		if (getThrowingEntity() != null && getThrowingEntity() instanceof EntityNatureGuardian){
 			((EntityNatureGuardian)getThrowingEntity()).hasSickle = true;
 		}else if (getThrowingEntity() != null && getThrowingEntity() instanceof EntityPlayer){
-			if (!worldObj.isRemote)
-				if (getThrowingEntity().getHealth() <= 0){
-					PlayerTracker.storeSoulboundItemForRespawn((EntityPlayer)getThrowingEntity(), ItemsCommonProxy.natureScytheEnchanted.copy());
-				}else{
-					if (!((EntityPlayer)getThrowingEntity()).inventory.addItemStackToInventory(ItemsCommonProxy.natureScytheEnchanted.copy())){
+			if (!worldObj.isRemote){
+				if (!((EntityPlayer)getThrowingEntity()).inventory.addItemStackToInventory(ItemsCommonProxy.natureScytheEnchanted.copy())){
 						EntityItem item = new EntityItem(worldObj);
 						item.setPosition(posX, posY, posZ);
 						item.setEntityItemStack(ItemsCommonProxy.natureScytheEnchanted.copy());
 						worldObj.spawnEntityInWorld(item);
-					}
 				}
+			}
 		}
 		super.setDead();
 	}
