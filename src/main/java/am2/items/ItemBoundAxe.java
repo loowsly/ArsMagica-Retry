@@ -108,7 +108,7 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 
 	@Override
 	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventoryIndex){
-		itemstack = InventoryUtilities.replaceItem(itemstack, ItemsCommonProxy.spell);
+		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
 		player.inventory.setInventorySlotContents(inventoryIndex, itemstack);
 	}
 

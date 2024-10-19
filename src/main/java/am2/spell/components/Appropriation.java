@@ -57,7 +57,7 @@ public class Appropriation implements ISpellComponent{
 		if (!(caster instanceof EntityPlayer))
 			return false;
 
-		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster, Appropriation.class);
+		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster);
 		if (originalSpellStack == null){
 			return false;
 		}
@@ -235,7 +235,7 @@ public class Appropriation implements ISpellComponent{
 		if (!(caster instanceof EntityPlayer))
 			return false;
 
-		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster, Appropriation.class);
+		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster);
 		if (originalSpellStack == null)
 			return false;
 		if (!world.isRemote){
@@ -268,18 +268,15 @@ public class Appropriation implements ISpellComponent{
 		}
 	}
 
-	public static ItemStack getOriginalSpellStack(EntityPlayer caster, Class clazz){
+	private ItemStack getOriginalSpellStack(EntityPlayer caster){
 		ItemStack originalSpellStack = caster.getCurrentEquippedItem();
-		if (originalSpellStack == null)
-			return null;
-		if(originalSpellStack.getItem() == ItemsCommonProxy.spell){
-			return originalSpellStack;
-		}
+		if (originalSpellStack == null ){return null;}
+		if(originalSpellStack.getItem() == ItemsCommonProxy.spell){return originalSpellStack;}
 		else if (originalSpellStack.getItem() instanceof ItemSpellBook){
 			originalSpellStack = ((ItemSpellBook)originalSpellStack.getItem()).GetActiveItemStack(originalSpellStack); //it's a spell book - get the active scroll
 			//sanity check needed here because from cast to apply the spell could have changed - just ensure appropriation is a part of this spell somewhere so that any stored item can be retrieved
 			for (int i = 0; i < SpellUtils.instance.numStages(originalSpellStack); ++i){
-				if (SpellUtils.instance.componentIsPresent(originalSpellStack, clazz, i)){
+				if (SpellUtils.instance.componentIsPresent(originalSpellStack, Appropriation.class, i)){
 					return originalSpellStack;
 				}
 			}

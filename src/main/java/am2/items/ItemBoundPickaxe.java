@@ -107,7 +107,7 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 
 	@Override
 	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventorySlot){
-		itemstack = InventoryUtilities.replaceItem(itemstack, ItemsCommonProxy.spell);
+		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
 		player.inventory.setInventorySlotContents(inventorySlot, itemstack);
 	}
 

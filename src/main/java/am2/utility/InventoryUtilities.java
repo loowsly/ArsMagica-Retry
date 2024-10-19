@@ -2,6 +2,7 @@ package am2.utility;
 
 import am2.AMCore;
 import am2.entities.EntityBroomInventory;
+import am2.items.ItemsCommonProxy;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
@@ -372,6 +373,27 @@ public class InventoryUtilities{
 	}
 
 	public static ItemStack replaceItem(ItemStack originalStack, Item newItem){
+		ItemStack stack = new ItemStack(newItem, originalStack.stackSize, originalStack.getItemDamage());
+		if (originalStack.hasTagCompound())
+			stack.setTagCompound(originalStack.getTagCompound());
+		return stack;
+	}
+	public static ItemStack replaceBoundItem(ItemStack originalStack){
+		Item newItem = ItemsCommonProxy.spell;
+		if(originalStack.hasTagCompound()){
+			if(originalStack.stackTagCompound.hasKey("ItemID")){
+				int meta = originalStack.stackTagCompound.getInteger("meta");
+				int id = originalStack.stackTagCompound.getInteger("ItemID");
+				newItem = Item.getItemById(id);
+				ItemStack stack = new ItemStack(newItem, originalStack.stackSize, meta);
+				originalStack.stackTagCompound.removeTag("ItemID");
+				originalStack.stackTagCompound.removeTag("meta");
+				if(originalStack.hasTagCompound()){
+					stack.setTagCompound(originalStack.getTagCompound());
+				}
+				return stack;
+			}
+		}
 		ItemStack stack = new ItemStack(newItem, originalStack.stackSize, originalStack.getItemDamage());
 		if (originalStack.hasTagCompound())
 			stack.setTagCompound(originalStack.getTagCompound());

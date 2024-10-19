@@ -940,12 +940,15 @@ public class SpellUtils implements ISpellUtils{
 	}
 
 	public boolean componentIsPresent(ItemStack stack, Class clazz, int stage){
-		if (!stack.hasTagCompound()) return false;
+		if (!stack.hasTagCompound()) {
+			return false;
+		}
 
 		ISpellComponent[] components = getComponentsForStage(stack, stage);
 		for (ISpellComponent comp : components){
-			if (comp.getClass() == clazz)
+			if (comp.getClass() == clazz){
 				return true;
+			}
 		}
 		return false;
 	}

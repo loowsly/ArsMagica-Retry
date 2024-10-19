@@ -5,15 +5,18 @@ import am2.api.spell.component.interfaces.ISpellShape;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellCastResult;
 import am2.items.ItemBindingCatalyst;
+import am2.items.ItemSpellBook;
 import am2.items.ItemsCommonProxy;
 import am2.spell.SpellUtils;
 import am2.utility.InventoryUtilities;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import am2.spell.components.Appropriation;
+
 
 public class Binding implements ISpellShape{
 
@@ -27,38 +30,44 @@ public class Binding implements ISpellShape{
 		if (!(caster instanceof EntityPlayer)){
 			return SpellCastResult.EFFECT_FAILED;
 		}
-
 		EntityPlayer player = (EntityPlayer)caster;
 		ItemStack heldStack = player.getCurrentEquippedItem();
-		if (heldStack == null || Appropriation.getOriginalSpellStack(player, Binding.class) != null || !(SpellUtils.instance.getShapeForStage(stack, 0) instanceof Binding)){
+		Item Iheld = heldStack.getItem();
+		if (heldStack == null || !(SpellUtils.instance.getShapeForStage(stack, 0) instanceof Binding)){
+			System.out.println("NOPE");
 			return SpellCastResult.EFFECT_FAILED;
 		}
 
-		int bindingType = getBindingType(heldStack);
-		switch (bindingType){
-		case ItemBindingCatalyst.META_AXE:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundAxe);
-			break;
-		case ItemBindingCatalyst.META_PICK:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundPickaxe);
-			break;
-		case ItemBindingCatalyst.META_SWORD:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundSword);
-			break;
-		case ItemBindingCatalyst.META_SHOVEL:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundShovel);
-			break;
-		case ItemBindingCatalyst.META_HOE:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundHoe);
-			break;
-		case ItemBindingCatalyst.META_BOW:
-			heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundBow);
-			break;
+		if(heldStack.getItem() != ItemsCommonProxy.spell){
+			int itemid = Item.getIdFromItem(heldStack.getItem());
+			int meta = heldStack.getItemDamage();
+			heldStack.stackTagCompound.setInteger("ItemID", itemid);
+			heldStack.stackTagCompound.setInteger("meta", meta);
 		}
+		int bindingType = getBindingType(heldStack);
+			switch (bindingType){
+			case ItemBindingCatalyst.META_AXE:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundAxe);
+				break;
+			case ItemBindingCatalyst.META_PICK:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundPickaxe);
+				break;
+			case ItemBindingCatalyst.META_SWORD:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundSword);
+				break;
+			case ItemBindingCatalyst.META_SHOVEL:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundShovel);
+				break;
+			case ItemBindingCatalyst.META_HOE:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundHoe);
+				break;
+			case ItemBindingCatalyst.META_BOW:
+				heldStack = InventoryUtilities.replaceItem(heldStack, ItemsCommonProxy.BoundBow);
+				break;
+			}
 		player.inventory.setInventorySlotContents(player.inventory.currentItem, heldStack);
 		return SpellCastResult.SUCCESS;
 	}
-
 	@Override
 	public boolean isChanneled(){
 		return false;
