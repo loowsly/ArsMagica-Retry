@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import am2.spell.components.Appropriation;
 
 public class Binding implements ISpellShape{
 
@@ -29,7 +30,7 @@ public class Binding implements ISpellShape{
 
 		EntityPlayer player = (EntityPlayer)caster;
 		ItemStack heldStack = player.getCurrentEquippedItem();
-		if (heldStack == null || heldStack.getItem() != ItemsCommonProxy.spell || !(SpellUtils.instance.getShapeForStage(stack, 0) instanceof Binding)){
+		if (heldStack == null || Appropriation.getOriginalSpellStack(player, Binding.class) != null || !(SpellUtils.instance.getShapeForStage(stack, 0) instanceof Binding)){
 			return SpellCastResult.EFFECT_FAILED;
 		}
 

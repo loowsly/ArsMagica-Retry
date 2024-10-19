@@ -35,6 +35,7 @@ import net.minecraft.world.WorldServer;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EntityUtilities{
 	private static final HashMap<Integer, ArrayList> storedTasks = new HashMap<Integer, ArrayList>();
@@ -295,18 +296,20 @@ public class EntityUtilities{
 
 	public static int getRuneCombo(EntityPlayer player){
 		int hash = player.getCommandSenderName().toLowerCase().hashCode();
+
 		return hash & 0xFFFF;
 	}
 
 	public static EntityPlayer getPlayerForCombo(World world, int combo){
-		if (world.isRemote)
-			return null;
-		combo &= 0xFFFF; //convert to a valid key; drop all other bits.
-		for (WorldServer ws : MinecraftServer.getServer().worldServers){
-			for (Object o : ws.playerEntities){
-				EntityPlayer player = (EntityPlayer)o;
-				if (getRuneCombo(player) == combo)
-					return player;
+		if(!world.isRemote){
+			combo &= 0xFFFF;//convert to a valid key; drop all other bits.
+			for (WorldServer ws : MinecraftServer.getServer().worldServers){
+				List<EntityPlayer> players = ws.playerEntities;
+				for (EntityPlayer p : players){
+					if (getRuneCombo(p) == combo){
+						return p;
+					}
+				}
 			}
 		}
 		return null;

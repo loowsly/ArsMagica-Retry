@@ -1,14 +1,13 @@
 package am2.spell.components;
 
 import am2.AMCore;
-import am2.api.ArsMagicaApi;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
 import am2.blocks.BlocksCommonProxy;
 import am2.items.ItemSpellBook;
+import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleOrbitPoint;
-import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellUtils;
 import am2.utility.DummyEntityPlayer;
 import net.minecraft.block.Block;
@@ -19,10 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
@@ -31,7 +28,6 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
@@ -61,7 +57,7 @@ public class Appropriation implements ISpellComponent{
 		if (!(caster instanceof EntityPlayer))
 			return false;
 
-		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster);
+		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster, Appropriation.class);
 		if (originalSpellStack == null){
 			return false;
 		}
@@ -239,27 +235,21 @@ public class Appropriation implements ISpellComponent{
 		if (!(caster instanceof EntityPlayer))
 			return false;
 
-		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster);
+		ItemStack originalSpellStack = getOriginalSpellStack((EntityPlayer)caster, Appropriation.class);
 		if (originalSpellStack == null)
 			return false;
-
 		if (!world.isRemote){
-			if (originalSpellStack.stackTagCompound.hasKey(storageKey)){
+			if (originalSpellStack.hasTagCompound() && originalSpellStack.stackTagCompound.hasKey(storageKey)){
 				restore((EntityPlayer)caster, world, originalSpellStack, (int)target.posX, (int)target.posY, (int)target.posZ, target.posX, target.posY + target.getEyeHeight(), target.posZ);
 			}else{
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("class", target.getClass().getName());
 				data.setString(storageType, "ent");
-
 				NBTTagCompound targetData = new NBTTagCompound();
 				target.writeToNBT(targetData);
-
 				data.setTag("targetNBT", targetData);
-
 				originalSpellStack.stackTagCompound.setTag(storageKey, data);
-
 				setOriginalSpellStackData((EntityPlayer)caster, originalSpellStack);
-
 				target.setDead();
 			}
 		}
@@ -278,25 +268,23 @@ public class Appropriation implements ISpellComponent{
 		}
 	}
 
-	private ItemStack getOriginalSpellStack(EntityPlayer caster){
+	public static ItemStack getOriginalSpellStack(EntityPlayer caster, Class clazz){
 		ItemStack originalSpellStack = caster.getCurrentEquippedItem();
 		if (originalSpellStack == null)
 			return null;
+		if(originalSpellStack.getItem() == ItemsCommonProxy.spell){
+			return originalSpellStack;
+		}
 		else if (originalSpellStack.getItem() instanceof ItemSpellBook){
 			originalSpellStack = ((ItemSpellBook)originalSpellStack.getItem()).GetActiveItemStack(originalSpellStack); //it's a spell book - get the active scroll
 			//sanity check needed here because from cast to apply the spell could have changed - just ensure appropriation is a part of this spell somewhere so that any stored item can be retrieved
-			boolean hasAppropriation = false;
 			for (int i = 0; i < SpellUtils.instance.numStages(originalSpellStack); ++i){
-				if (SpellUtils.instance.componentIsPresent(originalSpellStack, Appropriation.class, i)){
-					hasAppropriation = true;
-					break;
+				if (SpellUtils.instance.componentIsPresent(originalSpellStack, clazz, i)){
+					return originalSpellStack;
 				}
 			}
-			if (!hasAppropriation)
-				return null;
 		}
-
-		return originalSpellStack;
+		return null;
 	}
 
 	private void restore(EntityPlayer player, World world, ItemStack stack, int x, int y, int z, double hitX, double hitY, double hitZ){
