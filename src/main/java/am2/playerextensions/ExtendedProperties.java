@@ -4,6 +4,7 @@ import am2.AMCore;
 import am2.api.ArsMagicaApi;
 import am2.api.IExtendedProperties;
 import am2.api.events.PlayerMagicLevelChangeEvent;
+import am2.api.events.RegisterCompendiumEntries;
 import am2.api.math.AMVector2;
 import am2.api.math.AMVector3;
 import am2.api.spell.enums.ContingencyTypes;
@@ -1319,10 +1320,11 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	}
 
 	private void setDefaultCompendiumEntryValues() {
-		// set them for client
-		ArcaneCompendium.instance.init(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage());
-		// sync all the defaults to server.
-		ArcaneCompendium.instance.saveUnlockData();
+			// set them for client
+			ArcaneCompendium.instance.init(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage());
+			MinecraftForge.EVENT_BUS.post(new RegisterCompendiumEntries(ArcaneCompendium.instance));
+			// sync all the defaults to server.
+			ArcaneCompendium.instance.saveUnlockData();
 	}
 
 	public void setCompendiumEntryNoSync(String name, String value) {

@@ -286,8 +286,15 @@ public class EntityThrownRock extends EntityLiving{
 			List<EntityLivingBase> ents = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundingBox.expand(5, 5, 5));
 			for (EntityLivingBase e : ents){
 				if (e == throwingEntity) continue;
-				if (this.getEntitySenses().canSee(e))
-					SpellHelper.instance.attackTargetSpecial(null, e, DamageSources.causeEntityMagicDamage(throwingEntity), damage);
+				if (this.getEntitySenses().canSee(e)){
+					if (damage > 500.0F){
+						SpellHelper.instance.attackTargetSpecial(null, e, DamageSources.causeEntityMagicDamage(throwingEntity).setDamageIsAbsolute(), damage);
+					}
+					else{
+						SpellHelper.instance.attackTargetSpecial(null, e, DamageSources.causeEntityMagicDamage(throwingEntity), damage);
+
+					}
+				}
 			}
 		}else{
 

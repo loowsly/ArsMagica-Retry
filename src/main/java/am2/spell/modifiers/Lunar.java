@@ -4,8 +4,6 @@ import am2.api.spell.component.interfaces.ISpellModifier;
 import am2.api.spell.enums.SpellModifiers;
 import am2.items.ItemsCommonProxy;
 import am2.playerextensions.ExtendedProperties;
-import am2.spell.SpellHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
@@ -49,14 +47,15 @@ public class Lunar implements ISpellModifier{
 
 	@Override
 	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity, EntityLivingBase caster){
-		World world = caster.worldObj;
-
 		float multiplier = 3.5f;
-		if (caster == null)
+		if ((caster == null)){
 			return quantity * multiplier;
-		else if (caster.dimension == 1)
+		}
+		World world = caster.worldObj;
+		if (caster.dimension == 1)
 				multiplier = 2.0f;
-		else if (!world.provider.hasNoSky && !world.isDaytime()){
+		if(world != null){
+			if (!world.provider.hasNoSky && !world.isDaytime()){
 				double time = world.getWorldTime() % 24000;
 
 				//Returns a decreasing value between 3.4 and 2.5 as it approaches midnight.
@@ -64,7 +63,7 @@ public class Lunar implements ISpellModifier{
 						1.5 + Math.exp(0.13 * (Math.abs((time - 18000) / 1000)))
 				) * 100) / 100;
 			}
-
+		}
 		return quantity * multiplier;
 	}
 	@Override

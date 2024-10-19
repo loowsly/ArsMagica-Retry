@@ -712,7 +712,7 @@
     </talent>
     <talent id="AugmentedCasting">
       <name>Augmented Casting</name>
-      <desc>You have figured out how to put everything you have into a spell cast.  All of your spells are more powerful.  Durations are longer, radii are bigger, and damage is increased.</desc>
+      <desc>You have figured out how to put everything you have into a spell cast.  All of your spells are more powerful.  Durations are longer, radius are bigger, and damage is increased.</desc>
     </talent>
     <talent id="ExtraSummon">
       <name>Extra Summon</name>

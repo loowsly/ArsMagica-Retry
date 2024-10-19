@@ -167,13 +167,13 @@ public class AMEventHandler{
 	//SoulBound Handler (code taken from @EnderIO)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDropsEvent evt) {
-		System.out.println("PlayerDrop event happening!");
+
 		if (evt.entityPlayer == null || evt.entityPlayer instanceof FakePlayer || evt.isCanceled()) {
-			System.out.println("Nope!");
+
 			return;
 		}
 		if (evt.entityPlayer.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) {
-			System.out.println("KeepInv is ON !");
+
 			return;
 		}
 
@@ -182,7 +182,7 @@ public class AMEventHandler{
 			EntityItem ei = iter.next();
 			ItemStack item = ei.getEntityItem();
 			if (isSoulBound(item)) {
-				System.out.println("Found soulbound item !");
+
 				if (addToPlayerInventory(evt.entityPlayer, item)) {
 					iter.remove();
 				}
@@ -227,10 +227,7 @@ public class AMEventHandler{
 	}
 
 	private boolean isSoulBound(ItemStack item) {
-		if(EnchantmentHelper.getEnchantmentLevel(AMEnchantments.soulbound.effectId, item) > 0){
-			return true;
-		}
-		else System.out.println("enchant not enchanting"); return false;
+		return EnchantmentHelper.getEnchantmentLevel(AMEnchantments.soulbound.effectId, item) > 0;
 	}
 
 	private boolean addToPlayerInventory(EntityPlayer entityPlayer, ItemStack item) {
