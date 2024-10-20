@@ -7,6 +7,7 @@ import am2.skills.*;
 import am2.spell.components.*;
 import am2.spell.modifiers.*;
 import am2.spell.shapes.*;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
@@ -146,6 +147,9 @@ public class SkillManager implements ISpellPartManager{
 
 	public String getSkillName(ISkillTreeEntry component){
 		int id = component.getID();
+		if(id == -1){
+			return reversedPartNames.get(1);
+		}
 		if (component instanceof ISpellComponent)
 			id += COMPONENT_OFFSET;
 		else if (component instanceof ISpellModifier)
@@ -249,7 +253,9 @@ public class SkillManager implements ISpellPartManager{
 		registerSkillTreeEntry(new Plow(), "Plow");
 		registerSkillTreeEntry(new RandomTeleport(), "RandomTeleport");
 		registerSkillTreeEntry(new Recall(), "Recall");
-		registerSkillTreeEntry(new RedstoneFluxDrain(), "RedstoneFluxDrain");
+		if(Loader.isModLoaded("CoFHCore")){
+			registerSkillTreeEntry(new RedstoneFluxDrain(), "RedstoneFluxDrain");
+		}
 		registerSkillTreeEntry(new Reflect(), "Reflect");
 		registerSkillTreeEntry(new Regeneration(), "Regeneration");
 		registerSkillTreeEntry(new Repel(), "Repel");

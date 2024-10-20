@@ -7,6 +7,7 @@ import am2.api.spell.ISkillTreeManager;
 import am2.api.spell.component.interfaces.ISkillTreeEntry;
 import am2.api.spell.enums.SkillPointTypes;
 import am2.api.spell.enums.SkillTrees;
+import cpw.mods.fml.common.Loader;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -233,8 +234,9 @@ public class SkillTreeManager implements ISkillTreeManager{
 
 		RegisterPart(SkillManager.instance.getSkill("Flight"), 222, 270, SkillTrees.Defense, SkillPointTypes.RED, SkillManager.instance.getSkill("Levitate"));
 		RegisterPart(SkillManager.instance.getSkill("Shield"), 357, 270, SkillTrees.Defense, SkillPointTypes.BLUE, SkillManager.instance.getSkill("Zone"));
-		RegisterPart(SkillManager.instance.getSkill("RedstoneFluxDrain"), 312, 270, SkillTrees.Defense, SkillPointTypes.RED, SkillManager.instance.getSkill("ManaDrain"));
-
+		if(Loader.isModLoaded("CoFHCore")){
+			RegisterPart(SkillManager.instance.getSkill("RedstoneFluxDrain"), 312, 270, SkillTrees.Defense, SkillPointTypes.RED, SkillManager.instance.getSkill("ManaDrain"));
+		}
 		RegisterPart(SkillManager.instance.getSkill("Contingency_Health"), 402, 270, SkillTrees.Defense, SkillPointTypes.RED, SkillManager.instance.getSkill("Shield"));
 
 		RegisterPart(SkillManager.instance.getSkill("Rune"), 157, 315, SkillTrees.Defense, SkillPointTypes.GREEN, SkillManager.instance.getSkill("Accelerate"), SkillManager.instance.getSkill("Entangle"));
