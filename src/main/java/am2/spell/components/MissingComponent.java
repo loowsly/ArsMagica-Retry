@@ -49,7 +49,7 @@ public class MissingComponent implements ISpellComponent{
 
 	@Override
 	public int getID(){
-		return 38;
+		return -1;
 	}
 
 	@Override

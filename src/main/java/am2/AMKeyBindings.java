@@ -19,12 +19,12 @@ import org.lwjgl.input.Keyboard;
 
 public class AMKeyBindings{
 
-	private static KeyBinding ShapeGroupKey = new KeyBinding("key.ShapeGroups", Keyboard.KEY_C, "key.am2.category");
-	private static KeyBinding SpellBookNextSpellKey = new KeyBinding("key.SpellBookNext", Keyboard.KEY_X, "key.am2.category");
-	private static KeyBinding SpellBookPrevSpellKey = new KeyBinding("key.SpellBookPrev", Keyboard.KEY_Z, "key.am2.category");
-	private static KeyBinding AuraCustomizationKey = new KeyBinding("key.AuraCustomization", Keyboard.KEY_B, "key.am2.category");
-	private static KeyBinding ManaToggleKey = new KeyBinding("key.ToggleManaDisplay", Keyboard.KEY_O, "key.am2.category");
-	private static KeyBinding AffinityActivationKey = new KeyBinding("key.ActivateAffinityAbility", Keyboard.KEY_X, "key.am2.category");
+	public static KeyBinding ShapeGroupKey = new KeyBinding("key.ShapeGroups", Keyboard.KEY_C, "key.am2.category");
+	public static KeyBinding SpellBookNextSpellKey = new KeyBinding("key.SpellBookNext", Keyboard.KEY_X, "key.am2.category");
+	public static KeyBinding SpellBookPrevSpellKey = new KeyBinding("key.SpellBookPrev", Keyboard.KEY_Z, "key.am2.category");
+	public static KeyBinding AuraCustomizationKey = new KeyBinding("key.AuraCustomization", Keyboard.KEY_B, "key.am2.category");
+	public static KeyBinding ManaToggleKey = new KeyBinding("key.ToggleManaDisplay", Keyboard.KEY_O, "key.am2.category");
+	public static KeyBinding AffinityActivationKey = new KeyBinding("key.ActivateAffinityAbility", Keyboard.KEY_X, "key.am2.category");
 
 	public AMKeyBindings(){
 		ClientRegistry.registerKeyBinding(ShapeGroupKey);
