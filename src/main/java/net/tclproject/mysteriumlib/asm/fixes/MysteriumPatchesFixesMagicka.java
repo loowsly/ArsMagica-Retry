@@ -193,7 +193,7 @@ public class MysteriumPatchesFixesMagicka{
 	@Fix(returnSetting = EnumReturnSetting.ON_TRUE)
 	public static boolean register(EventBus eb, Object target)
 	{
-		if (target.getClass().getName().contains("Ears")) {
+		if (target.getClass().getName().contains("Ears") && !AMCore.config.EnableEarsLoader()) {
 			LogHelper.warn("--------------------------!!!--------------------------");
 			LogHelper.warn("The Ears mod transformer was found and disabled. This most likely means you're using FoamFix's hacky 1.8+ skin support.");
 			LogHelper.warn("Please disable it in FoamFix's config and use (preferably, as its solution is much more compatible and elegant) EtFuturumRequiem, or (if need be) SkinPort instead.");

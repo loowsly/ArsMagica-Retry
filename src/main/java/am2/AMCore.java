@@ -71,7 +71,6 @@ public class AMCore{
 
 	@SidedProxy(clientSide = "am2.proxy.ClientProxy", serverSide = "am2.proxy.CommonProxy")
 	public static CommonProxy proxy;
-
 	public static AMConfig config;
 	public static SkillConfiguration skillConfig;
 	public static final int ANY_META = 32767;

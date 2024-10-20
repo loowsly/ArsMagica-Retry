@@ -14,16 +14,12 @@ import java.io.File;
 
 public class AMConfig extends Configuration{
 
-	private final String KEY_PlayerSpellsDamageTerrain = "Player_Spells_Destroy_Terrain";
-	private final String KEY_NPCSpellsDamageTerrain = "NPC_Spells_Destroy_Terrain";
-	private final String KEY_TowergenGridSize = "Towergen_Grid_Size";
-	private final String KEY_EnableWorldGen = "EnableWorldGen";
+
 	private final String KEY_RetroactiveWorldGen = "RetroactiveWorldGen";
 
 	private final String KEY_SecondarySkillTreeTierCap = "SecondarySkillTreeTierCap";
 	private final String KEY_DigBreaksTEs = "DigBreaksTileEntities";
 	private final String KEY_DisplayManaInInventory = "DisplayManaInInventory";
-	private final String KEY_SpellBookUIPosition = "SpellBookUIPosition";
 	private final String KEY_ManaCap = "Mana_Cap";
 	private final String KEY_MaxSummons = "Max Summons";
 	private final String KEY_mageSpawnRate = "MageSpawnRate";
@@ -37,12 +33,9 @@ public class AMConfig extends Configuration{
 	private final String KEY_fireElementalSpawnRate = "FireElementalSpawnRate";
 	private final String KEY_flickerSpawnRate = "FlickerSpawnRate";
 
-	private final String KEY_RandomSpellRecipes = "RandomSpellRecipes";
 	private final String KEY_DamageMultiplier = "DamageMultiplier";
 
-	private final String KEY_UseSpecialRenderers = "Use_Special_Renderers";
 	private final String KEY_SpawnHugeTrees = "SpawnHugeTrees";
-	private final String KEY_LowResParticles = "Low_Res_Particles";
 	private final String KEY_FrictionCoefficient = "FrictionCoefficient";
 
 	private final String KEY_MageVillagerProfessionID = "mage_villager_profession_id";
@@ -53,7 +46,6 @@ public class AMConfig extends Configuration{
 	private final String KEY_WorldgenWhitelist = "worldgen_whitelist";
 	private final String KEY_WorldgenWhitelistEnabled = "worldgen_whitelist_enabled";
 
-	private final String KEY_GetRandomSpellNames = "suggest_spell_names";
 	private final String KEY_DisarmAffectsPlayers = "disarm_affects_players";
 	private final String KEY_NewBurnoutEffects = "BurnoutEffects";
 
@@ -73,8 +65,7 @@ public class AMConfig extends Configuration{
 	private final String KEY_Appropriation_Block_Blacklist = "Appropriation_Block_Blacklist";
 	private final String KEY_Appropriation_Mob_Blacklist = "Appropriation_Mob_Blacklist";
 
-	private final String KEY_AllowVersionChecks = "Allow_Version_Checks";
-	private final String KEY_AllowCompendiumUpdates = "Allow_Compendium_Updates";
+
 	private final String KEY_MeteorMinSpawnLevel = "Meteor_Spawn_Min_Level";
 	private final String KEY_HazardousGateways = "Hazardous_Gateways";
 	private final String KEY_EnableSpatialVortex = "EnableSpatialVortex";
@@ -193,6 +184,7 @@ public class AMConfig extends Configuration{
 
 	private final String KEY_DebugVortex = "DebugSpatialVortex";
 	private final String KEY_GuardianSilverSpells = "GuardianSilverSpells";
+	private final String KEY_EarsCompat = "EarsCompat";
 	/**
 	 * End GUI Config
 	 **/
@@ -205,14 +197,10 @@ public class AMConfig extends Configuration{
 
 	private int GFXLevel;
 	private int EtherMode;
-	private boolean PlayerSpellsDamageTerrain;
-	private boolean NPCSpellsDamageTerrain;
 	private float DamageMultiplier;
-	private boolean UseSpecialRenderers;
 	private boolean SpawnHugeTrees;
 	private boolean useDimWhitelist;
 	private boolean DisplayManaInInventory;
-	private boolean IsImbueEnabled;
 	private boolean enableGlobalTime;
 	private boolean RetroWorldGen;
 	private boolean moonstoneMeteorsDestroyTerrain;
@@ -245,9 +233,10 @@ public class AMConfig extends Configuration{
 	private int[] worldgenWhitelist;
 	private int[] mobBlacklist;
 	private boolean enableWitchwoodForest;
-	private int witchwoodForestRarity;
+	private int witchwoodFrequency;
 	
 	private boolean allowCreativeTargets;
+	private boolean EnableEars;
 
 	private String[] appropriationBlockBlacklist;
 	private Class[] appropriationMobBlacklist;
@@ -266,6 +255,7 @@ public class AMConfig extends Configuration{
 	private double manaCap;
 	private int MaxSummons;
 	private int enderAffinityAbilityCooldown;
+
 
 	private AMVector2 manaHudPosition;
 	private AMVector2 burnoutHudPosition;
@@ -300,11 +290,8 @@ public class AMConfig extends Configuration{
 	private boolean savePowerOnWorldSave;
 	private boolean UnlockSilverSpellWithGuardian;
 
-	private boolean allowCompendiumUpdates;
-	private boolean allowVersionChecks;
 	private boolean canDryadsDespawn;
-	
-	private int witchwoodFrequency;
+
 	private int poolFrequency;
 	private int wakebloomFrequency;
 	private int flowerGenAttempts;
@@ -343,12 +330,8 @@ public class AMConfig extends Configuration{
 
 	public void init(){
 
-		PlayerSpellsDamageTerrain = get(CATEGORY_GENERAL, KEY_PlayerSpellsDamageTerrain, true, "Set to false to prevent terrain damage from player-casted spells.").getBoolean(true);
-		NPCSpellsDamageTerrain = get(CATEGORY_GENERAL, KEY_NPCSpellsDamageTerrain, false, "Set to false to prevent terrain damage from NPC-casted spells.").getBoolean(false);
-
 		DamageMultiplier = (float)get(CATEGORY_GENERAL, KEY_DamageMultiplier, 1.0, "How much the damage in Ars Magica is scaled.").getDouble(1.0);
 
-		UseSpecialRenderers = get(CATEGORY_GENERAL, KEY_UseSpecialRenderers, true, "Render spell effects on equipped scrolls rather than the scroll itself (only applies to the in-game one, the one on your hotbar remains unchanged)").getBoolean(true);
 		enableGlobalTime = get(CATEGORY_GENERAL, KEY_GlobalTime, true, "Enable time manipulation spells working globally. If false, only the local parts retain functionality (similar to time-in-a-bottle).").getBoolean(true);
 		SpawnHugeTrees =  get(CATEGORY_GENERAL, KEY_SpawnHugeTrees, false, "Spawn big witchwood trees. If disabled, will only spawn normal witchwood trees. May cause minor lag on chunkloading.").getBoolean(false);
 
@@ -385,6 +368,7 @@ public class AMConfig extends Configuration{
 		XPNumericPosition = new AMVector2(get(CATEGORY_UI, KEY_XPNumericPositionX, 0.47083333134651184).getDouble(0.47083333134651184), get(CATEGORY_UI, KEY_XPNumericPositionY, 0.7450980544090271).getDouble(0.7450980544090271));
 		SpellBookPosition = new AMVector2(get(CATEGORY_UI, KEY_SpellBookPositionX, 0.0).getDouble(0.0), get(CATEGORY_UI, KEY_SpellBookPositionY, 0.0).getDouble(0.0));
 
+
 		showHudMinimally = get(CATEGORY_UI, KEY_ShowHudMinimally, false, "Set this to true to only show the AM HUD when a spell is equipped").getBoolean(false);
 		showArmorUI = get(CATEGORY_UI, KEY_ShowArmorUI, true).getBoolean(true);
 		showBuffs = get(CATEGORY_UI, KEY_ShowBuffs, true).getBoolean(true);
@@ -392,6 +376,7 @@ public class AMConfig extends Configuration{
 		showXPAlways = get(CATEGORY_UI, KEY_ShowXPAlways, false).getBoolean(false);
 		showHudBars = get(CATEGORY_UI, KEY_ShowHUDBars, true).getBoolean(true);
 
+		EnableEars = get(CATEGORY_GENERAL,KEY_EarsCompat, false, "Set this to true to enable Ears Loader").getBoolean(false);
 		EtherMode = get(CATEGORY_GENERAL, KEY_EtheriumSpawnMode, 3, "0 = spawn both large and small pools. 1 = spawn large pools only. 2 = spawn small pools only, 3 = no pools (use the new etherium gathering mechanic)").getInt();
 		witchwoodForestID = get(CATEGORY_GENERAL, KEY_WitchwoodForestBiomeID, 100, "The biome ID for Witchwood Forests. Change this if you run into issues with other mods that add biomes.").getInt();
 		mmfBiomeID = get(CATEGORY_GENERAL, KEY_MMFBiomeID, 110, "The biome ID for Moo Moo Farm. Change this if you run into issues with other mods that add biomes.").getInt();
@@ -401,7 +386,6 @@ public class AMConfig extends Configuration{
 		EasyStart = get(CATEGORY_GENERAL, KEY_EasyStart, false, "start with 3 basic shapes unlocked (projectile, touch, self)").getBoolean(false);
 		debugVortex = get(CATEGORY_GENERAL, KEY_DebugVortex, false, "Enable if you're having issues with spatial vortices and want to report it. This enables a lot of verbose output about their inner workings at all stages to make it easier for me to debug.").getBoolean(false);
 		enableWitchwoodForest = get(CATEGORY_GENERAL, KEY_EnableWitchwoodForest, true, "Disable this if you prefer the witchwood forest to not generate").getBoolean(true);
-		witchwoodForestRarity = get(CATEGORY_GENERAL, KEY_WitchwoodForestRarity, 6, "Sets how rare witchwood forests are.  Lower is more rare.").getInt();
 		UnlockSilverSpellWithGuardian = get(CATEGORY_GENERAL, KEY_GuardianSilverSpells, true, "Silver Spells are unlocked by killing guardian").getBoolean(true);
 
 		allowCreativeTargets = get(CATEGORY_GENERAL, KEY_allowCreativeTargets, true, "Disable this to prevent spell effects on creative players").getBoolean(true);
@@ -419,9 +403,6 @@ public class AMConfig extends Configuration{
 		colourblindMode = get(CATEGORY_GENERAL, KEY_ColourblindMode, false, "Set this to true to have AM2 list out colours for skill points and essence types rather than showing them as a colour.").getBoolean(false);
 
 		candlesAreRovingLights = get(CATEGORY_GENERAL, KEY_CandlesAreRovingLights, true, "Set this to false to disable candles being able to act as roving lights, which improves performance.").getBoolean(true);
-
-		allowCompendiumUpdates = get(CATEGORY_GENERAL, KEY_AllowCompendiumUpdates, true, "If true, AM2 will automatically download compendium updates when available for your mod version.").getBoolean(true);
-		allowVersionChecks = get(CATEGORY_GENERAL, KEY_AllowVersionChecks, true, "If true, AM2 will notify you via the compendium when new versions are available.  It will not spam chat on login.  You will not be notified of updates that are not for your current Minecraft version.").getBoolean(true);
 
 		meteorMinSpawnLevel = get(CATEGORY_GENERAL, KEY_MeteorMinSpawnLevel, 10, "You must reach this magic level before Moonstone meteors will fall near you.").getInt();
 
@@ -593,15 +574,7 @@ public class AMConfig extends Configuration{
 		return GFXLevel == 0;
 	}
 
-	public int spawnEtherMode() { return EtherMode; };
-
-	public boolean NPCSpellsDamageTerrain(){
-		return NPCSpellsDamageTerrain;
-	}
-
-	public boolean PlayerSpellsDamageTerrain(){
-		return PlayerSpellsDamageTerrain;
-	}
+	public int spawnEtherMode() { return EtherMode; }
 
 	public int getGFXLevel(){
 		return GFXLevel;
@@ -609,18 +582,6 @@ public class AMConfig extends Configuration{
 
 	public float getDamageMultiplier(){
 		return DamageMultiplier;
-	}
-
-	public boolean getIsImbueEnchantEnabled(){
-		return IsImbueEnabled;
-	}
-
-	public int getImbueProcCost(int enchantID){
-		return 0;
-	}
-
-	public boolean useSpecialRenderers(){
-		return UseSpecialRenderers;
 	}
 
 	public boolean spawnHugeTrees(){
@@ -774,6 +735,7 @@ public class AMConfig extends Configuration{
 	public boolean showHudBars(){
 		return showHudBars;
 	}
+	public boolean EnableEarsLoader(){return EnableEars;}
 
 	public boolean witchwoodLeafPFX(){
 		return witchwoodLeafParticles;
@@ -795,14 +757,6 @@ public class AMConfig extends Configuration{
 
 	public Class[] getAppropriationMobBlacklist(){
 		return appropriationMobBlacklist;
-	}
-
-	public boolean allowVersionChecks(){
-		return allowVersionChecks;
-	}
-
-	public boolean allowCompendiumUpdates(){
-		return allowCompendiumUpdates;
 	}
 
 	public boolean getHazardousGateways(){
@@ -871,10 +825,6 @@ public class AMConfig extends Configuration{
 		return this.debugVortex;
 	}
 
-	public int getWitchwoodForestRarity(){
-		return this.witchwoodForestRarity;
-	}
-
 	public boolean getAllowCreativeTargets(){
 		return this.allowCreativeTargets;
 	}
@@ -894,6 +844,9 @@ public class AMConfig extends Configuration{
 	public int getFlowerGenAttempts(){
 		return this.flowerGenAttempts;
 	}
+	//====================================================================================
+	// ORES
+	//====================================================================================
 	
 	public int getVinteumMinHeight(){
 		return this.vinteumMinHeight;
@@ -914,7 +867,6 @@ public class AMConfig extends Configuration{
 	public int getChimeriteMinHeight(){
 		return this.chimeriteMinHeight;
 	}
-	
 	public int getChimeriteMaxHeight(){
 		return this.chimeriteMaxHeight;
 	}
@@ -928,19 +880,19 @@ public class AMConfig extends Configuration{
 	}
 	
 	public int getTopazMinHeight(){
-		return this.vinteumMinHeight;
+		return this.topazMinHeight;
 	}
 	
 	public int getTopazMaxHeight(){
-		return this.vinteumMaxHeight;
+		return this.topazMaxHeight;
 	}
 	
 	public int getTopazVeinSize(){
-		return this.vinteumVeinSize;
+		return this.topazVeinSize;
 	}
 	
 	public int getTopazFrequency(){
-		return this.vinteumFrequency;
+		return this.topazFrequency;
 	}
 	
 	public int getSunstoneMinHeight(){
