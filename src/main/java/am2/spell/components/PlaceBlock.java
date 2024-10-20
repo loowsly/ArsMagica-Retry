@@ -71,7 +71,7 @@ public class PlaceBlock implements ISpellComponent{
 				tagList.removeTag(i);
 			}
 		}
-		tagList.appendTag(new NBTTagString(String.format(StatCollector.translateToLocal("am2.tooltip.placeBlockSpell"), blockStack.getDisplayName())));
+		//tagList.appendTag(new NBTTagString(String.format(StatCollector.translateToLocal("am2.tooltip.placeBlockSpell"), blockStack.getDisplayName())));
 
 		stack.stackTagCompound.setTag("Lore", tagList);
 	}

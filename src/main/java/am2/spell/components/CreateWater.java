@@ -7,10 +7,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.*;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -19,13 +28,25 @@ public class CreateWater implements ISpellComponent{
 
 	@Override
 	public boolean applyEffectBlock(ItemStack stack, World world, int blockx, int blocky, int blockz, int blockFace, double impactX, double impactY, double impactZ, EntityLivingBase caster){
+		{
 
+		}
 		Block block = world.getBlock(blockx, blocky, blockz);
+		TileEntity Tile = world.getTileEntity(blockx, blocky, blockz);
 
 		if (block == Blocks.cauldron){
 			world.setBlockMetadataWithNotify(blockx, blocky, blockz, 3, 2);
 			world.notifyBlockChange(blockx, blocky, blockz, block);
 			return true;
+		}
+		if(Tile instanceof IFluidHandler){
+			IFluidHandler tile = (IFluidHandler)Tile;
+			Fluid water = FluidRegistry.WATER;
+			FluidStack Water = new FluidStack(water, 1000);
+			if((tile.canFill(ForgeDirection.UNKNOWN, water))){
+				tile.fill(ForgeDirection.UNKNOWN,Water, true);
+				return true;
+			}
 		}
 
 		switch (blockFace){
@@ -51,9 +72,16 @@ public class CreateWater implements ISpellComponent{
 
 		block = world.getBlock(blockx, blocky, blockz);
 		if (world.isAirBlock(blockx, blocky, blockz) || block == Blocks.snow || block == Blocks.water || block == Blocks.flowing_water || block instanceof BlockFlower){
-			world.setBlock(blockx, blocky, blockz, Blocks.water);
-			Blocks.water.onNeighborBlockChange(world, blockx, blocky, blockz, Blocks.air);
-			return true;
+			if(caster instanceof EntityPlayer){
+				EntityPlayer player = (EntityPlayer)caster;
+				BlockSnapshot BlockS = BlockSnapshot.getBlockSnapshot(world, blockx, blocky, blockz);
+				BlockEvent.PlaceEvent place = ForgeEventFactory.onPlayerBlockPlace(player, BlockS, ForgeDirection.UNKNOWN);
+				if (!place.isCanceled()){
+					world.setBlock(blockx, blocky, blockz, Blocks.water);
+					Blocks.water.onNeighborBlockChange(world, blockx, blocky, blockz, Blocks.air);
+					return true;
+				}
+			}
 		}
 		return false;
 	}
