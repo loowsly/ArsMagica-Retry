@@ -1,5 +1,6 @@
 package am2.bosses;
 
+import am2.api.entities.Bosses.BossActionsAPI;
 import am2.bosses.ai.EntityAICastSpell;
 import am2.bosses.ai.EntityAIDispel;
 import am2.bosses.ai.ISpellCastCallback;

@@ -1,6 +1,7 @@
 package am2.bosses;
 
 import am2.AMCore;
+import am2.api.entities.Bosses.BossActionsAPI;
 import am2.bosses.ai.*;
 import am2.buffs.BuffEffectFrostSlowed;
 import am2.damage.DamageSourceFire;
