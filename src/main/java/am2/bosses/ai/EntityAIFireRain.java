@@ -1,7 +1,7 @@
 package am2.bosses.ai;
 
-import am2.api.entities.Bosses.BossActionsAPI;
-import am2.api.entities.Bosses.IArsMagicaBoss;
+import am2.bosses.BossActions;
+import am2.bosses.IArsMagicaBoss;
 import am2.entities.EntitySpellEffect;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -19,9 +19,9 @@ public class EntityAIFireRain extends EntityAIBase{
 
 	@Override
 	public boolean shouldExecute(){
-		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActionsAPI.IDLE && host.getAttackTarget() != null && cooldownTicks-- <= 0;
+		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActions.IDLE && host.getAttackTarget() != null && cooldownTicks-- <= 0;
 		if (execute)
-			((IArsMagicaBoss)host).setCurrentAction(BossActionsAPI.CASTING);
+			((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
 		return execute;
 	}
 
@@ -32,15 +32,15 @@ public class EntityAIFireRain extends EntityAIBase{
 
 	@Override
 	public void resetTask(){
-		((IArsMagicaBoss)host).setCurrentAction(BossActionsAPI.IDLE);
+		((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
 		cooldownTicks = 150;
 		boltTicks = 0;
 	}
 
 	@Override
 	public void updateTask(){
-		if (((IArsMagicaBoss)host).getCurrentAction() != BossActionsAPI.CASTING)
-			((IArsMagicaBoss)host).setCurrentAction(BossActionsAPI.CASTING);
+		if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.CASTING)
+			((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
 
 		boltTicks++;
 		if (boltTicks == 12){

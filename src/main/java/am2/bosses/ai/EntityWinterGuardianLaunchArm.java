@@ -1,6 +1,6 @@
 package am2.bosses.ai;
 
-import am2.api.entities.Bosses.BossActionsAPI;
+import am2.bosses.BossActions;
 import am2.bosses.EntityWinterGuardian;
 import am2.entities.EntityWinterGuardianArm;
 import net.minecraft.entity.EntityLivingBase;
@@ -43,8 +43,8 @@ public class EntityWinterGuardianLaunchArm extends EntityAIBase{
 
 	@Override
 	public boolean continueExecuting(){
-		if (target == null || target.isDead || host.getDistanceSqToEntity(target) < 49D || host.getDistanceSqToEntity(target) > 225D || (host.getCurrentAction() == BossActionsAPI.LAUNCHING && host.getTicksInCurrentAction() > host.getCurrentAction().getMaxActionTime())){
-			host.setCurrentAction(BossActionsAPI.IDLE);
+		if (target == null || target.isDead || host.getDistanceSqToEntity(target) < 49D || host.getDistanceSqToEntity(target) > 225D || (host.getCurrentAction() == BossActions.LAUNCHING && host.getTicksInCurrentAction() > host.getCurrentAction().getMaxActionTime())){
+			host.setCurrentAction(BossActions.IDLE);
 			target = null;
 			if (!host.hasLeftArm() && !host.hasRightArm())
 				cooldownTicks = 20;
@@ -56,12 +56,12 @@ public class EntityWinterGuardianLaunchArm extends EntityAIBase{
 	@Override
 	public void updateTask(){
 		host.getLookHelper().setLookPositionWithEntity(target, 30, 30);
-		if (host.getDistanceSqToEntity(target) > 144 && host.getCurrentAction() == BossActionsAPI.IDLE){
+		if (host.getDistanceSqToEntity(target) > 144 && host.getCurrentAction() == BossActions.IDLE){
 			host.getNavigator().tryMoveToEntityLiving(target, moveSpeed);
 		}else{
 			host.getNavigator().clearPathEntity();
-			if (host.getCurrentAction() != BossActionsAPI.LAUNCHING)
-				host.setCurrentAction(BossActionsAPI.LAUNCHING);
+			if (host.getCurrentAction() != BossActions.LAUNCHING)
+				host.setCurrentAction(BossActions.LAUNCHING);
 
 			if (host.getTicksInCurrentAction() == 14){
 				host.faceEntity(target, 180, 180);

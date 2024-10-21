@@ -1,11 +1,12 @@
 package am2.bosses;
 
 import am2.AMCore;
-import am2.api.entities.Bosses.BossActionsAPI;
 import am2.api.math.AMVector3;
 import am2.bosses.ai.EntityAIDispel;
 import am2.bosses.ai.EntityAIHurricane;
 import am2.bosses.ai.EntityAISpawnWhirlwind;
+import am2.damage.DamageSourceFire;
+import am2.damage.DamageSourceFrost;
 import am2.damage.DamageSourceLightning;
 import am2.entities.ai.EntityAIGuardSpawnLocation;
 import am2.items.ItemsCommonProxy;
@@ -14,6 +15,7 @@ import am2.particles.AMParticle;
 import am2.particles.ParticleApproachEntity;
 import am2.particles.ParticleFloatUpward;
 import am2.playerextensions.ExtendedProperties;
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -67,13 +69,13 @@ public class EntityAirGuardian extends AM2Boss{
 	}
 
 	@Override
-	public void setCurrentAction(am2.api.entities.Bosses.BossActionsAPI action){
+	public void setCurrentAction(BossActions action){
 		super.setCurrentAction(action);
 
 		this.spinRotation = 0;
 		this.hitCount = 0;
 
-		if (action == BossActionsAPI.CASTING)
+		if (action == BossActions.CASTING)
 			this.useLeftArm = !this.useLeftArm;
 
 		if (!worldObj.isRemote){
@@ -106,7 +108,7 @@ public class EntityAirGuardian extends AM2Boss{
 				for (int i = 0; i < AMCore.config.getGFXLevel(); ++i){
 					AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(worldObj, "wind", posX + worldObj.rand.nextDouble() * 4 - 2, posY, posZ + worldObj.rand.nextDouble() * 4 - 2);
 					if (particle != null){
-						if (ticksInCurrentAction < BossActionsAPI.SPINNING.getMaxActionTime() - 10){
+						if (ticksInCurrentAction < BossActions.SPINNING.getMaxActionTime() - 10){
 							particle.AddParticleController(new ParticleApproachEntity(particle, this, 0.2f, 0.5f, 1, true));
 							particle.AddParticleController(new ParticleFloatUpward(particle, 0.01f, 0.2f, 2, true));
 						}else{
@@ -150,7 +152,7 @@ public class EntityAirGuardian extends AM2Boss{
 
 	@Override
 	public boolean canBePushed(){
-		return this.getCurrentAction() != BossActionsAPI.SPINNING;
+		return this.getCurrentAction() != BossActions.SPINNING;
 	}
 
 	@Override

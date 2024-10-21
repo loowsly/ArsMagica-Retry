@@ -1,7 +1,6 @@
 package am2.bosses;
 
 import am2.AMCore;
-import am2.api.entities.Bosses.BossActionsAPI;
 import am2.bosses.ai.*;
 import am2.damage.DamageSourceFire;
 import am2.damage.DamageSourceFrost;
@@ -64,7 +63,7 @@ public class EntityNatureGuardian extends AM2Boss{
 
 	@Override
 	protected void initSpecificAI(){
-		this.tasks.addTask(1, new EntityAICastSpell(this, NPCSpells.instance.dispel, 16, 23, 50, BossActionsAPI.CASTING, new ISpellCastCallback<EntityNatureGuardian>(){
+		this.tasks.addTask(1, new EntityAICastSpell(this, NPCSpells.instance.dispel, 16, 23, 50, BossActions.CASTING, new ISpellCastCallback<EntityNatureGuardian>(){
 			@Override
 			public boolean shouldCast(EntityNatureGuardian host, ItemStack spell){
 				return host.getActivePotionEffects().size() > 0;
@@ -96,14 +95,14 @@ public class EntityNatureGuardian extends AM2Boss{
 			leaf.setMaxAge(20);
 			leaf.setIgnoreMaxAge(false);
 			leaf.AddParticleController(new ParticleFloatUpward(leaf, 0.05f, -0.02f, 1, false));
-			if (getCurrentAction() == BossActionsAPI.SPINNING){
+			if (getCurrentAction() == BossActions.SPINNING){
 				leaf.AddParticleController(new ParticleOrbitEntity(leaf, this, 0.6f, 1, false));
 			}
 		}
 	}
 
 	@Override
-	public void setCurrentAction(BossActionsAPI action){
+	public void setCurrentAction(BossActions action){
 		super.setCurrentAction(action);
 		this.spinRotation = 0;
 
@@ -147,8 +146,8 @@ public class EntityNatureGuardian extends AM2Boss{
 	}
 
 	@Override
-	public boolean isActionValid(BossActionsAPI action){
-		if (action == BossActionsAPI.STRIKE || action == BossActionsAPI.SPINNING || action == BossActionsAPI.THROWING_SICKLE){
+	public boolean isActionValid(BossActions action){
+		if (action == BossActions.STRIKE || action == BossActions.SPINNING || action == BossActions.THROWING_SICKLE){
 			return hasSickle;
 		}
 		return true;

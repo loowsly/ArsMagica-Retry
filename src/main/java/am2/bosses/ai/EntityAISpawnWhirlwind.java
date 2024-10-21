@@ -1,8 +1,7 @@
 package am2.bosses.ai;
 
-
-import am2.api.entities.Bosses.BossActionsAPI;
-import am2.api.entities.Bosses.IArsMagicaBoss;
+import am2.bosses.BossActions;
+import am2.bosses.IArsMagicaBoss;
 import am2.entities.EntityWhirlwind;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -21,7 +20,7 @@ public class EntityAISpawnWhirlwind extends EntityAIBase{
 	@Override
 	public boolean shouldExecute(){
 		cooldownTicks--;
-		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActionsAPI.IDLE && host.getAttackTarget() != null && cooldownTicks <= 0;
+		boolean execute = ((IArsMagicaBoss)host).getCurrentAction() == BossActions.IDLE && host.getAttackTarget() != null && cooldownTicks <= 0;
 		if (execute) hasCasted = false;
 		return execute;
 	}
@@ -33,7 +32,7 @@ public class EntityAISpawnWhirlwind extends EntityAIBase{
 
 	@Override
 	public void resetTask(){
-		((IArsMagicaBoss)host).setCurrentAction(BossActionsAPI.IDLE);
+		((IArsMagicaBoss)host).setCurrentAction(BossActions.IDLE);
 		cooldownTicks = 10;
 		hasCasted = true;
 		windTicks = 0;
@@ -56,8 +55,8 @@ public class EntityAISpawnWhirlwind extends EntityAIBase{
 		}else if (!host.canEntityBeSeen(host.getAttackTarget())){
 			host.getNavigator().tryMoveToEntityLiving(host.getAttackTarget(), 0.5f);
 		}else{
-			if (((IArsMagicaBoss)host).getCurrentAction() != BossActionsAPI.CASTING)
-				((IArsMagicaBoss)host).setCurrentAction(BossActionsAPI.CASTING);
+			if (((IArsMagicaBoss)host).getCurrentAction() != BossActions.CASTING)
+				((IArsMagicaBoss)host).setCurrentAction(BossActions.CASTING);
 
 			windTicks++;
 			if (windTicks == 12 && !host.worldObj.isRemote){

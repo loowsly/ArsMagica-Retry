@@ -1,8 +1,6 @@
 package am2.bosses;
 
 import am2.AMCore;
-import am2.api.entities.Bosses.BossActionsAPI;
-import am2.api.entities.Bosses.IArsMagicaBoss;
 import am2.blocks.BlocksCommonProxy;
 import am2.buffs.BuffList;
 import am2.entities.EntityLightMage;
@@ -34,7 +32,7 @@ import java.util.ArrayList;
 
 public abstract class AM2Boss extends EntityMob implements IArsMagicaBoss, IEntityMultiPart{
 
-	protected BossActionsAPI currentAction = BossActionsAPI.IDLE;
+	protected BossActions currentAction = BossActions.IDLE;
 	protected int ticksInCurrentAction;
 	protected EntityDragonPart[] parts;
 
@@ -109,12 +107,12 @@ public abstract class AM2Boss extends EntityMob implements IArsMagicaBoss, IEnti
 	protected abstract void initSpecificAI();
 
 	@Override
-	public BossActionsAPI getCurrentAction(){
+	public BossActions getCurrentAction(){
 		return currentAction;
 	}
 
 	@Override
-	public void setCurrentAction(BossActionsAPI action){
+	public void setCurrentAction(BossActions action){
 		currentAction = action;
 		ticksInCurrentAction = 0;
 	}
@@ -125,7 +123,7 @@ public abstract class AM2Boss extends EntityMob implements IArsMagicaBoss, IEnti
 	}
 
 	@Override
-	public boolean isActionValid(BossActionsAPI action){
+	public boolean isActionValid(BossActions action){
 		return true;
 	}
 
@@ -233,7 +231,7 @@ public abstract class AM2Boss extends EntityMob implements IArsMagicaBoss, IEnti
 		this.ticksInCurrentAction++;
 
 		if (ticksInCurrentAction > 200){
-			setCurrentAction(BossActionsAPI.IDLE);
+			setCurrentAction(BossActions.IDLE);
 		}
 
 		if (worldObj.isRemote){

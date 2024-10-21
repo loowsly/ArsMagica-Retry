@@ -1,6 +1,6 @@
 package am2.bosses.models;
 
-import am2.api.entities.Bosses.BossActionsAPI;
+import am2.bosses.BossActions;
 import am2.entities.renderers.AM2ModelRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -473,7 +473,7 @@ public class ModelLightningGuardian extends ModelBase{
 		//braces are used purely for organization
 
 		//idle
-		animator.setAnim(BossActionsAPI.IDLE.ordinal());
+		animator.setAnim(BossActions.IDLE.ordinal());
 		{
 			animator.startPhase(25);
 			animator.rotate(leftshoulder, 0, 0, Angles.RADS_5);
@@ -510,7 +510,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(25);
 		}
 		//basic attack
-		animator.setAnim(BossActionsAPI.STRIKE.ordinal());
+		animator.setAnim(BossActions.STRIKE.ordinal());
 		{
 			animator.startPhase(4); //wind up
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
@@ -531,7 +531,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(4);
 		}
 		//dive into lightning
-		animator.setAnim(BossActionsAPI.SPINNING.ordinal());
+		animator.setAnim(BossActions.SPINNING.ordinal());
 		{
 			animator.startPhase(5); //setup
 			animator.rotate(leftshoulder, Angles.RADS_45, Angles.RADS_15, 0);
@@ -552,7 +552,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.setStationaryPhase(30); //hold for the spin
 		}
 		//continue lightning
-		animator.setAnim(BossActionsAPI.SHIELD_BASH.ordinal());
+		animator.setAnim(BossActions.SHIELD_BASH.ordinal());
 		{
 			animator.startPhase(0);
 			animator.rotate(rightshoulder, -Angles.RADS_145, 0, 0);
@@ -564,7 +564,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.setStationaryPhase(600); //max 30 seconds
 		}
 		//exit lightning
-		animator.setAnim(BossActionsAPI.LAUNCHING.ordinal());
+		animator.setAnim(BossActions.LAUNCHING.ordinal());
 		{
 			animator.startPhase(0);//set initial anim
 			animator.rotate(rightshoulder, -Angles.RADS_145, 0, 0);
@@ -576,7 +576,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(10);
 		}
 		//static charge
-		animator.setAnim(BossActionsAPI.CHARGE.ordinal());
+		animator.setAnim(BossActions.CHARGE.ordinal());
 		{
 			animator.startPhase(40); //charge up
 			animator.rotate(rightshoulder, -Angles.RADS_30, Angles.RADS_45, 0);
@@ -613,7 +613,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(15);
 		}
 		//lightning rune
-		animator.setAnim(BossActionsAPI.CASTING.ordinal());
+		animator.setAnim(BossActions.CASTING.ordinal());
 		{
 			animator.startPhase(10); //wind up
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
@@ -659,7 +659,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(5);
 		}
 		//lightning rod
-		animator.setAnim(BossActionsAPI.LONG_CASTING.ordinal());
+		animator.setAnim(BossActions.LONG_CASTING.ordinal());
 		{
 			animator.startPhase(20); //prepare
 			animator.rotate(ChestUpper, 0, -Angles.RADS_15, 0);
@@ -728,7 +728,7 @@ public class ModelLightningGuardian extends ModelBase{
 			animator.resetPhase(15);
 		}
 		//scramble synapses
-		animator.setAnim(BossActionsAPI.SMASH.ordinal());
+		animator.setAnim(BossActions.SMASH.ordinal());
 		{
 			animator.startPhase(40); //arms up
 
