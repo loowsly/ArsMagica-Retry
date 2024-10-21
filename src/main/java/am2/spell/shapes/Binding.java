@@ -5,7 +5,6 @@ import am2.api.spell.component.interfaces.ISpellShape;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellCastResult;
 import am2.items.ItemBindingCatalyst;
-import am2.items.ItemSpellBook;
 import am2.items.ItemsCommonProxy;
 import am2.spell.SpellUtils;
 import am2.utility.InventoryUtilities;
@@ -14,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 
@@ -32,9 +30,7 @@ public class Binding implements ISpellShape{
 		}
 		EntityPlayer player = (EntityPlayer)caster;
 		ItemStack heldStack = player.getCurrentEquippedItem();
-		Item Iheld = heldStack.getItem();
 		if (heldStack == null || !(SpellUtils.instance.getShapeForStage(stack, 0) instanceof Binding)){
-			System.out.println("NOPE");
 			return SpellCastResult.EFFECT_FAILED;
 		}
 

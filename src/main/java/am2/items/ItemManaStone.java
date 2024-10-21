@@ -1,5 +1,7 @@
 package am2.items;
 
+import am2.api.items.IManaContainerItem;
+import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
 import am2.utility.EntityUtilities;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,9 +15,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemManaStone extends ArsMagicaItem {
+public class ItemManaStone extends ArsMagicaItem implements IManaContainerItem{
 
-	private static final String KEY_NBT_MANA = "Stored_MANA";
+	private static final String KEY_NBT_MANA = "Stored_Mana";
 
 	public ItemManaStone(){
 		super();
@@ -40,7 +42,7 @@ public class ItemManaStone extends ArsMagicaItem {
 			if (i < strings.length / 2) firstHalf += strings[i] + " ";
 			else secondHalf += strings[i] + " ";
 		}
-		list.add(String.format(StatCollector.translateToLocal("am2.tooltip.containedMana"), getManaInStone(stack)));
+		list.add(String.format(StatCollector.translateToLocal("am2.tooltip.containedMana"), getMana(stack)));
 		list.add(firstHalf);
 		list.add(secondHalf);
 	}
@@ -48,44 +50,30 @@ public class ItemManaStone extends ArsMagicaItem {
 	@Override
 	public ItemStack onItemRightClick(ItemStack stone, World world, EntityPlayer player){
 
-		if (player.isSneaking() && !isFull(stone)){
+		if (player.isSneaking() && !ManaItemHandler.isFull(stone)){
 			if (ExtendedProperties.For(player).getCurrentMana() > 50){
 				ExtendedProperties.For(player).setCurrentMana(ExtendedProperties.For(player).getCurrentMana() - 50);
-				if (!player.worldObj.isRemote) addManaToStone(stone, 50);
+				if (!player.worldObj.isRemote) ManaItemHandler.AddMana(stone, 50);
 			}
 		}else{
-			int amtp = Math.min(getManaInStone(stone), 50);
+			float amtp = Math.min(getMana(stone), 50);
 			float amt = Math.min(ExtendedProperties.For(player).getMaxMana() - ExtendedProperties.For(player).getCurrentMana(), amtp);
 			if (amt > 0){
 				ExtendedProperties.For(player).setCurrentMana(ExtendedProperties.For(player).getCurrentMana()+amt);
-				if (!player.worldObj.isRemote) deductManaFromStone(stone, (int)amt);
+				if (!player.worldObj.isRemote) ManaItemHandler.RemoveMana(stone, (int)amt);
 			}
 		}
 
 		return super.onItemRightClick(stone, world, player);
 	}
-
-	public static void addManaToStone(ItemStack stone, int amount){
-		if (!stone.hasTagCompound())
-			stone.stackTagCompound = new NBTTagCompound();
-		int value = Math.min(stone.stackTagCompound.getInteger(KEY_NBT_MANA) + amount, 1000);
-		stone.stackTagCompound.setInteger(KEY_NBT_MANA, value);
-	}
-
-	public static void deductManaFromStone(ItemStack stone, int amount){
-		addManaToStone(stone, -amount);
-	}
-
-	public static int getManaInStone(ItemStack stone){
-		if (!stone.hasTagCompound())
+	public float getMana(ItemStack item){
+		if (!item.hasTagCompound())
 			return 0;
-		return stone.stackTagCompound.getInteger(KEY_NBT_MANA);
+		return item.stackTagCompound.getFloat(KEY_NBT_MANA);
+	}
+	public float getMaxMana(){
+		return 1000;
 	}
 
-	public static boolean isFull(ItemStack stone){
-		if (!stone.hasTagCompound())
-			return false;
-		return stone.stackTagCompound.getInteger(KEY_NBT_MANA) >= 1000;
-	}
 
 }

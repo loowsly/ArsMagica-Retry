@@ -1,5 +1,7 @@
 package am2.items;
 
+import am2.api.items.IBoundItem;
+import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
 import am2.spell.SpellUtils;
@@ -94,17 +96,13 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 		if (par3Entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer)par3Entity;
 			if (player.capabilities.isCreativeMode) return;
-			ExtendedProperties props = ExtendedProperties.For(player);
-			if (props.getCurrentMana() + props.getBonusCurrentMana() < this.maintainCost()){
-				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
-				return;
-			}else{
-				props.deductMana(this.maintainCost());
+			if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost()))
+				ExtendedProperties.For(player).deductMana(this.maintainCost());
 			}
 			if (par1ItemStack.getItemDamage() > 0)
 				par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
 		}
-	}
+
 
 	@Override
 	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventoryIndex){

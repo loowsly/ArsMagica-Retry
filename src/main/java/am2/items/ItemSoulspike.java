@@ -1,6 +1,7 @@
 package am2.items;
 
 import am2.AMEventHandler;
+import am2.api.items.ManaItemHandler;
 import am2.armor.ItemEnderBoots;
 import am2.playerextensions.ExtendedProperties;
 import am2.utility.DummyEntityPlayer;
@@ -17,16 +18,18 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import am2.api.items.IManaContainerItem;
 
 import java.util.List;
 
-public class ItemSoulspike extends ItemSword {
+public class ItemSoulspike extends ItemSword implements IManaContainerItem{
 
-    private static final String KEY_NBT_MANA = "Stored_GREATERMANA";
+    private static final String KEY_NBT_MANA = "Stored_Mana";
 
     public ItemSoulspike(ToolMaterial material) {
         super(material);
         this.setMaxDamage(0);
+
     }
 
     public ItemSoulspike setUnlocalizedAndTextureName(String name){
@@ -43,16 +46,16 @@ public class ItemSoulspike extends ItemSword {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4){
-        list.add(String.format(StatCollector.translateToLocal("am2.tooltip.containedMana"), getManaInSpike(stack)));
+        list.add(String.format(StatCollector.translateToLocal("am2.tooltip.containedMana"), getMana(stack)));
     }
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player){
-        if (player.isSneaking() && player.isPotionActive(Potion.invisibility.id) && (getManaInSpike(stack) > 100)) { // ethereal form
+        if (player.isSneaking() && player.isPotionActive(Potion.invisibility.id) && (getMana(stack) > 100)) { // ethereal form
             if (player.inventory.armorInventory[0] != null) {
                 if (areEtherealApplicableBootsEquipped(player)) { // player wearing reality-bending boots
                     if (!ExtendedProperties.For(player).hasExtraVariable("karma")) { // good karma
-                        deductManaFromSpike(stack, 100);
+                        ManaItemHandler.RemoveMana(stack, 100);
                         player.attackEntityFrom(DamageSource.outOfWorld, 5);
                         world.playSoundAtEntity(player, "arsmagica2:spell.cast.ender", 1F, 1F);
                         ExtendedProperties.For(player).addToExtraVariables("ethereal", String.valueOf(player.getActivePotionEffect(Potion.invisibility).getDuration()));
@@ -130,27 +133,13 @@ public class ItemSoulspike extends ItemSword {
     {
         return "§a" + ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(p_77653_1_) + ".name")).trim() + "§r";
     }
-
-    public static void addManaToSpike(ItemStack spike, int amount){
-        if (!spike.hasTagCompound())
-            spike.stackTagCompound = new NBTTagCompound();
-        int value = Math.min(spike.stackTagCompound.getInteger(KEY_NBT_MANA) + amount, 150000);
-        spike.stackTagCompound.setInteger(KEY_NBT_MANA, value);
-    }
-
-    public static void deductManaFromSpike(ItemStack spike, int amount){
-        addManaToSpike(spike, -amount);
-    }
-
-    public static int getManaInSpike(ItemStack spike){
+    public float getMana(ItemStack spike){
         if (!spike.hasTagCompound())
             return 0;
-        return spike.stackTagCompound.getInteger(KEY_NBT_MANA);
+        return spike.stackTagCompound.getFloat(KEY_NBT_MANA);
+    }
+    public final float  getMaxMana(){
+        return 150000;
     }
 
-    public static boolean isFull(ItemStack spike){
-        if (!spike.hasTagCompound())
-            return false;
-        return spike.stackTagCompound.getInteger(KEY_NBT_MANA) >= 150000; // not entirely lore-accurate, but lowered for the sake of balance
-    }
 }

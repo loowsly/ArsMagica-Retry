@@ -4,10 +4,9 @@ import am2.AMCore;
 import am2.api.math.AMVector2;
 import am2.api.spell.ItemSpellBase;
 import am2.api.spell.enums.Affinity;
-import am2.api.spell.enums.ContingencyTypes;
 import am2.armor.ArmorHelper;
 import am2.buffs.BuffList;
-import am2.items.IBoundItem;
+import am2.api.items.IBoundItem;
 import am2.items.ItemSpellBook;
 import am2.items.ItemsCommonProxy;
 import am2.playerextensions.AffinityData;
@@ -16,21 +15,16 @@ import am2.spell.SkillManager;
 import am2.spell.SpellUtils;
 import am2.texture.ResourceManager;
 import am2.texture.SpellIconManager;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSnowball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
@@ -240,7 +234,7 @@ public class AMIngameGUI{
 		float fatigue = props.getCurrentFatigue();
 		float maxFatigue = props.getMaxFatigue();
 
-		if (mana + bonusMana > maxMana)
+		if (mana  > maxMana)
 			mana = maxMana;
 
 		float progressScaled = (mana / (maxMana + 0.01f));
@@ -315,7 +309,7 @@ public class AMIngameGUI{
 		}
 
 		if (AMCore.config.getShowNumerics()){
-			String manaStr = StatCollector.translateToLocal("am2.gui.mana") + ": " + (int)(mana + bonusMana) + "/" + (int)maxMana;
+			String manaStr = StatCollector.translateToLocal("am2.gui.mana") + ": " + (int)(mana) + "/" + (int)maxMana;
 			String burnoutStr = StatCollector.translateToLocal("am2.gui.burnout") + ": " + (int)props.getCurrentFatigue() + "/" + (int)props.getMaxFatigue();
 			AMVector2 manaNumericPos = getShiftedVector(AMCore.config.getManaNumericPosition(), i, j);
 			AMVector2 burnoutNumericPos = getShiftedVector(AMCore.config.getBurnoutNumericPosition(), i, j);

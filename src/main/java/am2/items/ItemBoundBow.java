@@ -1,5 +1,7 @@
 package am2.items;
 
+import am2.api.items.IBoundItem;
+import am2.api.items.ManaItemHandler;
 import am2.entities.EntityBoundArrow;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
@@ -14,15 +16,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
 public class ItemBoundBow extends ItemBow implements IBoundItem{
 
@@ -91,7 +88,7 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 			EntityPlayer player = (EntityPlayer)par3Entity;
 			if (player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
-			if (props.getCurrentMana() + props.getBonusCurrentMana() < this.maintainCost()){
+			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
 				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 				return;
 			}else{

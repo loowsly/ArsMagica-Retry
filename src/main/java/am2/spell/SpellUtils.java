@@ -701,25 +701,10 @@ public class SpellUtils implements ISpellUtils{
 	public boolean casterHasMana(EntityLivingBase caster, float mana){
 		if (caster instanceof EntityPlayer && ((EntityPlayer)caster).capabilities.isCreativeMode)
 			return true;
-		return ExtendedProperties.For(caster).getCurrentMana() + ExtendedProperties.For(caster).getBonusCurrentMana() + getStoredItemMana(caster) >= mana;
+		ExtendedProperties Eplayer = ExtendedProperties.For(caster);
+		return Eplayer.getCurrentMana() + Eplayer.getBonusCurrentMana() + Eplayer.getStoredItemMana()  >= mana;
 	}
 
-	public float getStoredItemMana(EntityLivingBase caster){
-		float mana = 0;
-		if (caster instanceof EntityPlayer){
-			EntityPlayer casterPlayer = (EntityPlayer) caster;
-			for (int i = 0; i < casterPlayer.inventory.mainInventory.length; i++) {
-				if (casterPlayer.inventory.mainInventory[i] != null){
-					if (casterPlayer.inventory.mainInventory[i].getItem() instanceof ItemManaStone){
-						mana += ItemManaStone.getManaInStone(casterPlayer.inventory.mainInventory[i]);
-					} else if (casterPlayer.inventory.mainInventory[i].getItem() instanceof ItemSoulspike){
-						mana += ItemSoulspike.getManaInSpike(casterPlayer.inventory.mainInventory[i]);
-					}
-				}
-			}
-		}
-		return mana;
-	}
 
 	public void addSpellStageToScroll(ItemStack scrollStack, int shape, int[] components, ListMultimap<Integer, byte[]> modifiers){
 		if (scrollStack.stackTagCompound == null){

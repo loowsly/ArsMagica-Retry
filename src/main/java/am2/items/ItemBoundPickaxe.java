@@ -1,10 +1,13 @@
 package am2.items;
 
+import am2.api.items.IBoundItem;
+import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
 import am2.spell.SpellUtils;
 import am2.texture.ResourceManager;
 import am2.utility.InventoryUtilities;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -19,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -94,7 +98,7 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 			EntityPlayer player = (EntityPlayer)par3Entity;
 			if (player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
-			if (props.getCurrentMana() + props.getBonusCurrentMana() < this.maintainCost()){
+			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
 				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 				return;
 			}else{

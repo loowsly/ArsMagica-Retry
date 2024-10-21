@@ -5,6 +5,8 @@ import am2.api.ArsMagicaApi;
 import am2.api.IExtendedProperties;
 import am2.api.events.PlayerMagicLevelChangeEvent;
 import am2.api.events.RegisterCompendiumEntries;
+import am2.api.items.IManaContainerItem;
+import am2.api.items.ManaItemHandler;
 import am2.api.math.AMVector2;
 import am2.api.math.AMVector3;
 import am2.api.spell.enums.ContingencyTypes;
@@ -16,8 +18,6 @@ import am2.armor.infusions.ImbuementRegistry;
 import am2.bosses.EntityLifeGuardian;
 import am2.buffs.BuffList;
 import am2.guis.AMGuiHelper;
-import am2.items.ItemManaStone;
-import am2.items.ItemSoulspike;
 import am2.items.ItemsCommonProxy;
 import am2.lore.ArcaneCompendium;
 import am2.lore.CompendiumEntry;
@@ -782,6 +782,21 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		}
 		return bonus;
 	}
+	public float getStoredItemMana(){
+		float mana = 0;
+		if (this.entity instanceof EntityPlayer){
+			EntityPlayer casterPlayer = (EntityPlayer)this.entity;
+			for (int i = 0; i < casterPlayer.inventory.mainInventory.length; i++){
+				if (casterPlayer.inventory.mainInventory[i] != null){
+					if (casterPlayer.inventory.mainInventory[i].getItem() instanceof IManaContainerItem){
+						IManaContainerItem containerItem = (IManaContainerItem)casterPlayer.inventory.mainInventory[i].getItem();
+						mana += containerItem.getMana(casterPlayer.inventory.mainInventory[i]);
+					}
+				}
+			}
+		}
+		return mana;
+	}
 
 	public float getBonusMaxMana(){
 		float bonus = 0;
@@ -1414,26 +1429,17 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 	public void deductMana(float manaCost){
 		float leftOver = manaCost - currentMana;
-		this.setCurrentMana(currentMana - manaCost);
 		if (leftOver > 0){
 			if (this.entity instanceof EntityPlayer){
 				EntityPlayer casterPlayer = (EntityPlayer) this.entity;
 				for (int i = 0; i < casterPlayer.inventory.mainInventory.length; i++) {
 					if (casterPlayer.inventory.mainInventory[i] != null){
-						if (casterPlayer.inventory.mainInventory[i].getItem() instanceof ItemManaStone){
-							int availablemana = ItemManaStone.getManaInStone(casterPlayer.inventory.mainInventory[i]);
+						if (casterPlayer.inventory.mainInventory[i].getItem() instanceof IManaContainerItem){
+							IManaContainerItem container = (IManaContainerItem)casterPlayer.inventory.mainInventory[i].getItem();
+							float availablemana = container.getMana(casterPlayer.inventory.mainInventory[i]);
 							float amt = Math.min(availablemana, leftOver);
 							if (amt > 0){
-								ItemManaStone.deductManaFromStone(casterPlayer.inventory.mainInventory[i], (int)amt);
-								leftOver -= amt;
-								if (leftOver <= 0)
-									break;
-							}
-						} else if (casterPlayer.inventory.mainInventory[i].getItem() instanceof ItemSoulspike){
-							int availablemana = ItemSoulspike.getManaInSpike(casterPlayer.inventory.mainInventory[i]);
-							float amt = Math.min(availablemana, leftOver);
-							if (amt > 0){
-								ItemSoulspike.deductManaFromSpike(casterPlayer.inventory.mainInventory[i], (int)amt);
+								ManaItemHandler.RemoveMana(casterPlayer.inventory.mainInventory[i], amt);
 								leftOver -= amt;
 								if (leftOver <= 0)
 									break;
@@ -1450,6 +1456,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 					break;
 			}
 		}
+		this.setCurrentMana(currentMana - leftOver);
 	}
 
 	public void toggleFlipped(){

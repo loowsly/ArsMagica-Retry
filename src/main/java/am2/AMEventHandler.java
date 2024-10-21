@@ -2,6 +2,7 @@ package am2;
 import am2.affinity.AffinityHelper;
 import am2.api.ArsMagicaApi;
 import am2.api.events.ManaCostEvent;
+import am2.api.items.ManaItemHandler;
 import am2.api.power.IPowerNode;
 import am2.api.power.PowerTypes;
 import am2.api.spell.component.interfaces.ISkillTreeEntry;
@@ -302,7 +303,7 @@ public class AMEventHandler{
 		if (event.entityPlayer.getHeldItem() != null) {
 			if (event.entityPlayer.getHeldItem().getItem() instanceof ItemSoulspike) {
 				if (event.target instanceof EntityHallucination) {
-					ItemSoulspike.addManaToSpike(event.entityPlayer.getHeldItem(), 15);
+					ManaItemHandler.AddMana(event.entityPlayer.getHeldItem(), 15);
 					event.target.attackEntityFrom(DamageSource.outOfWorld, 15);
 					event.target.attackEntityFrom(DamageSource.magic, 15);
 				} else if (event.target instanceof EntityLivingBase) {
@@ -311,11 +312,11 @@ public class AMEventHandler{
 						if (!AMCore.config.getAllowCreativeTargets() && pl.capabilities.isCreativeMode) return;
 						ExtendedProperties properties = ExtendedProperties.For(pl);
 						if (properties.hasExtraVariable("ethereal")) {
-							ItemSoulspike.addManaToSpike(event.entityPlayer.getHeldItem(), (int)(properties.getCurrentMana()/4));
+							ManaItemHandler.AddMana(event.entityPlayer.getHeldItem(), (int)(properties.getCurrentMana()/4));
 							properties.deductMana(properties.getCurrentMana()/4);
 						}
 					}
-					ItemSoulspike.addManaToSpike(event.entityPlayer.getHeldItem(), 3);
+					ManaItemHandler.AddMana(event.entityPlayer.getHeldItem(), 3);
 					event.target.attackEntityFrom(DamageSource.outOfWorld, 3);
 
 				}
@@ -379,7 +380,6 @@ public class AMEventHandler{
 	public void onPlayerGetAchievement(AchievementEvent event){
 		if (!event.entityPlayer.worldObj.isRemote && event.achievement == AchievementList.theEnd2){
 			PlayerTracker.storeExtendedPropertiesForRespawn(event.entityPlayer);
-
 		}
 	}
 
