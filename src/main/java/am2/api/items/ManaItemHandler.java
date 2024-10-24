@@ -1,9 +1,11 @@
 package am2.api.items;
 
+import am2.api.events.ManaUsageEvent;
 import am2.playerextensions.ExtendedProperties;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ManaItemHandler {
 
@@ -23,6 +25,10 @@ public class ManaItemHandler {
 		if(manaAmount > currentmana){
 			return 0;
 		}else{
+			ManaUsageEvent mue = new ManaUsageEvent(item, player, manaAmount);
+			MinecraftForge.EVENT_BUS.post(mue);
+
+			manaAmount = mue.amount;
 			return manaAmount;
 		}
 	}
@@ -34,6 +40,8 @@ public class ManaItemHandler {
 	 * Used to check if item can use mana.
 	 */
 	public static boolean canExtractMana(ItemStack item, EntityPlayer player,float manaAmount){
+		if(!(item.getItem() instanceof IManaItem))
+			return false;
 		if(manaAmount == 0)
 			return true;
 		return UseMana(item, player, manaAmount) != 0;

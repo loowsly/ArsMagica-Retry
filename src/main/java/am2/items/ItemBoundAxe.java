@@ -98,9 +98,12 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 			if (player.capabilities.isCreativeMode) return;
 			if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost()))
 				ExtendedProperties.For(player).deductMana(this.maintainCost());
+			else{
+				UnbindItem(par1ItemStack, player, slotIndex);
 			}
-			if (par1ItemStack.getItemDamage() > 0)
-				par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
+			}
+			// if (par1ItemStack.getItemDamage() > 0)
+			//	par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
 		}
 
 
