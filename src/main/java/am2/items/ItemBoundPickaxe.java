@@ -1,5 +1,6 @@
 package am2.items;
 
+import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
@@ -80,7 +81,7 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player){
-		UnbindItem(item, player, player.inventory.currentItem);
+		BoundItemHandler.UnbindItem(item, player, player.inventory.currentItem);
 		return false;
 	}
 
@@ -99,7 +100,7 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 			if (player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
 			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
-				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
+				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 				return;
 			}else{
 				props.deductMana(this.maintainCost());
@@ -107,12 +108,6 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 			if (par1ItemStack.getItemDamage() > 0)
 				par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
 		}
-	}
-
-	@Override
-	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventorySlot){
-		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
-		player.inventory.setInventorySlotContents(inventorySlot, itemstack);
 	}
 
 	@Override
@@ -137,19 +132,11 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase living){
 
 		if (!living.isSneaking() && stack.hasTagCompound() && this.getDigSpeed(stack, block, world.getBlockMetadata(x, y, z)) == this.efficiencyOnProperMaterial){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 			SpellHelper.instance.applyStackStage(castStack, living, null, x, y, z, stack.stackTagCompound.getInteger("block_break_face"), world, true, true, 0);
 		}
 
 		return super.onBlockDestroyed(stack, world, block, x, y, z, living);
-	}
-
-	private ItemStack getApplicationStack(ItemStack boundStack){
-		ItemStack castStack = SpellUtils.instance.constructSpellStack(boundStack.copy());
-		castStack = SpellUtils.instance.popStackStage(castStack);
-		castStack = InventoryUtilities.replaceItem(castStack, ItemsCommonProxy.spell);
-
-		return castStack;
 	}
 
 	@Override
@@ -157,7 +144,7 @@ public class ItemBoundPickaxe extends ItemPickaxe implements IBoundItem{
 		MovingObjectPosition mop = ItemsCommonProxy.spell.getMovingObjectPosition(player, world, 4.0f, true, false);
 
 		if (mop != null && stack.hasTagCompound()){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 
 			if (mop.typeOfHit == MovingObjectType.BLOCK)
 				SpellHelper.instance.applyStackStage(castStack, player, null, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, mop.sideHit, world, true, true, 0);

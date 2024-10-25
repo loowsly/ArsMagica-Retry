@@ -1,5 +1,6 @@
 package am2.items;
 
+import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
@@ -74,7 +75,7 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem{
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player){
-		UnbindItem(item, player, player.inventory.currentItem);
+		BoundItemHandler.UnbindItem(item, player, player.inventory.currentItem);
 		return false;
 	}
 
@@ -85,7 +86,7 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem{
 			if (player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
 			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
-				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
+				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 				return;
 			}else{
 				props.deductMana(this.maintainCost());
@@ -100,7 +101,7 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem{
 		MovingObjectPosition mop = ItemsCommonProxy.spell.getMovingObjectPosition(player, world, 4.0f, true, false);
 
 		if (mop != null && stack.hasTagCompound()){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 			if (mop.typeOfHit == MovingObjectType.BLOCK)
 				SpellHelper.instance.applyStackStage(castStack, player, null, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, mop.sideHit, world, true, true, 0);
 			else if (mop.typeOfHit == MovingObjectType.ENTITY && mop.entityHit instanceof EntityLivingBase)
@@ -108,14 +109,6 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem{
 		}
 
 		return super.onItemRightClick(stack, world, player);
-	}
-
-	private ItemStack getApplicationStack(ItemStack boundStack){
-		ItemStack castStack = SpellUtils.instance.constructSpellStack(boundStack.copy());
-		castStack = SpellUtils.instance.popStackStage(castStack);
-		castStack = InventoryUtilities.replaceItem(castStack, ItemsCommonProxy.spell);
-
-		return castStack;
 	}
 
 	@Override
@@ -127,17 +120,11 @@ public class ItemBoundHoe extends ItemHoe implements IBoundItem{
 	}
 
 	@Override
-	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventorySlot){
-		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
-		player.inventory.setInventorySlotContents(inventorySlot, itemstack);
-	}
-
-	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int face, float hitX, float hitY, float hitZ){
 		boolean b = super.onItemUse(stack, player, world, x, y, z, face, hitX, hitY, hitZ);
 
 		if (!player.isSneaking() && b){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 			SpellHelper.instance.applyStackStage(castStack, player, null, x, y, z, face, world, true, true, 0);
 		}
 

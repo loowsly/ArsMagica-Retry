@@ -1,5 +1,6 @@
 package am2.items;
 
+import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
 import am2.playerextensions.ExtendedProperties;
@@ -79,7 +80,7 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player){
-		UnbindItem(item, player, player.inventory.currentItem);
+		BoundItemHandler.UnbindItem(item, player, player.inventory.currentItem);
 		return false;
 	}
 
@@ -94,23 +95,15 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int slotIndex, boolean par5){
 		if (par3Entity instanceof EntityPlayer){
-			EntityPlayer player = (EntityPlayer)par3Entity;
-			if (player.capabilities.isCreativeMode) return;
-			if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost()))
-				ExtendedProperties.For(player).deductMana(this.maintainCost());
-			else{
-				UnbindItem(par1ItemStack, player, slotIndex);
-			}
-			}
-			// if (par1ItemStack.getItemDamage() > 0)
-			//	par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
+				EntityPlayer player = (EntityPlayer)par3Entity;
+				if (player.capabilities.isCreativeMode) return;
+				if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost()))
+					ExtendedProperties.For(player).deductMana(this.maintainCost());
+				else{
+					BoundItemHandler.UnbindItem(par1ItemStack, player, slotIndex);
+
+				}
 		}
-
-
-	@Override
-	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventoryIndex){
-		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
-		player.inventory.setInventorySlotContents(inventoryIndex, itemstack);
 	}
 
 	@Override
@@ -136,7 +129,7 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 		MovingObjectPosition mop = ItemsCommonProxy.spell.getMovingObjectPosition(player, world, 4.0f, true, false);
 
 		if (mop != null && stack.hasTagCompound()){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 
 			if (mop.typeOfHit == MovingObjectType.BLOCK)
 				SpellHelper.instance.applyStackStage(castStack, player, null, mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord, mop.sideHit, world, true, true, 0);
@@ -147,19 +140,13 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 		return super.onItemRightClick(stack, world, player);
 	}
 
-	private ItemStack getApplicationStack(ItemStack boundStack){
-		ItemStack castStack = SpellUtils.instance.constructSpellStack(boundStack.copy());
-		castStack = SpellUtils.instance.popStackStage(castStack);
-		castStack = InventoryUtilities.replaceItem(castStack, ItemsCommonProxy.spell);
 
-		return castStack;
-	}
 
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase living){
 
 		if (!living.isSneaking() && this.getDigSpeed(stack, block, world.getBlockMetadata(x, y, z)) == this.efficiencyOnProperMaterial){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 			SpellHelper.instance.applyStackStage(castStack, living, null, x, y, z, stack.stackTagCompound.getInteger("block_break_face"), world, true, true, 0);
 		}
 

@@ -1,5 +1,6 @@
 package am2.items;
 
+import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
 import am2.entities.EntityBoundArrow;
@@ -73,7 +74,7 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player){
-		UnbindItem(item, player, player.inventory.currentItem);
+		BoundItemHandler.UnbindItem(item, player, player.inventory.currentItem);
 		return false;
 	}
 
@@ -89,7 +90,7 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 			if (player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
 			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
-				UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
+				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 				return;
 			}else{
 				props.deductMana(this.maintainCost());
@@ -124,7 +125,7 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 			f = 1.0F;
 		}
 
-		EntityBoundArrow entityarrow = new EntityBoundArrow(p_77615_2_, p_77615_3_, f * 2.0F, getApplicationStack(p_77615_1_));
+		EntityBoundArrow entityarrow = new EntityBoundArrow(p_77615_2_, p_77615_3_, f * 2.0F, BoundItemHandler.getApplicationStack(p_77615_1_));
 
 		if (f == 1.0F)
 		{
@@ -160,26 +161,12 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 	}
 
 	@Override
-	public void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventorySlot){
-		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
-		player.inventory.setInventorySlotContents(inventorySlot, itemstack);
-	}
-
-	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity){ // you can apply the effect just by hitting someone with the bow (or by shooting them!)
 		if (!player.isSneaking() && stack.hasTagCompound() && entity instanceof EntityLivingBase){
-			ItemStack castStack = getApplicationStack(stack);
+			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
 			SpellHelper.instance.applyStackStage(castStack, player, (EntityLivingBase)entity, entity.posX, entity.posY, entity.posZ, 0, player.worldObj, true, true, 0);
 		}
 		return super.onLeftClickEntity(stack, player, entity);
-	}
-
-	private ItemStack getApplicationStack(ItemStack boundStack){
-		ItemStack castStack = SpellUtils.instance.constructSpellStack(boundStack.copy());
-		castStack = SpellUtils.instance.popStackStage(castStack);
-		castStack = InventoryUtilities.replaceItem(castStack, ItemsCommonProxy.spell);
-
-		return castStack;
 	}
 
 	@Override

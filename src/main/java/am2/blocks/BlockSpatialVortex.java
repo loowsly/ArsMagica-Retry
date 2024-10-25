@@ -2,6 +2,7 @@ package am2.blocks;
 
 import am2.blocks.tileentities.TileEntityCandle;
 import am2.blocks.tileentities.TileEntitySpatialVortex;
+import am2.items.ItemOre;
 import am2.items.ItemsCommonProxy;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -65,7 +66,7 @@ public class BlockSpatialVortex extends AMSpecialRenderBlockContainer{
 	@Override
 	public ArrayList<ItemStack> getDrops(World arg0, int arg1, int arg2, int arg3, int arg4, int arg5){
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(ItemsCommonProxy.itemOre, 2, ItemsCommonProxy.itemOre.META_PURIFIEDVINTEUM));
+		drops.add(new ItemStack(ItemsCommonProxy.itemOre, 2, ItemOre.META_PURIFIEDVINTEUM));
 		return drops;
 	}
 }
