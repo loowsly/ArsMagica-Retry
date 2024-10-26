@@ -1,5 +1,6 @@
 package am2.spell.components;
 
+import am2.AMCore;
 import am2.RitualShapeHelper;
 import am2.api.ArsMagicaApi;
 import am2.api.blocks.MultiblockStructureDefinition;
@@ -9,11 +10,16 @@ import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
 import am2.blocks.BlocksCommonProxy;
 import am2.entities.EntityRiftStorage;
+import am2.guis.ArsMagicaGuiIdList;
 import am2.items.ItemsCommonProxy;
+import am2.playerextensions.RiftStorage;
 import am2.spell.SpellUtils;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -71,7 +77,15 @@ public class Rift implements ISpellComponent, IRitualInteraction{
 
 	@Override
 	public boolean applyEffectEntity(ItemStack stack, World world, EntityLivingBase caster, Entity target){
-		return false;
+		if(caster == target && caster instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer)caster;
+			EntityRiftStorage storage = new EntityRiftStorage(world);
+			RiftStorage.For(player).setAccessEntity(storage);
+			int storageLevel = Math.min(1 + SpellUtils.instance.countModifiers(SpellModifiers.BUFF_POWER, stack, 0), 3);
+			storage.setStorageLevel(storageLevel);
+			FMLNetworkHandler.openGui(player, AMCore.instance, ArsMagicaGuiIdList.GUI_RIFT,caster.worldObj,(int)player.posX,(int)player.posY,(int)player.posZ);
+		}
+		return  false;
 	}
 
 	@Override
