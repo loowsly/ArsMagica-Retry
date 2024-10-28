@@ -111,9 +111,7 @@ public class ItemSpellStaff extends ArsMagicaItem{
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack){
-		if (isMagiTechStaff())
-			return EnumAction.none;
-		return EnumAction.block;
+		return isMagiTechStaff() ? EnumAction.none: EnumAction.block;
 	}
 
 	@Override
@@ -190,11 +188,7 @@ public class ItemSpellStaff extends ArsMagicaItem{
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int X, int Y, int Z, int side, float par8, float par9, float par10){
-		if (isMagiTechStaff()){
-			return true;
-		}
-
-		return false;
+		return isMagiTechStaff();
 	}
 
 	@Override

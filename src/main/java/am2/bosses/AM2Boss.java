@@ -273,7 +273,7 @@ public abstract class AM2Boss extends EntityMob implements IArsMagicaBoss, IEnti
 
 	@Override
 	public void addPotionEffect(PotionEffect effect){
-		if (effect.getPotionID() == BuffList.silence.id || effect.getPotionID() == Potion.blindness.id
+		if (effect.getPotionID() == Potion.blindness.id
 			|| effect.getEffectName().contains("blindness") || effect.getEffectName().contains("ink")
 		|| effect.getPotionID() == BuffList.entangled.id)
 			return;

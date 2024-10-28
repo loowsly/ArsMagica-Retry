@@ -13,6 +13,9 @@ import java.util.HashMap;
 public class BoundItemHandler extends Item{
 
 	public static void UnbindItem(ItemStack itemstack, EntityPlayer player, int inventoryIndex){
+		if(!(itemstack.getItem() instanceof IBoundItem)){
+			return;
+		}
 		itemstack = InventoryUtilities.replaceBoundItem(itemstack);
 		player.inventory.setInventorySlotContents(inventoryIndex, itemstack);
 	}

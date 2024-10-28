@@ -1,21 +1,16 @@
 package am2.items;
 
-import am2.AMEventHandler;
 import am2.api.items.ManaItemHandler;
 import am2.armor.ItemEnderBoots;
 import am2.playerextensions.ExtendedProperties;
-import am2.utility.DummyEntityPlayer;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentFireAspect;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import am2.api.items.IManaContainerItem;
@@ -131,7 +126,7 @@ public class ItemSoulspike extends ItemSword implements IManaContainerItem{
     @Override
     public String getItemStackDisplayName(ItemStack p_77653_1_)
     {
-        return "§a" + ("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(p_77653_1_) + ".name")).trim() + "§r";
+        return EnumChatFormatting.GREEN + (StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(p_77653_1_) + ".name")).trim() + EnumChatFormatting.RESET;
     }
     public float getMana(ItemStack spike){
         if (!spike.hasTagCompound())
@@ -141,5 +136,4 @@ public class ItemSoulspike extends ItemSword implements IManaContainerItem{
     public final float  getMaxMana(){
         return 150000;
     }
-
 }

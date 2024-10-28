@@ -1428,8 +1428,8 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	}
 
 	public void deductMana(float manaCost){
-		float leftOver = manaCost - currentMana;
-		if (leftOver > 0){
+
+		if (manaCost > 0){
 			if (this.entity instanceof EntityPlayer){
 				EntityPlayer casterPlayer = (EntityPlayer) this.entity;
 				for (int i = 0; i < casterPlayer.inventory.mainInventory.length; i++) {
@@ -1437,11 +1437,11 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 						if (casterPlayer.inventory.mainInventory[i].getItem() instanceof IManaContainerItem){
 							IManaContainerItem container = (IManaContainerItem)casterPlayer.inventory.mainInventory[i].getItem();
 							float availablemana = container.getMana(casterPlayer.inventory.mainInventory[i]);
-							float amt = Math.min(availablemana, leftOver);
+							float amt = Math.min(availablemana, manaCost);
 							if (amt > 0){
 								ManaItemHandler.RemoveMana(casterPlayer.inventory.mainInventory[i], amt);
-								leftOver -= amt;
-								if (leftOver <= 0)
+								manaCost -= amt;
+								if (manaCost <= 0)
 									break;
 							}
 						}
@@ -1449,14 +1449,14 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 				}
 			}
 		}
-		if (leftOver > 0){
+		if (manaCost > 0){
 			for (ManaLinkEntry entry : this.manaLinks){
-				leftOver -= entry.deductMana(entity.worldObj, entity, leftOver);
-				if (leftOver <= 0)
+				manaCost -= entry.deductMana(entity.worldObj, entity, manaCost);
+				if (manaCost <= 0)
 					break;
 			}
 		}
-		this.setCurrentMana(currentMana - leftOver);
+		this.setCurrentMana(currentMana - manaCost);
 	}
 
 	public void toggleFlipped(){
