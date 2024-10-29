@@ -15,6 +15,7 @@ public class ItemRuneBag extends Item{
 
 	public ItemRuneBag(){
 		super();
+		this.maxStackSize = 1;
 	}
 
 	@Override

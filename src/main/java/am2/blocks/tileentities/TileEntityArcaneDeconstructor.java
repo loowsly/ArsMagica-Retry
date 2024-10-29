@@ -95,7 +95,7 @@ public class TileEntityArcaneDeconstructor extends TileEntityAMPower implements 
 							}
 						}else{
 							if (current_deconstruction_time++ >= DECONSTRUCTION_TIME){
-							        if(getDeconstructionRecipe() == true){
+							        if(getDeconstructionRecipe()){
 									for (ItemStack stack : deconstructionRecipe){
 										transferOrEjectItem(stack);
 									}

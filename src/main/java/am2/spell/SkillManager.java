@@ -148,7 +148,7 @@ public class SkillManager implements ISpellPartManager{
 	public String getSkillName(ISkillTreeEntry component){
 		int id = component.getID();
 		if(id == -1){
-			return reversedPartNames.get(1);
+			return reversedPartNames.get(-1);
 		}
 		if (component instanceof ISpellComponent)
 			id += COMPONENT_OFFSET;

@@ -4,6 +4,8 @@ import am2.bosses.ai.EntityAICastSpell;
 import am2.bosses.ai.EntityAIDispel;
 import am2.bosses.ai.ISpellCastCallback;
 import am2.buffs.BuffList;
+import am2.items.ItemEssence;
+import am2.items.ItemRune;
 import am2.items.ItemsCommonProxy;
 import am2.network.AMNetHandler;
 import am2.playerextensions.ExtendedProperties;
@@ -110,10 +112,10 @@ public class EntityArcaneGuardian extends AM2Boss{
 	}
 	@Override
 	public void addPotionEffect(PotionEffect effect){
-		if (!(effect.getPotionID() == BuffList.silence.id)){
-			return;
+		if ((effect.getPotionID() == BuffList.silence.id)){
+			super.addPotionEffect(effect);
 		}
-		super.addPotionEffect(effect);
+
 	}
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
@@ -170,7 +172,7 @@ public class EntityArcaneGuardian extends AM2Boss{
 
 	@Override
 	protected float modifyDamageAmount(DamageSource source, float damageAmt){
-		if (isPotionActive(BuffList.silence.id)){
+		if (this.isPotionActive(BuffList.silence.id)){
 			damageAmt *= 2;
 		}
 		return damageAmt;
@@ -226,12 +228,12 @@ public class EntityArcaneGuardian extends AM2Boss{
 	@Override
 	protected void dropFewItems(boolean par1, int par2){
 		if (par1)
-			this.entityDropItem(new ItemStack(ItemsCommonProxy.rune, 1, ItemsCommonProxy.rune.META_INF_ORB_GREEN), 0.0f);
+			this.entityDropItem(new ItemStack(ItemsCommonProxy.rune, 1, ItemRune.META_INF_ORB_GREEN), 0.0f);
 
 		int i = rand.nextInt(4);
 
 		for (int j = 0; j < i; j++){
-			this.entityDropItem(new ItemStack(ItemsCommonProxy.essence, 1, ItemsCommonProxy.essence.META_ARCANE), 0.0f);
+			this.entityDropItem(new ItemStack(ItemsCommonProxy.essence, 1, ItemEssence.META_ARCANE), 0.0f);
 		}
 
 		i = rand.nextInt(10);
