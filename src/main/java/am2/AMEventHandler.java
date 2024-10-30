@@ -2,12 +2,15 @@ package am2;
 import am2.affinity.AffinityHelper;
 import am2.api.ArsMagicaApi;
 import am2.api.events.ManaCostEvent;
+import am2.api.items.BoundItemHandler;
+import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
 import am2.api.power.IPowerNode;
 import am2.api.power.PowerTypes;
 import am2.api.spell.component.interfaces.ISkillTreeEntry;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.BuffPowerLevel;
+import am2.api.spell.enums.SpellModifiers;
 import am2.armor.ArmorHelper;
 import am2.armor.infusions.GenericImbuement;
 import am2.blocks.BlocksCommonProxy;
@@ -35,6 +38,7 @@ import am2.playerextensions.SkillData;
 import am2.power.PowerNodeRegistry;
 import am2.spell.SkillManager;
 import am2.spell.SkillTreeManager;
+import am2.spell.SpellUtils;
 import am2.utility.*;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -89,6 +93,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+@SuppressWarnings("unused")
 public class AMEventHandler{
 
 	static boolean enabled_accelerate = true;
@@ -1777,7 +1782,20 @@ public class AMEventHandler{
 			event.burnout *= 0.4f;
 		}
 	}
-
+	
+//handle bound item dig speed modifiers
+	@SubscribeEvent
+	public void digspeed(BreakSpeed event){
+		if(event.entity instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer)event.entity;
+			if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof IBoundItem){
+				ItemStack spellstack = BoundItemHandler.getSpellStack(player.getHeldItem());
+				if(SpellUtils.instance.modifierIsPresent(SpellModifiers.SPEED, spellstack)){
+					event.newSpeed = (float)SpellUtils.instance.getModifiedDouble_Mul(event.originalSpeed,spellstack,player,null,player.worldObj,SpellModifiers.SPEED);
+				}
+			}
+		}
+	}
 	@SubscribeEvent
 	public void onPlayerPickupItem(EntityItemPickupEvent event){
 		if (event.entityPlayer == null)

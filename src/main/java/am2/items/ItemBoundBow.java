@@ -3,6 +3,7 @@ package am2.items;
 import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
+import am2.api.spell.enums.SpellModifiers;
 import am2.entities.EntityBoundArrow;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
@@ -18,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -79,7 +81,12 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 	}
 
 	@Override
-	public float maintainCost(){
+	public float maintainCost(ItemStack stack){
+		ItemStack spellstack = BoundItemHandler.getSpellStack(stack);
+		if(SpellUtils.instance.modifierIsPresent(SpellModifiers.DAMAGE,spellstack)){
+			int count = SpellUtils.instance.countModifiers(SpellModifiers.DAMAGE, spellstack);
+			return IBoundItem.normalMaintain - ((2*count)/10);
+		}
 		return IBoundItem.normalMaintain;
 	}
 
@@ -87,16 +94,13 @@ public class ItemBoundBow extends ItemBow implements IBoundItem{
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int slotIndex, boolean par5){
 		if (par3Entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer)par3Entity;
-			if (player.capabilities.isCreativeMode) return;
+			if(player.getHeldItem() == null || player.getHeldItem().getItem() != this || player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
-			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
-				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
-				return;
+			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost(par1ItemStack))){
+				props.deductMana(this.maintainCost(par1ItemStack));
 			}else{
-				props.deductMana(this.maintainCost());
+				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 			}
-			if (par1ItemStack.getItemDamage() > 0)
-				par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
 		}
 	}
 

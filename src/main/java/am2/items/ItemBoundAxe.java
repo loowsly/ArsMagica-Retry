@@ -3,11 +3,11 @@ package am2.items;
 import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
+import am2.api.spell.enums.SpellModifiers;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
 import am2.spell.SpellUtils;
 import am2.texture.ResourceManager;
-import am2.utility.InventoryUtilities;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -85,20 +85,22 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 	}
 
 	@Override
-	public float maintainCost(){
-		if (this.toolMaterial == ToolMaterial.STONE) return IBoundItem.diminishedMaintain;
-		if (this.toolMaterial == ToolMaterial.IRON) return IBoundItem.normalMaintain;
-		if (this.toolMaterial == ToolMaterial.EMERALD) return IBoundItem.augmentedMaintain;
-		return 0;
+	public float maintainCost(ItemStack stack){
+		ItemStack spellstack = BoundItemHandler.getSpellStack(stack);
+		if(SpellUtils.instance.modifierIsPresent(SpellModifiers.MINING_POWER,spellstack)){
+			int count = SpellUtils.instance.countModifiers(SpellModifiers.MINING_POWER, spellstack);
+			return IBoundItem.normalMaintain - ((2*count)/10);
+		}
+		return IBoundItem.normalMaintain;
 	}
 
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int slotIndex, boolean par5){
 		if (par3Entity instanceof EntityPlayer){
 				EntityPlayer player = (EntityPlayer)par3Entity;
-				if (player.capabilities.isCreativeMode) return;
-				if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost()))
-					ExtendedProperties.For(player).deductMana(this.maintainCost());
+				if(player.getHeldItem() == null || player.getHeldItem().getItem() != this || player.capabilities.isCreativeMode)return;
+				if(ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost(par1ItemStack)))
+					ExtendedProperties.For(player).deductMana(this.maintainCost(par1ItemStack));
 				else{
 					BoundItemHandler.UnbindItem(par1ItemStack, player, slotIndex);
 
@@ -147,7 +149,7 @@ public class ItemBoundAxe extends ItemAxe implements IBoundItem{
 
 		if (!living.isSneaking() && this.getDigSpeed(stack, block, world.getBlockMetadata(x, y, z)) == this.efficiencyOnProperMaterial){
 			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
-			SpellHelper.instance.applyStackStage(castStack, living, null, x, y, z, stack.stackTagCompound.getInteger("block_break_face"), world, true, true, 0);
+			SpellHelper.instance.applyStackStage(castStack, living, null, x, y, z, stack.stackTagCompound.getInteger("block_break_face"), world, false, true, 0);
 		}
 
 		return super.onBlockDestroyed(stack, world, block, x, y, z, living);

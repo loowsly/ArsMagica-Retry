@@ -21,7 +21,8 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class EntityBoundArrow extends EntityArrow {
-    private ItemStack castStack; // the spell
+    private ItemStack castStack;
+    private  boolean critical = false;// the spell
 
     public EntityBoundArrow(World p_i1756_1_, EntityLivingBase p_i1756_2_, float p_i1756_3_) {
         this(p_i1756_1_, p_i1756_2_, p_i1756_3_, null);
@@ -158,6 +159,7 @@ public class EntityBoundArrow extends EntityArrow {
                     if (this.getIsCritical())
                     {
                         k += this.rand.nextInt(k / 2 + 2);
+                        critical = true;
                     }
 
                     DamageSource damagesource = null;
@@ -192,7 +194,7 @@ public class EntityBoundArrow extends EntityArrow {
                                 }
                             }
 
-                            if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) SpellHelper.instance.applyStackStage(castStack, (EntityLivingBase)this.shootingEntity, target, target.posX, target.posY, target.posZ, 0, this.worldObj, true, true, 0);
+                            if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase) SpellHelper.instance.applyStackStage(castStack, (EntityLivingBase)this.shootingEntity, target, target.posX, target.posY, target.posZ, 0, this.worldObj, critical, true, 0);
                         }
 
                         this.setDead();
@@ -316,7 +318,7 @@ public class EntityBoundArrow extends EntityArrow {
                             if (this.field_145790_g != null) {
                                 if (this.shootingEntity != null && this.shootingEntity instanceof EntityLivingBase && !cast){
                                     cast = true;
-                                    SpellHelper.instance.applyStackStage(castStack, (EntityLivingBase)this.shootingEntity, null, k1, l1, i2, 0, this.worldObj, true, true, 0);
+                                    SpellHelper.instance.applyStackStage(castStack, (EntityLivingBase)this.shootingEntity, null, k1, l1, i2, 0, this.worldObj, critical, true, 0);
                                 }
                             }
                         }

@@ -3,11 +3,12 @@ package am2.items;
 import am2.api.items.BoundItemHandler;
 import am2.api.items.IBoundItem;
 import am2.api.items.ManaItemHandler;
+import am2.api.spell.enums.SpellModifiers;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellHelper;
 import am2.spell.SpellUtils;
 import am2.texture.ResourceManager;
-import am2.utility.InventoryUtilities;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -77,30 +78,26 @@ public class ItemBoundSword extends ItemSword implements IBoundItem{
 	}
 
 	@Override
-	public float maintainCost(){
-		if (Enum.valueOf(ToolMaterial.class, this.getToolMaterialName()) == ToolMaterial.STONE)
-			return IBoundItem.diminishedMaintain;
-		if (Enum.valueOf(ToolMaterial.class, this.getToolMaterialName()) == ToolMaterial.IRON)
-			return IBoundItem.normalMaintain;
-		if (Enum.valueOf(ToolMaterial.class, this.getToolMaterialName()) == ToolMaterial.EMERALD)
-			return IBoundItem.augmentedMaintain;
-		return 0;
+	public float maintainCost(ItemStack stack){
+		ItemStack spellstack = BoundItemHandler.getSpellStack(stack);
+		if(SpellUtils.instance.modifierIsPresent(SpellModifiers.DAMAGE,spellstack)){
+			int count = SpellUtils.instance.countModifiers(SpellModifiers.DAMAGE, spellstack);
+			return IBoundItem.normalMaintain - ((2*count)/10);
+		}
+		return IBoundItem.normalMaintain;
 	}
 
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int slotIndex, boolean par5){
 		if (par3Entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer)par3Entity;
-			if (player.capabilities.isCreativeMode) return;
+			if(player.getHeldItem() == null || player.getHeldItem().getItem() != this || player.capabilities.isCreativeMode) return;
 			ExtendedProperties props = ExtendedProperties.For(player);
-			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost())){
-				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
-				return;
+			if (ManaItemHandler.canExtractMana(par1ItemStack, player,maintainCost(par1ItemStack))){
+				props.deductMana(this.maintainCost(par1ItemStack));
 			}else{
-				props.deductMana(this.maintainCost());
+				BoundItemHandler.UnbindItem(par1ItemStack, (EntityPlayer)par3Entity, slotIndex);
 			}
-			if (par1ItemStack.getItemDamage() > 0)
-				par1ItemStack.damageItem(-1, (EntityLivingBase)par3Entity);
 		}
 	}
 
@@ -109,7 +106,7 @@ public class ItemBoundSword extends ItemSword implements IBoundItem{
 
 		if (!player.isSneaking() && stack.hasTagCompound() && entity instanceof EntityLivingBase){
 			ItemStack castStack = BoundItemHandler.getApplicationStack(stack);
-			SpellHelper.instance.applyStackStage(castStack, player, (EntityLivingBase)entity, entity.posX, entity.posY, entity.posZ, 0, player.worldObj, true, true, 0);
+			SpellHelper.instance.applyStackStage(castStack, player, (EntityLivingBase)entity, entity.posX, entity.posY, entity.posZ, 0, player.worldObj, false, true, 0);
 		}
 		return super.onLeftClickEntity(stack, player, entity);
 	}

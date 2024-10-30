@@ -388,6 +388,9 @@ public class InventoryUtilities{
 				ItemStack stack = new ItemStack(newItem, originalStack.stackSize, meta);
 				originalStack.stackTagCompound.removeTag("ItemID");
 				originalStack.stackTagCompound.removeTag("meta");
+				if(originalStack.stackTagCompound.hasKey("stored_spell")){
+					originalStack.stackTagCompound.removeTag("stored_spell");
+				}
 				if(originalStack.hasTagCompound()){
 					stack.setTagCompound(originalStack.getTagCompound());
 				}

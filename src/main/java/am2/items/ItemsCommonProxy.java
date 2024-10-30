@@ -169,12 +169,16 @@ public class ItemsCommonProxy{
 	public static Item BoundArmor;
 	public static Item BoundLeggings;
 	public static Item BoundBoots;
+	public static Item BoundBow;
+	public static ToolMaterial BoundToolMaterial = EnumHelper.addToolMaterial("BOUND", 8, 9999, 6F, 4F, 30);
 
+	//mana item
 	public static ItemManaStone manaStone;
 	public static ItemSoulspike soulspike;
+
 	public static ItemEtheriumExtractor etheriumExtractor;
 
-	public static Item BoundBow;
+
 
 	public static ItemCrystalPhylactery crystalPhylactery;
 	public static ItemMagitechGoggles magitechGoggles;
@@ -273,11 +277,11 @@ public class ItemsCommonProxy{
 		mobFocus = (ItemMobFocus)new ItemMobFocus().setUnlocalizedAndTextureName("arsmagica2:monster_focus").setCreativeTab(itemTab);
 		itemFocus = (ItemItemFocus)new ItemItemFocus().setUnlocalizedAndTextureName("arsmagica2:item_focus").setCreativeTab(itemTab);
 		creatureFocus = (ItemCreatureFocus)new ItemCreatureFocus().setUnlocalizedAndTextureName("arsmagica2:creature_focus").setCreativeTab(itemTab);
-		BoundHoe = new ItemBoundHoe(ToolMaterial.IRON).setUnlocalizedAndTextureName("arsmagica2:bound_hoe");
-		BoundAxe = new ItemBoundAxe(ToolMaterial.IRON).setUnlocalizedAndTextureName("arsmagica2:bound_axe");
-		BoundPickaxe = new ItemBoundPickaxe(ToolMaterial.IRON).setUnlocalizedAndTextureName("arsmagica2:bound_pickaxe");
-		BoundShovel = new ItemBoundShovel(ToolMaterial.IRON).setUnlocalizedAndTextureName("arsmagica2:bound_shovel");
-		BoundSword = new ItemBoundSword(ToolMaterial.IRON).setUnlocalizedAndTextureName("arsmagica2:bound_sword");
+		BoundHoe = new ItemBoundHoe(BoundToolMaterial).setUnlocalizedAndTextureName("arsmagica2:bound_hoe");
+		BoundAxe = new ItemBoundAxe(BoundToolMaterial).setUnlocalizedAndTextureName("arsmagica2:bound_axe");
+		BoundPickaxe = new ItemBoundPickaxe(BoundToolMaterial).setUnlocalizedAndTextureName("arsmagica2:bound_pickaxe");
+		BoundShovel = new ItemBoundShovel(BoundToolMaterial).setUnlocalizedAndTextureName("arsmagica2:bound_shovel");
+		BoundSword = new ItemBoundSword(BoundToolMaterial).setUnlocalizedAndTextureName("arsmagica2:bound_sword");
 		BoundBow = new ItemBoundBow().setUnlocalizedAndTextureName("arsmagica2:bound_bow");
 		manaCake = (ItemManaCake)new ItemManaCake().setUnlocalizedAndTextureName("arsmagica2:mana_cake").setAlwaysEdible().setCreativeTab(itemTab);
 		lesserManaPotion = (ItemManaPotion)new ItemManaPotion().setUnlocalizedAndTextureName("arsmagica2:mana_potion_lesser").setCreativeTab(itemTab);

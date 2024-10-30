@@ -5,6 +5,8 @@ import am2.api.spell.component.interfaces.ISpellShape;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellCastResult;
 import am2.items.ItemBindingCatalyst;
+import am2.items.ItemOre;
+import am2.items.ItemSpellBook;
 import am2.items.ItemsCommonProxy;
 import am2.spell.SpellUtils;
 import am2.utility.InventoryUtilities;
@@ -13,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 
@@ -35,6 +38,11 @@ public class Binding implements ISpellShape{
 		}
 
 		if(heldStack.getItem() != ItemsCommonProxy.spell){
+			ItemStack storedspell = ((ItemSpellBook)heldStack.getItem()).GetActiveItemStack(heldStack);
+			if(storedspell != null){
+				NBTTagCompound data = (NBTTagCompound)storedspell.getTagCompound().copy();
+				heldStack.stackTagCompound.setTag("stored_spell", data);
+			}
 			int itemid = Item.getIdFromItem(heldStack.getItem());
 			int meta = heldStack.getItemDamage();
 			heldStack.stackTagCompound.setInteger("ItemID", itemid);
@@ -72,8 +80,8 @@ public class Binding implements ISpellShape{
 	@Override
 	public Object[] getRecipeItems(){
 		return new Object[]{
-				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_CHIMERITE),
-				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_COGNITIVEDUST),
+				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_CHIMERITE),
+				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_COGNITIVEDUST),
 				Items.wooden_sword,
 				Items.stone_shovel,
 				Items.iron_hoe,

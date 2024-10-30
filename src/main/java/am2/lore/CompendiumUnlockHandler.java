@@ -45,7 +45,6 @@ public class CompendiumUnlockHandler{
 		if (event.entity.worldObj.isRemote && event.entity == AMCore.proxy.getLocalPlayer()){
 			if (event.level >= 5){
 				ArcaneCompendium.instance.unlockCategory("talents");
-				//ArcaneCompendium.instance.unlockEntry("dungeonsAndExploring");
 				ArcaneCompendium.instance.unlockEntry("enchantments");
 			}
 			if (event.level >= 10){
