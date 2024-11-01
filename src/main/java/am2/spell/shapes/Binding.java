@@ -4,10 +4,7 @@ import am2.api.spell.ItemSpellBase;
 import am2.api.spell.component.interfaces.ISpellShape;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellCastResult;
-import am2.items.ItemBindingCatalyst;
-import am2.items.ItemOre;
-import am2.items.ItemSpellBook;
-import am2.items.ItemsCommonProxy;
+import am2.items.*;
 import am2.spell.SpellUtils;
 import am2.utility.InventoryUtilities;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +22,7 @@ public class Binding implements ISpellShape{
 	public int getID(){
 		return 2;
 	}
+	private final String STORED_SPELL = "stored_spell";
 
 	@Override
 	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, int side, boolean giveXP, int useCount){
@@ -38,10 +36,18 @@ public class Binding implements ISpellShape{
 		}
 
 		if(heldStack.getItem() != ItemsCommonProxy.spell){
-			ItemStack storedspell = ((ItemSpellBook)heldStack.getItem()).GetActiveItemStack(heldStack);
-			if(storedspell != null){
-				NBTTagCompound data = (NBTTagCompound)storedspell.getTagCompound().copy();
-				heldStack.stackTagCompound.setTag("stored_spell", data);
+			if(heldStack.getItem() instanceof ItemSpellBook){
+				ItemStack storedspell = ((ItemSpellBook)heldStack.getItem()).GetActiveItemStack(heldStack);
+				if (storedspell != null){
+					NBTTagCompound data = (NBTTagCompound)storedspell.getTagCompound().copy();
+					heldStack.stackTagCompound.setTag(STORED_SPELL, data);
+				}
+			}else if(heldStack.getItem() instanceof ItemSpellStaff){
+				ItemStack storedspell = ((ItemSpellStaff)heldStack.getItem()).getSpellStack(heldStack);
+				if(storedspell != null){
+					NBTTagCompound data = (NBTTagCompound)storedspell.getTagCompound().copy();
+					heldStack.stackTagCompound.setTag(STORED_SPELL, data);
+				}
 			}
 			int itemid = Item.getIdFromItem(heldStack.getItem());
 			int meta = heldStack.getItemDamage();

@@ -258,7 +258,7 @@ public class ItemSpellStaff extends ArsMagicaItem{
 		return 2000;
 	}
 
-	private ItemStack getSpellStack(ItemStack staffStack){
+	public ItemStack getSpellStack(ItemStack staffStack){
 		if (!staffStack.hasTagCompound() || !staffStack.stackTagCompound.hasKey(NBT_SPELL))
 			return null;
 		ItemStack stack = new ItemStack(ItemsCommonProxy.spell);

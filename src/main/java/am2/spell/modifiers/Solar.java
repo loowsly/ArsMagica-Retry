@@ -2,6 +2,8 @@ package am2.spell.modifiers;
 
 import am2.api.spell.component.interfaces.ISpellModifier;
 import am2.api.spell.enums.SpellModifiers;
+import am2.items.ItemEssence;
+import am2.items.ItemOre;
 import am2.items.ItemsCommonProxy;
 import am2.playerextensions.ExtendedProperties;
 import net.minecraft.entity.Entity;
@@ -31,15 +33,15 @@ public class Solar implements ISpellModifier{
 		float spellBonus = getSpellTypeBonus(type);
 
 		return (float) Math.max(1,
-				Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* 5);
+				Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* 2);
 	}
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public Object[] getRecipeItems(){
 		return new Object[]{
-				new ItemStack(ItemsCommonProxy.essence, 1, ItemsCommonProxy.essence.META_NATURE),
-				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_SUNSTONE),
+				new ItemStack(ItemsCommonProxy.essence, 1, ItemEssence.META_NATURE),
+				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemOre.META_SUNSTONE),
 				Items.clock
 		};
 	}

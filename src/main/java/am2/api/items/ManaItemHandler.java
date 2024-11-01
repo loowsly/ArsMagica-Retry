@@ -17,7 +17,7 @@ public class ManaItemHandler {
 	 * return the amount of mana used (Still WIP!).
 	 */
 	public static float UseMana(ItemStack item, EntityPlayer player,float manaAmount){
-		if(item == null || player == null){
+		if(item == null || player == null || player.capabilities.isCreativeMode){
 			return 0;
 		}
 		ExtendedProperties Eplayer = ExtendedProperties.For(player);
@@ -42,7 +42,7 @@ public class ManaItemHandler {
 	public static boolean canExtractMana(ItemStack item, EntityPlayer player,float manaAmount){
 		if(!(item.getItem() instanceof IManaItem))
 			return false;
-		if(manaAmount == 0)
+		if(player.capabilities.isCreativeMode || manaAmount == 0)
 			return true;
 		return UseMana(item, player, manaAmount) != 0;
 	}

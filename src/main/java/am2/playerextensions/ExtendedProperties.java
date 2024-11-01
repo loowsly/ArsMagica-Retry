@@ -1337,7 +1337,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	private void setDefaultCompendiumEntryValues() {
 			// set them for client
 			ArcaneCompendium.instance.init(Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage());
-			MinecraftForge.EVENT_BUS.post(new RegisterCompendiumEntries(ArcaneCompendium.instance));
+
 			// sync all the defaults to server.
 			ArcaneCompendium.instance.saveUnlockData();
 	}
