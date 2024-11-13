@@ -436,9 +436,9 @@ public class SpellHelper{
 
 		magnitude *= AMCore.config.getDamageMultiplier();
 
-		ItemStack oldItemStack = null;
+		//ItemStack oldItemStack = null;
 
-		boolean success = false;
+		boolean success;
 		if (target instanceof EntityDragon){
 			success = ((EntityDragon)target).attackEntityFromPart(((EntityDragon)target).dragonPartHead, damagesource, magnitude);
 		}else{
@@ -460,14 +460,9 @@ public class SpellHelper{
 
 		return success;
 	}
-
 	private void dropHead(Entity target, World world){
 		if (target.getClass() == EntitySkeleton.class){
-			if (((EntitySkeleton)target).getSkeletonType() == 1){
-				dropHead_do(world, target.posX, target.posY, target.posZ, 1);
-			}else{
-				dropHead_do(world, target.posX, target.posY, target.posZ, 0);
-			}
+			dropHead_do(world, target.posX, target.posY, target.posZ, ((EntitySkeleton)target).getSkeletonType() == 1 ? 1 : 0);
 		}else if (target.getClass() == EntityZombie.class){
 			dropHead_do(world, target.posX, target.posY, target.posZ, 2);
 		}else if (target.getClass() == EntityCreeper.class){

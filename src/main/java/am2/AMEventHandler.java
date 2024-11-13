@@ -67,9 +67,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
@@ -102,7 +102,30 @@ public class AMEventHandler{
 	static boolean enabled_shield = true;
 	static boolean enable_spatialVortex = true;
 
+	@SubscribeEvent
+	public void onclone(net.minecraftforge.event.entity.player.PlayerEvent.Clone event){
+		EntityPlayer original = event.original;
+		EntityPlayer newplayer = event.entityPlayer;
+		//ExtendedProp.
+		NBTTagCompound OldNBT = new NBTTagCompound();
+		ExtendedProperties.For(original).saveNBTData(OldNBT);
+		ExtendedProperties.For(newplayer).loadNBTData(OldNBT);
 
+		//skill data.
+		NBTTagCompound OldSkill = new NBTTagCompound();
+		SkillData.For(original).saveNBTData(OldSkill);
+		SkillData.For(newplayer).loadNBTData(OldSkill);
+
+		//Rift storage.
+		NBTTagCompound OldRift = new NBTTagCompound();
+		RiftStorage.For(original).saveNBTData(OldRift);
+		RiftStorage.For(newplayer).loadNBTData(OldRift);
+		//Affinity data.
+		NBTTagCompound OldAffinity = new NBTTagCompound();
+		AffinityData.For(original).saveNBTData(OldAffinity);
+		AffinityData.For(newplayer).loadNBTData(OldAffinity);
+
+	}
 	@SubscribeEvent
 	public void onPotionBrewed(PotionBrewedEvent brewEvent){
 		for (ItemStack stack : brewEvent.brewingStacks){
@@ -343,9 +366,7 @@ public class AMEventHandler{
 			}
 		}
 
-		if (soonToBeDead instanceof EntityPlayer){
-			AMCore.proxy.playerTracker.onPlayerDeath((EntityPlayer)soonToBeDead);
-		}else if (soonToBeDead instanceof EntityCreature){
+		 if (soonToBeDead instanceof EntityCreature){
 			if (!EntityUtilities.isSummon(soonToBeDead) && EntityUtilities.isAIEnabled((EntityCreature)soonToBeDead) && event.source.getSourceOfDamage() instanceof EntityPlayer){
 				EntityUtilities.handleCrystalPhialAdd((EntityCreature)soonToBeDead, (EntityPlayer)event.source.getSourceOfDamage());
 			}
@@ -378,13 +399,6 @@ public class AMEventHandler{
 					}
 				}
 			}
-		}
-	}
-
-	@SubscribeEvent
-	public void onPlayerGetAchievement(AchievementEvent event){
-		if (!event.entityPlayer.worldObj.isRemote && event.achievement == AchievementList.theEnd2){
-			PlayerTracker.storeExtendedPropertiesForRespawn(event.entityPlayer);
 		}
 	}
 

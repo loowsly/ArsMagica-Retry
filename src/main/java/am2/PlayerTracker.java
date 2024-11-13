@@ -17,11 +17,13 @@ import am2.utility.WebRequestUtils;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,9 +68,6 @@ public class PlayerTracker{
 
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event){
-		if (hasAA(event.player)){
-			AMNetHandler.INSTANCE.requestClientAuras((EntityPlayerMP)event.player);
-		}
 
 		int[] disabledSkills = SkillTreeManager.instance.getDisabledSkillIDs();
 
@@ -101,7 +100,6 @@ public class PlayerTracker{
 	public void onPlayerChangedDimension(PlayerChangedDimensionEvent event){
 		//kill any summoned creatures, eventually respawn them in the new dimension
 		if (!event.player.worldObj.isRemote){
-			storeExtendedPropertiesForDimensionChange(event.player);
 			List list = event.player.worldObj.loadedEntityList;
 			for (Object o : list){
 				if (o instanceof EntityLivingBase && EntityUtilities.isSummon((EntityLivingBase)o) && EntityUtilities.getOwner((EntityLivingBase)o) == event.player.getEntityId()){
@@ -114,179 +112,7 @@ public class PlayerTracker{
 		}
 	}
 
-	@SubscribeEvent
-	public void onPlayerRespawn(PlayerRespawnEvent event){
-		//extended properties
-		//================================================================================
-		if (storedExtProps_death.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = storedExtProps_death.get(event.player.getUniqueID());
-			storedExtProps_death.remove(event.player.getUniqueID());
-
-			ExtendedProperties.For(event.player).loadNBTData(stored);
-			ExtendedProperties.For(event.player).setDelayedSync(40);
-		}else if (storedExtProps_dimension.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = storedExtProps_dimension.get(event.player.getUniqueID());
-			storedExtProps_dimension.remove(event.player.getUniqueID());
-
-			ExtendedProperties.For(event.player).loadNBTData(stored);
-			ExtendedProperties.For(event.player).setDelayedSync(40);
-		}
-		//================================================================================
-		//rift storage
-		//================================================================================
-		if (riftStorage_death.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = riftStorage_death.get(event.player.getUniqueID());
-			riftStorage_death.remove(event.player.getUniqueID());
-
-			RiftStorage.For(event.player).loadNBTData(stored);
-		}else if (riftStorage_dimension.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = riftStorage_dimension.get(event.player.getUniqueID());
-			riftStorage_dimension.remove(event.player.getUniqueID());
-
-			RiftStorage.For(event.player).loadNBTData(stored);
-		}
-		//================================================================================
-		//affinity data
-		//================================================================================
-		if (affinityStorage_death.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = affinityStorage_death.get(event.player.getUniqueID());
-			affinityStorage_death.remove(event.player.getUniqueID());
-
-			AffinityData.For(event.player).loadNBTData(stored);
-		}else if (affinityStorage_dimension.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = affinityStorage_dimension.get(event.player.getUniqueID());
-			affinityStorage_dimension.remove(event.player.getUniqueID());
-
-			AffinityData.For(event.player).loadNBTData(stored);
-		}
-		//================================================================================
-		//spell knowledge data
-		//================================================================================
-		if (spellKnowledgeStorage_death.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = spellKnowledgeStorage_death.get(event.player.getUniqueID());
-			spellKnowledgeStorage_death.remove(event.player.getUniqueID());
-
-			SkillData.For(event.player).loadNBTData(stored);
-		}else if (spellKnowledgeStorage_dimension.containsKey(event.player.getUniqueID())){
-			NBTTagCompound stored = spellKnowledgeStorage_dimension.get(event.player.getUniqueID());
-			spellKnowledgeStorage_dimension.remove(event.player.getUniqueID());
-
-			SkillData.For(event.player).loadNBTData(stored);
-		}
-
-	}
-
-	public void onPlayerDeath(EntityPlayer player){
-		storeExtendedPropertiesForRespawn(player);
-
-	}
-
-	public static void storeExtendedPropertiesForRespawn(EntityPlayer player){
-		//extended properties
-		//================================================================================
-		if (storedExtProps_death.containsKey(player.getUniqueID()))
-			storedExtProps_death.remove(player.getUniqueID());
-
-		NBTTagCompound save = new NBTTagCompound();
-		ExtendedProperties.For(player).saveNBTData(save);
-
-		storedExtProps_death.put(player.getUniqueID(), save);
-
-		//================================================================================
-		//rift storage
-		//================================================================================
-		if (riftStorage_death.containsKey(player.getUniqueID()))
-			riftStorage_death.remove(player.getUniqueID());
-		NBTTagCompound saveRift = new NBTTagCompound();
-		RiftStorage.For(player).saveNBTData(saveRift);
-
-		riftStorage_death.put(player.getUniqueID(), saveRift);
-
-		//================================================================================
-		//affinity storage
-		//================================================================================
-		if (affinityStorage_death.containsKey(player.getUniqueID()))
-			affinityStorage_death.remove(player.getUniqueID());
-		NBTTagCompound saveAffinity = new NBTTagCompound();
-		AffinityData.For(player).saveNBTData(saveAffinity);
-
-		affinityStorage_death.put(player.getUniqueID(), saveAffinity);
-		//================================================================================
-		//affinity storage
-		//================================================================================
-		if (spellKnowledgeStorage_death.containsKey(player.getUniqueID()))
-			spellKnowledgeStorage_death.remove(player.getUniqueID());
-		NBTTagCompound saveSpellKnowledge = new NBTTagCompound();
-		SkillData.For(player).saveNBTData(saveSpellKnowledge);
-
-		spellKnowledgeStorage_death.put(player.getUniqueID(), saveSpellKnowledge);
-		//================================================================================
-	}
-
-	public static void storeExtendedPropertiesForDimensionChange(EntityPlayer player){
-		//extended properties
-		//================================================================================
-		if (!storedExtProps_death.containsKey(player.getUniqueID())){
-			if (storedExtProps_dimension.containsKey(player.getUniqueID()))
-				storedExtProps_dimension.remove(player.getUniqueID());
-
-			NBTTagCompound saveExprop = new NBTTagCompound();
-			ExtendedProperties.For(player).saveNBTData(saveExprop);
-
-			storedExtProps_dimension.put(player.getUniqueID(), saveExprop);
-		}
-		//================================================================================
-		//rift storage
-		//================================================================================
-		if (!riftStorage_death.containsKey(player.getUniqueID())){
-			if (riftStorage_dimension.containsKey(player.getUniqueID()))
-				riftStorage_dimension.remove(player.getUniqueID());
-
-			NBTTagCompound saveRift = new NBTTagCompound();
-			RiftStorage.For(player).saveNBTData(saveRift);
-
-			riftStorage_dimension.put(player.getUniqueID(), saveRift);
-		}
-		//================================================================================
-		//affinity storage
-		//================================================================================
-		if (!affinityStorage_death.containsKey(player.getUniqueID())){
-			if (affinityStorage_dimension.containsKey(player.getUniqueID()))
-				affinityStorage_dimension.remove(player.getUniqueID());
-
-			NBTTagCompound saveAffinity = new NBTTagCompound();
-			AffinityData.For(player).saveNBTData(saveAffinity);
-
-			affinityStorage_dimension.put(player.getUniqueID(), saveAffinity);
-		}
-		//================================================================================
-		//spell knowledge storage
-		//================================================================================
-		if (!spellKnowledgeStorage_death.containsKey(player.getUniqueID())){
-			if (spellKnowledgeStorage_dimension.containsKey(player.getUniqueID()))
-				spellKnowledgeStorage_dimension.remove(player.getUniqueID());
-
-			NBTTagCompound spellKnowledge = new NBTTagCompound();
-			SkillData.For(player).saveNBTData(spellKnowledge);
-
-			spellKnowledgeStorage_dimension.put(player.getUniqueID(), spellKnowledge);
-		}
-		//================================================================================
-	}
-
-
-
-	public boolean hasAA(EntityPlayer entity){
-		return getAAL(entity) > 0;
-	}
-
-	public int getAAL(EntityPlayer thePlayer){
-		if (thePlayer == null) return 0;
-		try{
-			thePlayer.getDisplayName();
-		}catch (Throwable t){
-			return 0;
-		}
-		return thePlayer.getDisplayName().equalsIgnoreCase("Nlghtwing") ? 5 : 0;
+	public boolean hasAA(EntityPlayer player){
+		return true;
 	}
 }

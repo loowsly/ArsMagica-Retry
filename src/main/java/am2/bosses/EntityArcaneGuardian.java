@@ -26,6 +26,7 @@ public class EntityArcaneGuardian extends AM2Boss{
 
 	private float runeRotationZ = 0;
 	private float runeRotationY = 0;
+	private int RetaliationCD = 0;
 
 	private static final int DW_TARGET_ID = 20;
 
@@ -66,7 +67,9 @@ public class EntityArcaneGuardian extends AM2Boss{
 		if (this.motionY < 0){
 			this.motionY *= 0.7999999f;
 		}
-
+		if(RetaliationCD > 0){
+			RetaliationCD--;
+		}
 		updateRotations();
 
 		if (!worldObj.isRemote){
@@ -123,14 +126,14 @@ public class EntityArcaneGuardian extends AM2Boss{
 			return super.attackEntityFrom(par1DamageSource, par2);
 		}
 
-		if (checkRuneRetaliation(par1DamageSource)){
+		if (checkRuneRetaliation(par1DamageSource, par2)){
 			return super.attackEntityFrom(par1DamageSource, par2);
 		}
 		return super.attackEntityFrom(par1DamageSource, par2 * 0.8F);
 
 	}
 
-	private boolean checkRuneRetaliation(DamageSource damagesource){
+	private boolean checkRuneRetaliation(DamageSource damagesource, float par2){
 		Entity source = damagesource.getSourceOfDamage();
 		if (source instanceof EntityArcaneGuardian) {
 			return true;
@@ -162,9 +165,11 @@ public class EntityArcaneGuardian extends AM2Boss{
 				source.motionX = (speed * Math.cos(radians));
 				source.motionZ = (speed * Math.sin(radians));
 				source.motionY = vertSpeed;
-
-				source.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
-				return false;
+				if(RetaliationCD == 0){
+					source.attackEntityFrom(DamageSource.causeMobDamage(this), Math.min(2,par2/10));
+					RetaliationCD = 60;
+					return false;
+				}
 			}
 		}
 		return true;

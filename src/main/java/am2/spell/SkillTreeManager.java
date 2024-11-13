@@ -29,6 +29,7 @@ public class SkillTreeManager implements ISkillTreeManager{
 		skillPointTypeList = new HashMap<Integer, SkillPointTypes>();
 	}
 
+	//return the skill point (green,blue,red) of a part.
 	public SkillPointTypes getSkillPointTypeForPart(ISkillTreeEntry part){
 		int id = SkillManager.instance.getShiftedPartID(part);
 		return getSkillPointTypeForPart(id);
@@ -56,7 +57,7 @@ public class SkillTreeManager implements ISkillTreeManager{
 				}
 			}
 
-			if (locatedPrerequisites.size() == 0)
+			if (locatedPrerequisites.isEmpty())
 				throw new InvalidParameterException(String.format("Unable to locate one or more prerequisite items in the specified tree (%s).", tree.toString()));
 		}
 

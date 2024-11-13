@@ -59,7 +59,7 @@ public class CompendiumEntryBlock extends CompendiumEntry{
 					return new GuiArcaneCompendium(searchID + "@" + meta, block, meta);
 			}
 		}else{
-			for (Block block : AMCore.instance.proxy.blocks.getArsMagicaBlocks()){
+			for (Block block : AMCore.proxy.blocks.getArsMagicaBlocks()){
 				if (block.getUnlocalizedName() == null) continue;
 				String[] split = searchID.split("@");
 				if (block.getUnlocalizedName().replace("arsmagica2:", "").replace("tile.", "").equals(split[0])){
@@ -99,7 +99,7 @@ public class CompendiumEntryBlock extends CompendiumEntry{
 					return new ItemStack(item, 1, meta);
 			}
 		}else{
-			for (Block block : AMCore.instance.proxy.blocks.getArsMagicaBlocks()){
+			for (Block block : AMCore.proxy.blocks.getArsMagicaBlocks()){
 				if (block.getUnlocalizedName() == null) continue;
 				String[] split = searchID.split("@");
 				if (block.getUnlocalizedName().replace("arsmagica2:", "").replace("tile.", "").equals(split[0])){
@@ -120,7 +120,7 @@ public class CompendiumEntryBlock extends CompendiumEntry{
 					return new ItemStack(block, 1, meta);
 			}
 		}else{
-			for (Item item : AMCore.instance.proxy.items.getArsMagicaItems()){
+			for (Item item : AMCore.proxy.items.getArsMagicaItems()){
 				if (item.getUnlocalizedName() == null) continue;
 				String itemID = item.getUnlocalizedName().replace("item.", "").replace("arsmagica2:", "");
 				if (itemID.equals(searchID)){

@@ -24,5 +24,5 @@ public interface ILoreHelper{
 	 * @param allowReplace If an entry already exists with the specified key, can it be replaced?
 	 * @param relatedKeys  Related entries are shown at the bottom, and are clickable.
 	 */
-	public void AddCompenidumEntry(Object entryItem, String entryKey, String entryName, String entryDesc, String parent, boolean allowReplace, String... relatedKeys);
+	void AddCompenidumEntry(Object entryItem, String entryKey, String entryName, String entryDesc, String parent, boolean allowReplace, String... relatedKeys);
 }

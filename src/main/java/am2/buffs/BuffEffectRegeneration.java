@@ -8,11 +8,8 @@ import net.minecraft.world.World;
 
 public class BuffEffectRegeneration extends BuffEffect{
 
-	private int tickCounter;
-
 	public BuffEffectRegeneration(int duration, int amplifier){
 		super(BuffList.regeneration.id, duration, amplifier);
-		tickCounter = 0;
 	}
 
 	@Override
@@ -33,7 +30,7 @@ public class BuffEffectRegeneration extends BuffEffect{
 			if (!world.isRemote){
 				entityliving.heal(1);
 			}else{
-				AMParticle effect = (AMParticle)AMCore.instance.proxy.particleManager.spawn(world, "hr_sparkles_1",
+				AMParticle effect = (AMParticle)AMCore.proxy.particleManager.spawn(world, "hr_sparkles_1",
 						entityliving.posX + world.rand.nextDouble() * entityliving.height - (entityliving.height / 2),
 						entityliving.posY + world.rand.nextDouble() * entityliving.height - (entityliving.height / 2),
 						entityliving.posZ + world.rand.nextDouble() * entityliving.height - (entityliving.height / 2));

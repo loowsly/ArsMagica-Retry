@@ -7,6 +7,7 @@ import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
 import am2.buffs.BuffEffectTemporalAnchor;
 import am2.buffs.BuffList;
+import am2.items.ItemRune;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleFadeOut;
@@ -34,7 +35,8 @@ public class ChronoAnchor implements ISpellComponent{
 			int duration = SpellUtils.instance.getModifiedInt_Mul(BuffList.default_buff_duration, stack, caster, target, world, 0, SpellModifiers.DURATION);
 			duration = SpellUtils.instance.modifyDurationBasedOnArmor(caster, duration);
 			if (!world.isRemote)
-				((EntityLivingBase)target).addPotionEffect(new BuffEffectTemporalAnchor(duration, SpellUtils.instance.countModifiers(SpellModifiers.BUFF_POWER, stack, 0)));
+				if(!((EntityLivingBase)target).isPotionActive(BuffList.temporalAnchorBurnout.id))
+					((EntityLivingBase)target).addPotionEffect(new BuffEffectTemporalAnchor(duration, SpellUtils.instance.countModifiers(SpellModifiers.BUFF_POWER, stack, 0)));
 			return true;
 		}
 		return false;
@@ -47,7 +49,7 @@ public class ChronoAnchor implements ISpellComponent{
 
 	@Override
 	public float burnout(EntityLivingBase caster){
-		return ArsMagicaApi.instance.getBurnoutFromMana(manaCost(caster));
+		return ArsMagicaApi.getBurnoutFromMana(manaCost(caster));
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class ChronoAnchor implements ISpellComponent{
 	@Override
 	public Object[] getRecipeItems(){
 		return new Object[]{
-				new ItemStack(ItemsCommonProxy.rune, 1, ItemsCommonProxy.rune.META_WHITE),
+				new ItemStack(ItemsCommonProxy.rune, 1, ItemRune.META_WHITE),
 				Items.clock,
 				Items.nether_star
 		};

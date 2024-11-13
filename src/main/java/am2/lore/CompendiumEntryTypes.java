@@ -1,6 +1,7 @@
 package am2.lore;
 
 import am2.guis.AMGuiIcons;
+import am2.items.ItemEssence;
 import am2.items.ItemsCommonProxy;
 import am2.texture.SpellIconManager;
 
@@ -62,7 +63,7 @@ public class CompendiumEntryTypes{
 	public void initTextures(){
 		GUIDE.setRepresentIcon(ItemsCommonProxy.arcaneCompendium.getIconFromDamage(0));
 		MECHANIC.setRepresentIcon(ItemsCommonProxy.magitechGoggles.getIconFromDamage(0));
-		ITEM.setRepresentIcon(ItemsCommonProxy.essence.getIconFromDamage(ItemsCommonProxy.essence.META_ICE));
+		ITEM.setRepresentIcon(ItemsCommonProxy.essence.getIconFromDamage(ItemEssence.META_ICE));
 		BLOCK.setRepresentIcon(ItemsCommonProxy.crystalWrench.getIconFromDamage(0));
 		SPELL_SHAPE.setRepresentIcon(SpellIconManager.instance.getIcon("Binding"));
 		SPELL_COMPONENT.setRepresentIcon(SpellIconManager.instance.getIcon("LifeTap"));
@@ -77,7 +78,7 @@ public class CompendiumEntryTypes{
 	}
 
 	public static CompendiumEntryType getForSection(String category, String node){
-		for (CompendiumEntryType type : instance.allValues()){
+		for (CompendiumEntryType type : allValues()){
 			if (type.getCategoryName().equals(category) && type.getNodeName().equals(node)){
 				return type;
 			}

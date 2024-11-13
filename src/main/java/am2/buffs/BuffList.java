@@ -30,6 +30,7 @@ public class BuffList implements IBuffHelper{
 	public static ArsMagicaPotion charmed;
 	public static ArsMagicaPotion frostSlowed;
 	public static ArsMagicaPotion temporalAnchor;
+	public static ArsMagicaPotion temporalAnchorBurnout;
 	public static ArsMagicaPotion manaRegen;
 	public static ArsMagicaPotion entangled;
 	public static ArsMagicaPotion wateryGrave;
@@ -180,21 +181,12 @@ public class BuffList implements IBuffHelper{
 		fury = createAMPotion(potionDefaultOffset + 21, "Fury", 1, 6, false, BuffEffectFury.class);
 		scrambleSynapses = createAMPotion(potionDefaultOffset + 22, "Scramble Synapses", 2, 1, true, BuffEffectScrambleSynapses.class);
 		illumination = createAMPotion(potionDefaultOffset + 23, "Illuminated", 1, 0, false, BuffEffectIllumination.class);
-		
+
+
 		greaterManaPotion = createManaPotion(potionDefaultOffset + 24, "Greater Mana Restoration", 0, 1, false, 0x40c6be);
-		// greaterManaPotion = new ManaPotion(potionDefaultOffset + 24, false, 0x40c6be);
-		// greaterManaPotion.setPotionName("Greater Mana Restoration");
-		// greaterManaPotion._setIconIndex(0, 1);
-
 		epicManaPotion = createManaPotion(potionDefaultOffset + 25, "Epic Mana Restoration", 0, 1, false, 0xFF00FF);
-		// epicManaPotion = new ManaPotion(potionDefaultOffset + 25, false, 0xFF00FF);
-		// epicManaPotion.setPotionName("Epic Mana Restoration");
-		// epicManaPotion._setIconIndex(0, 1);
-
 		legendaryManaPotion = createManaPotion(potionDefaultOffset + 26, "Legendary Mana Restoration", 0, 1, false, 0xFFFF00);
-		// legendaryManaPotion = new ManaPotion(potionDefaultOffset + 26, false, 0xFFFF00);
-		// legendaryManaPotion.setPotionName("Legendary Mana Restoration");
-		// legendaryManaPotion._setIconIndex(0, 1);
+
 
 		gravityWell = createAMPotion(potionDefaultOffset + 27, "Gravity Well", 0, 6, true, BuffEffectGravityWell.class);
 		levitation = createAMPotion(potionDefaultOffset + 28, "Levitation", 0, 7, false, BuffEffectLevitation.class);
@@ -203,6 +195,7 @@ public class BuffList implements IBuffHelper{
 		shrink = createAMPotion(potionDefaultOffset + 30, "Shrunken", 0, 5, false, BuffEffectShrink.class);
 		burnoutReduction = createAMPotion(potionDefaultOffset + 31, "Burnout Redux", 1, 1, false, BuffEffectBurnoutReduction.class);
 		psychedelic = createAMPotion(potionDefaultOffset + 32, "Psychedelic", 1, 2, false, BuffEffectPsychedelic.class);
+		temporalAnchorBurnout = createAMPotion(potionDefaultOffset + 33, "Chrono Anchor Burnout",1, 4, true, BuffEffectTemporalAnchorBurnout.class);
 
 		for (int i : classesForBuffID.keySet()){
 			createDummyBuff(classesForBuffID.get(i), i);
@@ -220,6 +213,7 @@ public class BuffList implements IBuffHelper{
 		charmed.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		frostSlowed.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		temporalAnchor.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
+		temporalAnchorBurnout.setTextureSheet(ResourceManager.GetGuiTexturePath("buff_2.png"));
 		manaRegen.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		entangled.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		wateryGrave.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
@@ -283,6 +277,7 @@ public class BuffList implements IBuffHelper{
 		}
 		setFinalStatic(field, potions);
 	}
+
 
 	public static boolean IDIsAMBuff(int potionID){
 		for (ArsMagicaPotion i : arsMagicaPotions){

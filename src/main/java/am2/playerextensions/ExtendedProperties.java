@@ -4,7 +4,6 @@ import am2.AMCore;
 import am2.api.ArsMagicaApi;
 import am2.api.IExtendedProperties;
 import am2.api.events.PlayerMagicLevelChangeEvent;
-import am2.api.events.RegisterCompendiumEntries;
 import am2.api.items.IManaContainerItem;
 import am2.api.items.ManaItemHandler;
 import am2.api.math.AMVector2;
@@ -57,20 +56,13 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public static final String identifier = "ArsMagicaExProps";
 	public static final int maxMagicLevel = 99;
 
-	private static float magicRegenPerLevelPerTick = 0.15f;
-	private static float entityMagicPerLevelBase = 0.20f;
-	private static int baseTicksForFullRegen = 2400;
+	//private static float magicRegenPerLevelPerTick = 0.15f;
+	//private static float entityMagicPerLevelBase = 0.20f;
+	private static final int baseTicksForFullRegen = 2400;
 	private int ticksForFullRegen = baseTicksForFullRegen;
 
 	private ArrayList<Integer> summon_ent_ids = new ArrayList<Integer>();
 
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	// I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!
-	/** I AM SO BLOODY TIRED OF MAKING NEW VARIABLES FOR EEEP!!!!!!!*/
 	private Map<String, String> extra_properties = new HashMap<String, String>();
 
 	private Map<String, String> compendium_entries = new HashMap<String, String>();
@@ -104,11 +96,11 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 	private byte bitFlag;
 	private boolean hasDoneFullSync;
-
+/*
 	public int sprintTimer = 0;
 	public int sneakTimer = 0;
 	public int itemUseTimer = 0;
-
+*/
 	private int fallProtection = 0;
 	private int previousBreath = 300;
 
@@ -144,7 +136,6 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	private int AuraQuantity = 2;
 	private float AuraSpeed = 0.5f;
 
-	private boolean hasInitialized = false;
 	public boolean astralBarrierBlocked = false;
 	private boolean forcingSync = false;
 	private boolean isCritical;
@@ -162,7 +153,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public boolean guardian8 = false;
 	public boolean guardian9 = false;
 	public boolean guardian10 = false;
-
+	public Map<String, Boolean> guardians = new HashMap<String, Boolean>();
 	public boolean hasRitual = false;
 
 	public static final int UPD_CURRENT_MANA_FATIGUE = 0x1;
@@ -174,7 +165,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public static final int UPD_CONTINGENCY = 0x40;
 	public static final int UPD_BITFLAG = 0x80;
 	public static final int UPD_BETA_PARTICLES = 0x100;
-	public static final int UPD_TK_DISTANCE = 0x200;
+	//public static final int UPD_TK_DISTANCE = 0x200;
 	public static final int UPD_MANALINK = 0x400;
 	public static final int BIT_MARK_SET = 0x2;
 	public static final int BIT_FLIPPED = 0x4;
@@ -188,7 +179,6 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	private int ticksLeft = 0;
 
 	public ExtendedProperties(){
-		hasInitialized = false;
 		hasDoneFullSync = false;
 		manaLinks = new ArrayList<ManaLinkEntry>();
 	}
@@ -220,6 +210,17 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public int getNumSummons(){
 		return this.numSummons;
 	}
+
+	public int getGuardianAmountUnlocked(){
+		int count = 0;
+		for(String s : guardians.keySet()){
+			if(guardians.get(s)){
+				count++;
+			}
+		}
+		return count;
+	}
+
 
 	@Override
 	public AMVector3 getMarkLocation(){
@@ -325,36 +326,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 				max += 2000;
 			}
 		}
-		if (guardian1) { // this looks like awful code and it is
-			max += 2000;
-		}
-		if (guardian2) {
-			max += 2000;
-		}
-		if (guardian3) {
-			max += 2000;
-		}
-		if (guardian4) {
-			max += 2000;
-		}
-		if (guardian5) {
-			max += 2000;
-		}
-		if (guardian6) {
-			max += 2000;
-		}
-		if (guardian7) {
-			max += 2000;
-		}
-		if (guardian8) {
-			max += 2000;
-		}
-		if (guardian9) {
-			max += 2000;
-		}
-		if (guardian10) {
-			max += 2000;
-		}
+		max *= 1 + (getGuardianAmountUnlocked() * 2000);
 		if (hasRitual) {
 			max += 23000; // changed from 25000
 		}
@@ -422,7 +394,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		if ((this.updateFlags & UPD_NUM_SUMMONS) == UPD_NUM_SUMMONS){
 			writer.add(this.numSummons);
 		}
-		if ((this.updateFlags & UPD_BETA_PARTICLES) == UPD_BETA_PARTICLES && entity instanceof EntityPlayer && AMCore.proxy.playerTracker.hasAA((EntityPlayer)entity)){
+		if ((this.updateFlags & UPD_BETA_PARTICLES) == UPD_BETA_PARTICLES && entity instanceof EntityPlayer){
 			writer.add(this.getAuraIndex());
 			writer.add(this.getAuraBehaviour());
 			writer.add(this.getAuraScale());
@@ -454,11 +426,10 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 		NBTTagCompound extra_data = new NBTTagCompound();
 		int c = 0;
-		for (Object o : extra_properties.keySet()) {
-			String iS = (String)o;
-			String iValue = extra_properties.get(iS);
+		for (String o : extra_properties.keySet()) {
+			String iValue = extra_properties.get(o);
 			extra_data.setString("persistentobj" + c, iValue);
-			extra_data.setString("persistentobjname" + c, iS);
+			extra_data.setString("persistentobjname" + c, o);
 			c++;
 		}
 		extra_data.setInteger("persistentobjsize", extra_properties.size());
@@ -491,8 +462,8 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 			return false;
 		}
 		this.ticksToSync--;
-		if (this.ticksToSync <= 0) this.ticksToSync = this.syncTickDelay;
-		return this.updateFlags != 0 && this.ticksToSync == this.syncTickDelay;
+		if (this.ticksToSync <= 0) this.ticksToSync = syncTickDelay;
+		return this.updateFlags != 0 && this.ticksToSync == syncTickDelay;
 	}
 
 	public boolean getCanHaveMoreSummons(){
@@ -508,7 +479,6 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 		return this.numSummons < maxSummons;
 	}
-
 	public boolean getIsFlipped(){
 		return (bitFlag & BIT_FLIPPED) == BIT_FLIPPED;
 	}
@@ -888,7 +858,6 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public void setEntityReference(EntityLivingBase entity){
 		this.entity = entity;
 		setOriginalSize(new AMVector2(entity.width, entity.height));
-		hasInitialized = true;
 		isCritical = entity instanceof EntityPlayerMP;
 		yOffsetOrig = entity.yOffset;
 
@@ -899,21 +868,21 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 		if (isCritical){
 			if (armorProcCooldowns[3] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 3, armorProcCooldowns[3]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 3, armorProcCooldowns[3]);
 			}
 			if (armorProcCooldowns[1] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 1, armorProcCooldowns[1]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 1, armorProcCooldowns[1]);
 			}
 			if (armorProcCooldowns[2] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 2, armorProcCooldowns[2]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 2, armorProcCooldowns[2]);
 			}
 			if (armorProcCooldowns[0] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 0, armorProcCooldowns[0]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 0, armorProcCooldowns[0]);
 			}
 		}
 
-		if (entity.worldObj != null && entity.worldObj.isRemote && entity instanceof EntityPlayer && AMCore.proxy.playerTracker.hasAA((EntityPlayer)entity)){
-			EntityLivingBase localPlayer = AMCore.instance.proxy.getLocalPlayer();
+		if (entity.worldObj != null && entity.worldObj.isRemote && entity instanceof EntityPlayer){
+			EntityLivingBase localPlayer = AMCore.proxy.getLocalPlayer();
 			if (entity != localPlayer)
 				AMNetHandler.INSTANCE.requestAuras((EntityPlayer)entity);
 		}
@@ -924,16 +893,16 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		if (needsArmorTickCounterSync && entity instanceof EntityPlayerMP){
 			needsArmorTickCounterSync = false;
 			if (armorProcCooldowns[3] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 3, armorProcCooldowns[3]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 3, armorProcCooldowns[3]);
 			}
 			if (armorProcCooldowns[1] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 1, armorProcCooldowns[1]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 1, armorProcCooldowns[1]);
 			}
 			if (armorProcCooldowns[2] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 2, armorProcCooldowns[2]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 2, armorProcCooldowns[2]);
 			}
 			if (armorProcCooldowns[0] > 0){
-				AMCore.instance.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 0, armorProcCooldowns[0]);
+				AMCore.proxy.blackoutArmorPiece((EntityPlayerMP)entity, 0, armorProcCooldowns[0]);
 			}
 		}
 	}
@@ -955,28 +924,26 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		}
 	}
 
-	public boolean addSummon(EntityLivingBase entity){
+	public void addSummon(EntityLivingBase entity){
 		if (!entity.worldObj.isRemote){
 			summon_ent_ids.add(entity.getEntityId());
 			setNumSummons(getNumSummons() + 1);
 			setUpdateFlag(UPD_NUM_SUMMONS);
 		}
-		return true;
 	}
 
-	public boolean removeSummon(){
+	public void removeSummon(){
 		if (getNumSummons() == 0){
-			return false;
+			return;
 		}
 		if (!entity.worldObj.isRemote){
 			setNumSummons(getNumSummons() - 1);
 			setUpdateFlag(UPD_NUM_SUMMONS);
 		}
-		return true;
 	}
 
 	public void setSyncAuras(){
-		if (entity instanceof EntityPlayer && AMCore.proxy.playerTracker.hasAA((EntityPlayer)entity))
+		if (entity instanceof EntityPlayer)
 			this.setUpdateFlag(UPD_BETA_PARTICLES);
 	}
 
@@ -1029,7 +996,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		if ((flags & UPD_NUM_SUMMONS) == UPD_NUM_SUMMONS){
 			this.numSummons = rdr.getInt();
 		}
-		if ((flags & UPD_BETA_PARTICLES) == UPD_BETA_PARTICLES && entity instanceof EntityPlayer && AMCore.proxy.playerTracker.hasAA((EntityPlayer)entity)){
+		if ((flags & UPD_BETA_PARTICLES) == UPD_BETA_PARTICLES && entity instanceof EntityPlayer){
 			this.AuraIndex = rdr.getInt();
 			this.AuraBehaviour = rdr.getInt();
 			this.AuraScale = rdr.getFloat();
@@ -1289,11 +1256,10 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		NBTTagCompound compendium_data = new NBTTagCompound();
 		if (name == null && value == null) {
 			int c = 0;
-			for (Object o : compendium_entries.keySet()) {
-				String iS = (String) o;
-				String iValue = compendium_entries.get(iS);
+			for (String o : compendium_entries.keySet()) {
+				String iValue = compendium_entries.get(o);
 				compendium_data.setString("compentry" + c, iValue);
-				compendium_data.setString("compentryname" + c, iS);
+				compendium_data.setString("compentryname" + c, o);
 				c++;
 			}
 			compendium_data.setInteger("compendiumsize", compendium_entries.size());
@@ -1375,7 +1341,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public Map<String, String> getAllCompendiumEntries() {
 		return compendium_entries;
 	}
-
+/*
 	public boolean hasCompendiumEntry(String name) {
 		return compendium_entries.get(name) != null;
 	}
@@ -1387,7 +1353,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public boolean isEntryNew(String name) {
 		return compendium_entries.get(name).contains("N");
 	}
-
+*/
 	public Iterator<Map.Entry<String, String>> getCompendiumIterator() {
 		return compendium_entries.entrySet().iterator();
 	}
@@ -1424,7 +1390,6 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 		ticksToSync = world.rand.nextInt(syncTickDelay);
 
-		hasInitialized = true;
 	}
 
 	public void deductMana(float manaCost){
@@ -1461,12 +1426,9 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 
 	public void toggleFlipped(){
 		if (entity.worldObj.isRemote){
-			AMNetHandler.INSTANCE.sendExPropCommandToServer(this.BIT_FLIPPED);
+			AMNetHandler.INSTANCE.sendExPropCommandToServer(BIT_FLIPPED);
 		}
-		if (this.getIsFlipped())
-			this.setIsFlipped(false);
-		else
-			this.setIsFlipped(true);
+		this.setIsFlipped(!this.getIsFlipped());
 	}
 
 	public void spawnManaLinkParticles(){
@@ -1746,11 +1708,9 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public void performRemoteOp(int mask){
 		if (entity.worldObj.isRemote)
 			return;
-		switch (mask){
-		case BIT_FLIPPED:
+		if (mask == BIT_FLIPPED){
 			toggleFlipped();
 			forceSync();
-			break;
 		}
 	}
 }

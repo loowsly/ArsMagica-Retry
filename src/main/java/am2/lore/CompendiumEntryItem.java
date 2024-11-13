@@ -33,18 +33,6 @@ public class CompendiumEntryItem extends CompendiumEntry{
 		}
 	}
 
-	public boolean hasMetaItems(){
-		return (lowerMetaRange - upperMetaRange) > 0;
-	}
-
-	public ItemStack[] getMetaItems(Item item){
-		ItemStack[] items = new ItemStack[upperMetaRange - lowerMetaRange];
-		for (int i = lowerMetaRange; i < upperMetaRange; ++i){
-			items[i] = new ItemStack(item, 1, i);
-		}
-		return items;
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected GuiArcaneCompendium getCompendiumGui(String searchID, int meta){
@@ -58,7 +46,7 @@ public class CompendiumEntryItem extends CompendiumEntry{
 					return new GuiArcaneCompendium(searchID + "@" + meta, item, meta);
 			}
 		}else{
-			for (Item item : AMCore.instance.proxy.items.getArsMagicaItems()){
+			for (Item item : AMCore.proxy.items.getArsMagicaItems()){
 				if (item.getUnlocalizedName() == null) continue;
 				String itemID = item.getUnlocalizedName().replace("item.", "").replace("arsmagica2:", "");
 				if (itemID.equals(searchID)){
@@ -79,7 +67,7 @@ public class CompendiumEntryItem extends CompendiumEntry{
 		if (split.length == 2){
 			return GameRegistry.findItemStack(split[0], split[1], 1);
 		}else{
-			for (Item item : AMCore.instance.proxy.items.getArsMagicaItems()){
+			for (Item item : AMCore.proxy.items.getArsMagicaItems()){
 				if (item.getUnlocalizedName() == null) continue;
 				String itemID = item.getUnlocalizedName().replace("item.", "").replace("arsmagica2:", "");
 				if (itemID.equals(searchID)){

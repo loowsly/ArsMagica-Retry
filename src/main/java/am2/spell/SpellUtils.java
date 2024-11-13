@@ -560,7 +560,7 @@ public class SpellUtils implements ISpellUtils{
 		}
 
 		//check the old spell definition - if it starts with MissingShape, then inject the components and modifiers into the last stage from the shape group
-		if (numStages(stack) > 0 && newStages.size() > 0){
+		if (numStages(stack) > 0 && !newStages.isEmpty()){
 			SpellStageDefinition last = newStages.get(newStages.size() - 1);
 			int firstShape = stack.stackTagCompound.getInteger(Shape_Prefix + "0");
 			if (firstShape == SkillManager.instance.missingShape.getID()){
@@ -575,6 +575,7 @@ public class SpellUtils implements ISpellUtils{
 					if (ordinals.containsKey(modifier.getID()))
 						ordinal = ordinals.get(modifier.getID());
 					last.definition.addModifier(modifier.getID() + SkillManager.MODIFIER_OFFSET, getModifierMetadataFromStack(stack, modifier, 0, ordinal));
+					ordinals.put(modifier.getID(), ++ordinal);
 				}
 			}
 		}
@@ -582,7 +583,7 @@ public class SpellUtils implements ISpellUtils{
 		//inject the new stages in to the spell scroll
 		for (SpellStageDefinition stage : newStages){
 			addSpellStageToScroll(classicStack, stage.shape, stage.definition.getComponents(), stage.definition.getModifiers());
-			ISkillTreeEntry entry = SkillManager.instance.getSkill(stage.shape);
+		//unused: ISkillTreeEntry entry = SkillManager.instance.getSkill(stage.shape);
 		}
 
 
@@ -603,7 +604,7 @@ public class SpellUtils implements ISpellUtils{
 				if (ordinals.containsKey(modifier.getID()))
 					ordinal = ordinals.get(modifier.getID());
 				def.definition.addModifier(SkillManager.instance.getShiftedPartID(modifier), getModifierMetadataFromStack(stack, modifier, i, ordinal));
-				ordinals.put(modifier.getID(), ordinal++);
+				ordinals.put(modifier.getID(), ++ordinal);
 			}
 
 			addSpellStageToScroll(classicStack, def.shape, def.definition.getComponents(), def.definition.getModifiers());
@@ -632,20 +633,29 @@ public class SpellUtils implements ISpellUtils{
 
 		return workingStack;
 	}
-
+	/**
+	 * @return the numbers of Stages in a passed stack
+	 *
+	 */
 	public int numStages(ItemStack stack){
 		if (stack == null || !stack.hasTagCompound())
 			return 0;
 		int numStages = stack.stackTagCompound.hasKey(Stages_Identifier) ? stack.stackTagCompound.getInteger(Stages_Identifier) : stack.stackTagCompound.getInteger("ShapeOrdinal_");
 		return numStages;
 	}
-
+	/**
+	 * @return the numbers of shapes groups in a passed stack
+	 *
+	 */
 	public int numShapeGroups(ItemStack stack){
 		if (!stack.hasTagCompound())
 			return 0;
 		return stack.stackTagCompound.getInteger(NumShapeGroups_Identifier);
 	}
-
+	/**
+	 * @return an array of component in a stage for a passed stack.
+	 *
+	 */
 	public ISpellComponent[] getComponentsForStage(ItemStack stack, int stage){
 		if (stack == null || !stack.hasTagCompound())
 			return new ISpellComponent[0];
@@ -662,7 +672,10 @@ public class SpellUtils implements ISpellUtils{
 		}
 		return components;
 	}
-
+	/**
+	 * @return an array of Modifiers in a stage for a passed stack.
+	 *
+	 */
 	public ISpellModifier[] getModifiersForStage(ItemStack stack, int stage){
 		if (stack == null || !stack.hasTagCompound())
 			return new ISpellModifier[0];
@@ -680,7 +693,10 @@ public class SpellUtils implements ISpellUtils{
 		}
 		return modifiers;
 	}
-
+	/**
+	 * @return an array of Shapes in a stage for a passed stack.
+	 *
+	 */
 	public ISpellShape getShapeForStage(ItemStack stack, int stage){
 		if (stack == null || !stack.hasTagCompound()) return SkillManager.instance.missingShape;
 		int shapeIndex = stack.stackTagCompound.getInteger(Shape_Prefix + stage);

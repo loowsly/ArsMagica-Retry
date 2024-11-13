@@ -1,6 +1,7 @@
 package am2.commands;
 
 import am2.AMCore;
+import am2.proxy.CommonProxy;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -23,8 +24,8 @@ public class RegisterTeamHostilityCommand extends CommandBase{
 			throw new WrongUsageException(this.getCommandUsage(icommandsender), new Object[0]);
 		}
 
-		AMCore.instance.proxy.teamHostility.put(astring[0], astring[1]);
-		AMCore.instance.proxy.teamHostility.put(astring[1], astring[0]);
+		CommonProxy.teamHostility.put(astring[0], astring[1]);
+		CommonProxy.teamHostility.put(astring[1], astring[0]);
 
 		func_152373_a(icommandsender, this, String.format("Teams %s and %s are now marked as hostile to each other.", astring[0], astring[1]), new Object[0]);
 	}

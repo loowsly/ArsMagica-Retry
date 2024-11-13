@@ -107,12 +107,11 @@ public class CompendiumUnlockHandler{
 		if (event.player == AMCore.proxy.getLocalPlayer()){
 			if (event.skill instanceof Summon){
 				ArcaneCompendium.instance.unlockEntry("crystal_phylactery");
+				ArcaneCompendium.instance.unlockEntry("summoner");
 			}else if (event.skill instanceof TrueSight){
 				ArcaneCompendium.instance.unlockEntry("illusionBlocks");
 			}else if (event.skill instanceof Binding){
 				ArcaneCompendium.instance.unlockEntry("bindingcatalysts");
-			}else if (event.skill instanceof Summon){
-				ArcaneCompendium.instance.unlockEntry("summoner");
 			}else if (SkillTreeManager.instance.getSkillPointTypeForPart(event.skill) == SkillPointTypes.SILVER){
 				ArcaneCompendium.instance.unlockEntry("silver_skills");
 			}
