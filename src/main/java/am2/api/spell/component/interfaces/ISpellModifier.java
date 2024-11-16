@@ -41,7 +41,7 @@ public interface ISpellModifier extends ISpellPart{
 	/**
 	 * Gets any metadata needed by this modifier for the current spell.  Used, for example, in the color modifier to determine what color was specified.
 	 *
-	 * @param stage         The stage this modifier is at
+	 *
 	 * @param matchedRecipe The items that were added to the crafting altar which resulted in the matching of the recipe.
 	 */
 	public byte[] getModifierMetadata(ItemStack[] matchedRecipe);

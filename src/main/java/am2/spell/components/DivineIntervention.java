@@ -72,11 +72,6 @@ public class DivineIntervention implements ISpellComponent{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return new ItemStack[]{new ItemStack(ItemsCommonProxy.essence, 1, 9)};
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 		for (int i = 0; i < 100; ++i){
 			AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(world, "arcane", x, y - 1, z);

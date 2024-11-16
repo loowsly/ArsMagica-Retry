@@ -8,14 +8,12 @@ import am2.api.spell.enums.SpellModifiers;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleArcToEntity;
-import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellUtils;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -104,11 +102,6 @@ public class RedstoneFluxDrain implements ISpellComponent{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return ArsMagicaApi.getBurnoutFromMana(manaCost(caster));
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

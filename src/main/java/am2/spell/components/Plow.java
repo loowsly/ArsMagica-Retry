@@ -53,11 +53,6 @@ public class Plow implements ISpellComponent{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 		for (int i = 0; i < 10; ++i){
 			AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(world, "rock", x, y + 1, z);

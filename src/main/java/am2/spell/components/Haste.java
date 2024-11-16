@@ -64,11 +64,6 @@ public class Haste implements ISpellComponent, IRitualInteraction{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 		for (int i = 0; i < 25; ++i){
 			AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(world, "mystic", x, y - 1, z);

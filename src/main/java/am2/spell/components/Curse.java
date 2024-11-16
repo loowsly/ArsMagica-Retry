@@ -15,19 +15,15 @@ import am2.entities.EntitySpecificHallucinations;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleArcToEntity;
-import am2.spell.SpellHelper;
 import am2.spell.SpellUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -35,7 +31,6 @@ import java.util.*;
 
 import static am2.AMEventHandler.summonCreature;
 import static am2.AMEventHandler.tempCurseMap;
-import static am2.buffs.BuffList.buffEffectFromPotionID;
 import static am2.spell.components.Bless.magnifyPotions;
 
 public class Curse implements ISpellComponent, IRitualInteraction{
@@ -159,12 +154,7 @@ public class Curse implements ISpellComponent, IRitualInteraction{
         return ArsMagicaApi.getBurnoutFromMana(manaCost(caster));
     }
 
-    @Override
-    public ItemStack[] reagents(EntityLivingBase caster){
-        return null;
-    }
-
-    @Override
+	@Override
     public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
         for (int i = 0; i < 15; ++i){
             AMParticle particle = (AMParticle) AMCore.proxy.particleManager.spawn(world, "ember", x, y, z);

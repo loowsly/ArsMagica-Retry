@@ -8,7 +8,6 @@ import am2.api.spell.component.interfaces.IRitualInteraction;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
-import am2.buffs.BuffEffectHaste;
 import am2.buffs.BuffList;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
@@ -63,11 +62,6 @@ public class Weakness implements ISpellComponent, IRitualInteraction{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return ArsMagicaApi.instance.getBurnoutFromMana(manaCost(caster));
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

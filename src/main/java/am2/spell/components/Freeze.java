@@ -74,11 +74,6 @@ public class Freeze implements ISpellComponent, IRitualInteraction{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 		for (int i = 0; i < 5; ++i){
 			AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(world, "snowflakes", x + 0.5, y + 0.5, z + 0.5);

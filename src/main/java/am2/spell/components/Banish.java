@@ -13,11 +13,9 @@ import am2.playerextensions.ExtendedProperties;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import java.util.EnumSet;
@@ -64,12 +62,7 @@ public class Banish implements ISpellComponent {
         return ArsMagicaApi.getBurnoutFromMana(manaCost(caster));
     }
 
-    @Override
-    public ItemStack[] reagents(EntityLivingBase caster){
-        return new ItemStack[]{new ItemStack(ItemsCommonProxy.essence, 1, ItemsCommonProxy.essence.META_ENDER)};
-    }
-
-    @Override
+	@Override
     public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
         for (int i = 0; i < 100; ++i){
             AMParticle particle = (AMParticle)AMCore.proxy.particleManager.spawn(world, "arcane", x, y - 1, z);

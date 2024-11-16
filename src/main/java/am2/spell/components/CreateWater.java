@@ -11,10 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -99,11 +97,6 @@ public class CreateWater implements ISpellComponent{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return 30;
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

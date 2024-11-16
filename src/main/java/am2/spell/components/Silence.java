@@ -61,13 +61,6 @@ public class Silence implements ISpellComponent{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return new ItemStack[]{
-				new ItemStack(ItemsCommonProxy.itemOre, 1, ItemsCommonProxy.itemOre.META_PURIFIEDVINTEUM)
-		};
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z,
 							   EntityLivingBase caster, Entity target, Random rand,
 							   int colorModifier){

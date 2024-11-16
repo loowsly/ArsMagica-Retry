@@ -1,37 +1,21 @@
 package am2.spell.components;
 
-import am2.AMCore;
-import am2.api.ArsMagicaApi;
-import am2.api.blocks.IKeystoneLockable;
-import am2.api.items.KeystoneAccessType;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
-import am2.blocks.BlocksCommonProxy;
 import am2.items.ItemsCommonProxy;
-import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellUtils;
-import am2.utility.DummyEntityPlayer;
-import am2.utility.KeystoneUtilities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.tclproject.mysteriumlib.asm.fixes.MysteriumPatchesFixesMagicka;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
 
@@ -64,11 +48,6 @@ public class RedstoneSignal implements ISpellComponent{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return 12;
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

@@ -122,11 +122,6 @@ public class Dig implements ISpellComponent{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 
 	}

@@ -59,11 +59,6 @@ public class Heal implements ISpellComponent{
 	}
 
 	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
-	}
-
-	@Override
 	public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
 		if (target instanceof EntityLivingBase && ((EntityLivingBase)target).getCreatureAttribute() == EnumCreatureAttribute.UNDEAD){
 			for (int i = 0; i < 25; ++i){

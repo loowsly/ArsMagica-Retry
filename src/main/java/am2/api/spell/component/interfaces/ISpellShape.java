@@ -40,7 +40,7 @@ public interface ISpellShape extends ISpellPart{
 	public float manaCostMultiplier(ItemStack spellStack);
 
 	/**
-	 * Is the spell a terminus shape?  Return true if this component does not continue the spell chain when proccing.
+	 * Is the spell a terminus shape?  Return true if this component does not continue the spell chain when processing.
 	 */
 	public boolean isTerminusShape();
 

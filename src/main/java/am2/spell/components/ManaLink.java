@@ -3,7 +3,6 @@ package am2.spell.components;
 import am2.AMCore;
 import am2.RitualShapeHelper;
 import am2.api.blocks.MultiblockStructureDefinition;
-import am2.api.power.IPowerNode;
 import am2.api.spell.component.interfaces.IRitualInteraction;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
@@ -11,8 +10,6 @@ import am2.blocks.BlocksCommonProxy;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMLineArc;
 import am2.playerextensions.ExtendedProperties;
-import am2.power.PowerNodeRegistry;
-import net.minecraft.block.BlockDoor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
@@ -21,8 +18,6 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 import java.util.Random;
-
-import static am2.playerextensions.ExtendedProperties.maxMagicLevel;
 
 public class ManaLink implements ISpellComponent, IRitualInteraction {
 
@@ -79,11 +74,6 @@ public class ManaLink implements ISpellComponent, IRitualInteraction {
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return 0;
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

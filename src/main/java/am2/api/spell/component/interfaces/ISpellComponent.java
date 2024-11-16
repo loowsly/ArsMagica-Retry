@@ -49,12 +49,6 @@ public interface ISpellComponent extends ISpellPart{
 	public float burnout(EntityLivingBase caster);
 
 	/**
-	 * Gets any reagents that must be present in the caster's inventory in order
-	 * to cast the spell.
-	 */
-	public ItemStack[] reagents(EntityLivingBase caster);
-
-	/**
 	 * Spawn visual effects for the component
 	 *
 	 * @param colorModifier The color from the color modifier.  -1 if missing.

@@ -4,18 +4,15 @@ import am2.AMCore;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
-import am2.blocks.BlocksCommonProxy;
 import am2.buffs.BuffList;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
 import am2.particles.ParticleOrbitEntity;
 import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -82,12 +79,7 @@ public class ConcentrateTime implements ISpellComponent {
             return 10;
         }
 
-        @Override
-        public ItemStack[] reagents(net.minecraft.entity.EntityLivingBase caster){
-            return null;
-        }
-
-        @Override
+	@Override
         public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random
         rand, int colorModifier){
             AMParticle particle = (AMParticle) AMCore.proxy.particleManager.spawn(world, "sparkle", x, y, z);

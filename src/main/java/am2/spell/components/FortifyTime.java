@@ -68,12 +68,7 @@ public class FortifyTime implements ISpellComponent {
             return 10;
         }
 
-        @Override
-        public ItemStack[] reagents(EntityLivingBase caster){
-            return null;
-        }
-
-        @Override
+	@Override
         public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random
         rand, int colorModifier){
             AMParticle particle = (AMParticle) AMCore.proxy.particleManager.spawn(world, "sparkle", x, y, z);

@@ -14,7 +14,6 @@ import am2.guis.ArsMagicaGuiIdList;
 import am2.items.ItemsCommonProxy;
 import am2.playerextensions.RiftStorage;
 import am2.spell.SpellUtils;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -96,11 +95,6 @@ public class Rift implements ISpellComponent, IRitualInteraction{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return ArsMagicaApi.getBurnoutFromMana(manaCost(caster));
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override

@@ -15,15 +15,12 @@ import am2.network.AMNetHandler;
 import am2.network.AMPacketIDs;
 import am2.particles.AMParticle;
 import am2.particles.ParticleOrbitEntity;
-import am2.playerextensions.ExtendedProperties;
 import am2.spell.SpellUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
 import java.util.EnumSet;
@@ -69,12 +66,7 @@ public class Deafen implements ISpellComponent, IRitualInteraction {
         return ArsMagicaApi.instance.getBurnoutFromMana(manaCost(caster));
     }
 
-    @Override
-    public ItemStack[] reagents(EntityLivingBase caster){
-        return null;
-    }
-
-    @Override
+	@Override
     public void spawnParticles(World world, double x, double y, double z, EntityLivingBase caster, Entity target, Random rand, int colorModifier){
         for (int i = 0; i < 15; ++i){
             AMParticle particle = (AMParticle) AMCore.proxy.particleManager.spawn(world, "lens_flare", x, y, z);

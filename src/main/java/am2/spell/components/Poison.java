@@ -8,7 +8,6 @@ import am2.api.spell.component.interfaces.IRitualInteraction;
 import am2.api.spell.component.interfaces.ISpellComponent;
 import am2.api.spell.enums.Affinity;
 import am2.api.spell.enums.SpellModifiers;
-import am2.buffs.BuffEffectHaste;
 import am2.buffs.BuffList;
 import am2.items.ItemsCommonProxy;
 import am2.particles.AMParticle;
@@ -18,7 +17,6 @@ import am2.particles.ParticleOrbitPoint;
 import am2.spell.SpellUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -64,11 +62,6 @@ public class Poison implements ISpellComponent, IRitualInteraction{
 	@Override
 	public float burnout(EntityLivingBase caster){
 		return ArsMagicaApi.instance.getBurnoutFromMana(manaCost(caster));
-	}
-
-	@Override
-	public ItemStack[] reagents(EntityLivingBase caster){
-		return null;
 	}
 
 	@Override
