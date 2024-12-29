@@ -477,7 +477,7 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 
 	public void addSpellPartToStageGroup(int groupIndex, ISpellPart part){
 		ArrayList<ISpellPart> group = this.shapeGroups.get(groupIndex);
-		if (!currentSpellIsReadOnly && group.size() < 4 && !(part instanceof ISpellComponent)){
+		if (!currentSpellIsReadOnly && group.size() < 6 && !(part instanceof ISpellComponent) && ShapeIsUsed(part, groupIndex)){
 			group.add(part);
 			if (this.worldObj.isRemote)
 				this.sendDataToServer();
@@ -507,7 +507,7 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 	}
 
 	public void addSpellPart(ISpellPart part){
-		if (!currentSpellIsReadOnly && this.currentRecipe.size() < 16){
+		if (!currentSpellIsReadOnly && this.currentRecipe.size() < 8 && !(part instanceof ISpellShape)){
 			this.currentRecipe.add(part);
 			if (this.worldObj.isRemote)
 				this.sendDataToServer();
@@ -958,7 +958,9 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 	public ISpellPart getShapeGroupPartAt(int groupIndex, int index){
 		return this.shapeGroups.get(groupIndex).get(index);
 	}
-
+    public boolean ShapeIsUsed(ISkillTreeEntry part, int groupIndex){
+		return !(this.shapeGroups.get(groupIndex).contains(part));
+	}
 
 	public void incrementUpgradeState(){
 		this.numStageGroups++;

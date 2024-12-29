@@ -506,16 +506,11 @@ public class GuiInscriptionTable extends GuiContainer{
 		}
 		if (!hasShape && !(part instanceof ISpellShape))
 			return false;
-		if (part instanceof ISpellShape && ((ContainerInscriptionTable)this.inventorySlots).currentRecipeContains(part))
+		if (part instanceof ISpellShape && ((ContainerInscriptionTable)this.inventorySlots).currentRecipeContains(part)){
 			return false;
-		if (part instanceof ISpellComponent){
-			int index = ((ContainerInscriptionTable)this.inventorySlots).getCurrentRecipeSize() - 1;
-			while (index >= 0 && !(((ContainerInscriptionTable)this.inventorySlots).getRecipeItemAt(index) instanceof ISpellShape)){
-				ISpellPart curPart = ((ContainerInscriptionTable)this.inventorySlots).getRecipeItemAt(index--);
-				if (curPart instanceof ISpellComponent && curPart.getID() == part.getID()){
-					return false;
-				}
-			}
+		}
+		if (part instanceof ISpellComponent && ((ContainerInscriptionTable)this.inventorySlots).currentRecipeContains(part)){
+			return false;
 		}
 		if (part instanceof ISpellModifier){
 			return ((ContainerInscriptionTable)this.inventorySlots).modifierCanBeAdded((ISpellModifier)part);
