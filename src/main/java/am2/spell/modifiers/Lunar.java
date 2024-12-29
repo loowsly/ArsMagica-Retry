@@ -29,9 +29,11 @@ public class Lunar implements ISpellModifier{
 		ExtendedProperties properties = ExtendedProperties.For(caster);
 		float manaRatio = properties.getCurrentMana() / properties.getMaxMana();
 		float spellBonus = getSpellTypeBonus(type);
+		float firstcastbonus = 1;
+		if(manaRatio == 1)
+			firstcastbonus = 2;
 
-		return (float) Math.max(1, Math.pow(Math.pow((manaRatio * spellBonus), (manaRatio+1)),(manaRatio+1))
-		);
+		return (float) Math.max(1, Math.pow(Math.pow((manaRatio * spellBonus), (manaRatio+1)),(manaRatio+1))* firstcastbonus) ;
 	}
 
 	@Override
@@ -78,9 +80,9 @@ public class Lunar implements ISpellModifier{
 		case RADIUS:
 			return 1.04f; //bonus at 100% = 500%
 		case RANGE:
-			return 1.5f; //bonus at 100% = 655%
+			return 1.5f; //bonus at 100% = 506%
 		case DURATION:
-			return 1.4f; //bonus at 100% = 835%
+			return 1.4f; //bonus at 100% = 384%
 		}
 		return 1.2f; //bonus at 100% = 207%
 	}

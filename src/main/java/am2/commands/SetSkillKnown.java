@@ -1,8 +1,10 @@
 package am2.commands;
 
 import am2.api.spell.component.interfaces.ISkillTreeEntry;
+import am2.api.spell.enums.SkillPointTypes;
 import am2.playerextensions.SkillData;
 import am2.spell.SkillManager;
+import am2.spell.SkillTreeManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -51,7 +53,11 @@ public class SetSkillKnown extends CommandBase{
 		if (player == null) return;
 
 		ISkillTreeEntry entry = SkillManager.instance.getSkill(skill);
+		if(SkillTreeManager.instance.getSkillPointTypeForPart(entry) == SkillPointTypes.SILVER){
+			SkillData.For(player).incrementSpellPoints(SkillPointTypes.SILVER);
+		}
 		SkillData.For(player).learn(entry);
+		SkillData.For(player).forceSync();
 
 		func_152373_a(var1, this, "Unlocking " + skill + " for " + player.getCommandSenderName(), new Object[0]);
 	}

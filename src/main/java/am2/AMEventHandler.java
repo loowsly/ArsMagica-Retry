@@ -192,6 +192,7 @@ public class AMEventHandler{
 		}else if (event.entity instanceof EntityItemFrame){
 			AMCore.proxy.itemFrameWatcher.startWatchingFrame((EntityItemFrame)event.entity);
 		}
+
 	}
 	//SoulBound Handler (code taken from @EnderIO)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

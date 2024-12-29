@@ -33,8 +33,7 @@ public class Solar implements ISpellModifier{
 		float spellBonus = getSpellTypeBonus(type);
 		float burnoutBonus = Math.max(1,properties.getMaxFatigue() / 500);
 
-		return (float) Math.max(1,
-				Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* burnoutBonus);
+		return (float) Math.max(1, Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* burnoutBonus);
 	}
 
 	@SuppressWarnings("incomplete-switch")

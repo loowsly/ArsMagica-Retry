@@ -199,11 +199,11 @@ public class SkillData implements IExtendedEntityProperties, ISkillData{
 			writer.add(this.entity.getEntityId());
 			int id = entry.getID();
 			if (entry instanceof ISpellComponent)
-				id += SkillManager.instance.COMPONENT_OFFSET;
+				id += SkillManager.COMPONENT_OFFSET;
 			else if (entry instanceof ISpellModifier)
-				id += SkillManager.instance.MODIFIER_OFFSET;
+				id += SkillManager.MODIFIER_OFFSET;
 			else if (!(entry instanceof ISpellShape))
-				id += SkillManager.instance.TALENT_OFFSET;
+				id += SkillManager.TALENT_OFFSET;
 			writer.add(id);
 			if (entry instanceof ISpellShape) writer.add(0);
 			else if (entry instanceof ISpellComponent) writer.add(1);

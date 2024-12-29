@@ -35,8 +35,8 @@ public class Chain implements ISpellShape{
 	public SpellCastResult beginStackStage(ItemSpellBase item, ItemStack stack, EntityLivingBase caster, EntityLivingBase target, World world, double x, double y, double z, int side, boolean giveXP, int useCount){
 
 		MovingObjectPosition mop = item.getMovingObjectPosition(caster, world, 8.0f, true, false);
-		double range = SpellUtils.instance.getModifiedDouble_Mul(4, stack, caster, target, world, 0, SpellModifiers.RANGE);
-		int num_targets = SpellUtils.instance.getModifiedInt_Add(3, stack, caster, target, world, 0, SpellModifiers.PROCS);
+		double range = SpellUtils.instance.getModifiedDouble_Add( 2, stack, caster, target, world, 0, SpellModifiers.RANGE);
+		int num_targets = SpellUtils.instance.getModifiedInt_Mul(3, stack, caster, target, world, 0, SpellModifiers.PROCS);
 
 		ArrayList<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
 

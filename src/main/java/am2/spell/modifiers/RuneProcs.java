@@ -18,7 +18,7 @@ public class RuneProcs implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 4;
+		return 2;
 	}
 
 	@Override
