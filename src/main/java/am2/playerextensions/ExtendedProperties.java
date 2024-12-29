@@ -177,6 +177,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	public int redGlint = 0;
 	private int lightningsLeft = 0;
 	private int ticksLeft = 0;
+	private int burnoutDelay = 0;
 
 	public ExtendedProperties(){
 		hasDoneFullSync = false;
@@ -580,12 +581,75 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 			// BURNOUT NEGATIVE EFFECTS
 			if (this.entity instanceof EntityPlayer && !((EntityPlayer)this.entity).capabilities.isCreativeMode && AMCore.config.getBurnoutEffects()){
 				Random random = new Random();
-				if (currentFatigue > 50){ // lvl 5+
+				if (currentFatigue > 950 && burnoutDelay == 0){ // lvl 95+
+					int roll = random.nextInt(5);
+					if (roll == 2){
+						this.entity.setHealth(0);
+						this.entity.onDeath(DamageSource.magic);
+						burnoutDelay = 100;
+					}
+				}
+				if (currentFatigue > 500 && burnoutDelay == 0){ // lvl 50+
+					int roll = random.nextInt(4);
+					if (roll == 0){
+						if (!this.entity.worldObj.isRemote){
+							this.entity.addPotionEffect(new PotionEffect(Potion.blindness.id, random.nextInt(120), 1));
+							this.entity.addPotionEffect(new PotionEffect(Potion.wither.id, random.nextInt(60), 1));
+							this.entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, random.nextInt(160), 1));
+							this.entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, random.nextInt(160), 1));
+						}
+						burnoutDelay = 50;
+					}else if (roll == 1){
+						this.entity.worldObj.addWeatherEffect(new EntityLightningBolt(this.entity.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ));
+						burnoutDelay = 10;
+					}else if (roll == 2){
+						for (int i = 0; i < 100; i++){
+							double x = this.entity.posX + random.nextInt(10) - 5,
+									y = this.entity.posY + random.nextInt(10) - 5,
+									z = this.entity.posZ + random.nextInt(10) - 5;
+							if (this.entity.worldObj.isAirBlock((int)x, (int)y, (int)z) && this.entity.worldObj.isAirBlock((int)x, (int)y - 1, (int)z) && this.entity.worldObj.isAirBlock((int)x, (int)y + 1, (int)z)){
+								this.entity.setPosition(x, y, z);
+								float f = (random.nextFloat() - 0.5F) * 0.2F;
+								float f1 = (random.nextFloat() - 0.5F) * 0.2F;
+								float f2 = (random.nextFloat() - 0.5F) * 0.2F;
+								this.entity.worldObj.spawnParticle("portal", x, y, z, (double)f, (double)f1, (double)f2);
+								break;
+							}
+						}
+						burnoutDelay = 80;
+					}else if (roll == 3){
+						if (!this.entity.worldObj.isRemote){
+							this.entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, random.nextInt(160), 1));
+							this.entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, random.nextInt(160), 1));
+							burnoutDelay = 30;
+						}
+					}
+
+				}
+				if (currentFatigue > 250 && burnoutDelay == 0){ // lvl 25+
+					int roll = random.nextInt(4);
+					if (roll == 0) { // red bolts
+						this.lightningsLeft = random.nextInt(5) + 5;
+						burnoutDelay = 10;
+					} else if (roll == 1){ // red glint on screen
+						this.redGlint = 2000;
+						burnoutDelay = 10;
+					}else if (roll == 2){
+						if (!this.entity.worldObj.isRemote){
+							this.entity.addPotionEffect(new PotionEffect(Potion.wither.id, random.nextInt(60), 1));
+							burnoutDelay = 20;
+						}
+					}//roll 3 does nothing.
+
+				}
+				if (currentFatigue > 50 && burnoutDelay == 0){ // lvl 5+
 					int roll = random.nextInt(4);
 					if (roll == 0){
 						if (currentFatigue < 250){
-							if (!this.entity.worldObj.isRemote)
+							if (!this.entity.worldObj.isRemote){
 								this.entity.addPotionEffect(new PotionEffect(Potion.blindness.id, random.nextInt(100), 1));
+								burnoutDelay = 20;
+							}
 						}
 					}else if (roll == 1){
 						this.deductMana(this.currentMana / 4);
@@ -604,62 +668,8 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 						float f1 = (random.nextFloat() - 0.5F) * 0.2F;
 						float f2 = (random.nextFloat() - 0.5F) * 0.2F;
 						this.entity.worldObj.spawnParticle("reddust", this.entity.posX, this.entity.posY, this.entity.posZ, f, f1, f2);
-					}else if (roll == 2){
-						if (currentFatigue < 250){
-							if (!this.entity.worldObj.isRemote)
-								this.entity.addPotionEffect(new PotionEffect(Potion.wither.id, random.nextInt(60), 1));
-						}
-					}else if (roll == 3){
-						if (currentFatigue < 500){
-							if (!this.entity.worldObj.isRemote){
-								this.entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, random.nextInt(160), 1));
-								this.entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, random.nextInt(160), 1));
-							}
-						}
-					}
-				}
-				if (currentFatigue > 250){ // lvl 25+
-					int roll = random.nextInt(3);
-					if (roll == 0) { // red bolts
-						this.lightningsLeft = random.nextInt(5) + 5;
-					} else if (roll == 1){ // red glint on screen
-						this.redGlint = 2000;
-					}
-					// roll 2 does nothing: lucky roll
-				}
-				if (currentFatigue > 500){ // lvl 50+
-					int roll = random.nextInt(3);
-					if (roll == 0){
-						if (!this.entity.worldObj.isRemote){
-							this.entity.addPotionEffect(new PotionEffect(Potion.blindness.id, random.nextInt(120), 1));
-							this.entity.addPotionEffect(new PotionEffect(Potion.wither.id, random.nextInt(60), 1));
-							this.entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, random.nextInt(160), 1));
-							this.entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, random.nextInt(160), 1));
-						}
-					}else if (roll == 1){
-						this.entity.worldObj.addWeatherEffect(new EntityLightningBolt(this.entity.worldObj, this.entity.posX, this.entity.posY, this.entity.posZ));
-					}else if (roll == 2){
-						for (int i = 0; i < 100; i++){
-							double x = this.entity.posX + random.nextInt(10) - 5,
-									y = this.entity.posY + random.nextInt(10) - 5,
-									z = this.entity.posZ + random.nextInt(10) - 5;
-							if (this.entity.worldObj.isAirBlock((int)x, (int)y, (int)z) && this.entity.worldObj.isAirBlock((int)x, (int)y - 1, (int)z) && this.entity.worldObj.isAirBlock((int)x, (int)y + 1, (int)z)){
-								this.entity.setPosition(x, y, z);
-								float f = (random.nextFloat() - 0.5F) * 0.2F;
-								float f1 = (random.nextFloat() - 0.5F) * 0.2F;
-								float f2 = (random.nextFloat() - 0.5F) * 0.2F;
-								this.entity.worldObj.spawnParticle("portal", x, y, z, (double)f, (double)f1, (double)f2);
-								break;
-							}
-						}
-					}
-				}
-				if (currentFatigue > 950){ // lvl 95+
-					int roll = random.nextInt(3);
-					if (roll == 2){
-						this.entity.setHealth(0);
-						this.entity.onDeath(DamageSource.magic);
-					}
+						burnoutDelay = 30;
+					}//roll 3 & 4 does nothing.
 				}
 			}
 		}
@@ -1523,8 +1533,12 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 		ticksSinceLastRegen++;
 		healCooldown--;
 
+
 		if (disableGravity){
 			this.entity.motionY = 0;
+		}
+		if(burnoutDelay > 0){
+			burnoutDelay--;
 		}
 
 		if (ticksLeft > 0){

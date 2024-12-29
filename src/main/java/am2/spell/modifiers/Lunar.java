@@ -30,8 +30,7 @@ public class Lunar implements ISpellModifier{
 		float manaRatio = properties.getCurrentMana() / properties.getMaxMana();
 		float spellBonus = getSpellTypeBonus(type);
 
-		return (float) Math.max(1,
-				Math.pow(Math.pow((manaRatio * spellBonus), (manaRatio+1)),(manaRatio+1))
+		return (float) Math.max(1, Math.pow(Math.pow((manaRatio * spellBonus), (manaRatio+1)),(manaRatio+1))
 		);
 	}
 
@@ -75,13 +74,13 @@ public class Lunar implements ISpellModifier{
 		case HEALING:
 			return 1.3f; //bonus at 100% = 286%
 		case DAMAGE:
-			return 1.4f; //bonus at 100% = 384%
+			return 1.3f; //bonus at 100% = 384%
 		case RADIUS:
-			return 1.5f; //bonus at 100% = 500%
+			return 1.04f; //bonus at 100% = 500%
 		case RANGE:
-			return 1.6f; //bonus at 100% = 655%
+			return 1.5f; //bonus at 100% = 655%
 		case DURATION:
-			return 1.7f; //bonus at 100% = 835%
+			return 1.4f; //bonus at 100% = 835%
 		}
 		return 1.2f; //bonus at 100% = 207%
 	}

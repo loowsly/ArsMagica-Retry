@@ -20,7 +20,7 @@ public class Healing implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 2.5f; // increased a bit to justify using instead of solar + new crafting ingredient
+		return 2.9f; // increased a bit to justify using instead of solar + new crafting ingredient
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class Healing implements ISpellModifier{
 
 	@Override
 	public float getManaCostMultiplier(ItemStack spellStack, int stage, int quantity, EntityLivingBase caster){
-		return 1 * quantity;
+		return quantity;
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public class BuffEffectTemporalAnchor extends BuffEffect{
 			entityliving.rotationYaw = rotationYaw;
 			ExtendedProperties.For(entityliving).setCurrentMana(mana);
 			entityliving.setHealth(Math.max(1, health));
-			entityliving.addPotionEffect(new BuffEffectTemporalAnchorBurnout(1800, 0));// to only explicitly fix level data resets
-			if (health == 0)
+			entityliving.addPotionEffect(new BuffEffectTemporalAnchorBurnout(1800, 0));
+			if (health == 0)// to only explicitly fix level data resets
 				entityliving.attackEntityFrom(DamageSource.outOfWorld, 5000); // still kills but avoids broken setHealth() call
 			entityliving.fallDistance = 0;
 		}

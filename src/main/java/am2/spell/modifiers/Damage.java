@@ -20,7 +20,7 @@ public class Damage implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 2.8f; // increased a bit to justify using instead of solar + new crafting ingredient
+		return 2.9f; // increased a bit to justify using instead of solar + new crafting ingredient
 	}
 
 	@Override

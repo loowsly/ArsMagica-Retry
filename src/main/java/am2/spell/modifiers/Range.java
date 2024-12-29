@@ -19,7 +19,7 @@ public class Range implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 4f;
+		return 6f;
 	}
 
 	@Override

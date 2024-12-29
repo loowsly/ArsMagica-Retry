@@ -31,9 +31,10 @@ public class Solar implements ISpellModifier{
 		ExtendedProperties properties = ExtendedProperties.For(caster);
 		float burnoutRatio = properties.getCurrentFatigue() / properties.getMaxFatigue();
 		float spellBonus = getSpellTypeBonus(type);
+		float burnoutBonus = Math.max(1,properties.getMaxFatigue() / 500);
 
 		return (float) Math.max(1,
-				Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* 2);
+				Math.pow(Math.pow((burnoutRatio * spellBonus), (burnoutRatio+1)),(burnoutRatio+1))* burnoutBonus);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -75,15 +76,15 @@ public class Solar implements ISpellModifier{
 	public float getSpellTypeBonus(SpellModifiers type){
 		switch (type){
 		case HEALING:
-			return 1.3f; //bonus at 90% = 881%
+			return 1.3f; //bonus at 100% = 286%
 		case DAMAGE:
-			return 1.4f; //bonus at 90% = 1152%
+			return 1.3f; //bonus at 100% = 286%
 		case RADIUS:
-			return 1.5f; //bonus at 90% = 1477%
+			return 1.04f; //bonus at 100% = 500%
 		case RANGE:
-			return 1.6f; //bonus at 90% = 1865%
+			return 1.5f; //bonus at 100% = 506%
 		case DURATION:
-			return 1.7f; //bonus at 90% = 2321%
+			return 1.4f; //bonus at 100% = 506%
 		}
 		return 1.2f; //bonus at 90% = 660%
 	}

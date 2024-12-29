@@ -20,7 +20,7 @@ public class Radius implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 0.7f;
+		return 1.2f;
 	}
 
 	@Override

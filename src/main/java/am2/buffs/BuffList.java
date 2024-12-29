@@ -195,7 +195,7 @@ public class BuffList implements IBuffHelper{
 		shrink = createAMPotion(potionDefaultOffset + 30, "Shrunken", 0, 5, false, BuffEffectShrink.class);
 		burnoutReduction = createAMPotion(potionDefaultOffset + 31, "Burnout Redux", 1, 1, false, BuffEffectBurnoutReduction.class);
 		psychedelic = createAMPotion(potionDefaultOffset + 32, "Psychedelic", 1, 2, false, BuffEffectPsychedelic.class);
-		temporalAnchorBurnout = createAMPotion(potionDefaultOffset + 33, "Chrono Anchor Burnout",1, 4, true, BuffEffectTemporalAnchorBurnout.class);
+		temporalAnchorBurnout = createAMPotion(potionDefaultOffset + 33, "Chrono Anchor Burnout",1, 4, false, BuffEffectTemporalAnchorBurnout.class);
 
 		for (int i : classesForBuffID.keySet()){
 			createDummyBuff(classesForBuffID.get(i), i);
@@ -213,7 +213,7 @@ public class BuffList implements IBuffHelper{
 		charmed.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		frostSlowed.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		temporalAnchor.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
-		temporalAnchorBurnout.setTextureSheet(ResourceManager.GetGuiTexturePath("buff_2.png"));
+		temporalAnchorBurnout.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_2.png"));
 		manaRegen.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		entangled.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));
 		wateryGrave.setTextureSheet(ResourceManager.GetGuiTexturePath("buffs_1.png"));

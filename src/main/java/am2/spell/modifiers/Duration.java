@@ -19,7 +19,7 @@ public class Duration implements ISpellModifier{
 
 	@Override
 	public float getModifier(SpellModifiers type, EntityLivingBase caster, Entity target, World world, byte[] metadata){
-		return 2.2f;
+		return 5f;
 	}
 
 	@Override
