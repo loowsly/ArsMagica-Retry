@@ -11,13 +11,12 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 public class TileEntityManaBattery extends TileEntityAMPower{
 
 	private boolean active;
-	public static int storageCapacity;
+
 	private PowerTypes outputPowerType = PowerTypes.NONE;
 	private int tickCounter = 0;
 
 	public TileEntityManaBattery(){
 		super(250000);
-		this.storageCapacity = 250000;
 		active = false;
 	}
 
@@ -76,14 +75,18 @@ public class TileEntityManaBattery extends TileEntityAMPower{
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("isActive", active);
 		nbttagcompound.setInteger("outputType", outputPowerType.ID());
+		nbttagcompound.setFloat("power_charge", PowerNodeRegistry.For(this.worldObj).getPower(this,this.getPowerType()));
+
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound){
 		super.readFromNBT(nbttagcompound);
 		active = nbttagcompound.getBoolean("isActive");
-		if (nbttagcompound.hasKey("outputType"))
+		if(nbttagcompound.hasKey("outputType"))
 			outputPowerType = PowerTypes.getByID(nbttagcompound.getInteger("outputType"));
+		if(nbttagcompound.hasKey("power_charge"))
+			PowerNodeRegistry.For(this.worldObj).setPower(this,outputPowerType,nbttagcompound.getFloat("power_charge"));
 	}
 
 	@Override

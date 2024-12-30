@@ -377,8 +377,13 @@ public class SpellUtils implements ISpellUtils{
 			float stageBurnout = 0;
 
 			ISpellShape shape = getShapeForStage(stack, i);
+			ISpellComponent[] components = getComponentsForStage(stack, i);
 			ISpellModifier[] modifiers = getModifiersForStage(stack, i);
 			HashMap<ISpellModifier, Integer> modifierWithQuantity = new HashMap<ISpellModifier, Integer>();
+			for (ISpellComponent component : components){
+				stageManaCost += component.manaCost(caster);
+				stageBurnout += component.burnout(caster);
+			}
 			for (ISpellModifier modifier : modifiers){
 				if (modifierWithQuantity.containsKey(modifier)){
 					Integer qty = modifierWithQuantity.get(modifier);

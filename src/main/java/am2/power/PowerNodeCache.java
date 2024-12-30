@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-
+@SuppressWarnings("unused")
 public class PowerNodeCache{
 
 	public static String extension = ".amc";

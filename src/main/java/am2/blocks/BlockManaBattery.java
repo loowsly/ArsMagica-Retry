@@ -49,7 +49,13 @@ public class BlockManaBattery extends PoweredBlock{
 			return frameIcon;
 		return blockIcon;
 	}
-
+	@Override
+	public int quantityDropped(int meta, int fortune, Random random){
+		if (meta == 0)
+			return 1;
+		else
+			return 0;
+	}
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9){
 		if (!super.onBlockActivated(par1World, par2, par3, par4, par5EntityPlayer, par6, par7, par8, par9))
@@ -84,20 +90,12 @@ public class BlockManaBattery extends PoweredBlock{
 	}
 
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random){
-		if (meta == 0)
-			return 1;
-		else
-			return 0;
-	}
-
-	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack stack){
 		if (stack != null){
 			TileEntityManaBattery te = getTileEntity(par1World, par2, par3, par4);
 			if (stack.stackTagCompound != null){
-				if (stack.stackTagCompound.hasKey("mana_battery_charge") && stack.stackTagCompound.hasKey("mana_battery_powertype"))
-					PowerNodeRegistry.For(par1World).setPower(te, PowerTypes.getByID(stack.stackTagCompound.getInteger("mana_battery_powertype")), stack.stackTagCompound.getFloat("mana_battery_charge"));
+				if (stack.stackTagCompound.hasKey("power_charge") && stack.stackTagCompound.hasKey("outputType"))
+					PowerNodeRegistry.For(par1World).setPower(te, PowerTypes.getByID(stack.stackTagCompound.getInteger("outputType")), stack.stackTagCompound.getFloat("power_charge"));
 				else
 					te.setPowerType(PowerTypes.NONE, false);
 			}
@@ -109,21 +107,14 @@ public class BlockManaBattery extends PoweredBlock{
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block theBlock, int metadata){
 		TileEntityManaBattery te = getTileEntity(world, i, j, k);
+		ItemStack stack = new ItemStack(this, 1, metadata);
 		if (te != null && !world.isRemote){
-			if (PowerNodeRegistry.For(world).getPower(te, te.getPowerType()) != 0.0f){
-				float f = world.rand.nextFloat() * 0.8F + 0.1F;
-				float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-				float f2 = world.rand.nextFloat() * 0.8F + 0.1F;
-				ItemStack stack = new ItemStack(this, 1, metadata);
-				// These currently don't do anything without a custom ItemBlock, so I'm removing them temporarily
-				// int dmg = (int)((PowerNodeRegistry.For(world).getPower(te, te.getPowerType()) / te.getCapacity()) * 100);
-				// if (dmg == 0) dmg = 1;
-				// stack.damageItem(stack.getMaxDamage() - dmg, new EntityDummyCaster(world));
-				stack.stackTagCompound = new NBTTagCompound();
-				stack.stackTagCompound.setFloat("mana_battery_charge", PowerNodeRegistry.For(world).getPower(te, te.getPowerType()));
-				stack.stackTagCompound.setInteger("mana_battery_powertype", te.getPowerType().ID());
-
-				EntityItem entityitem = new EntityItem(world, i + f, j + f1, k + f2, stack);
+			if (PowerNodeRegistry.For(world).checkPower(te)){
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setFloat("power_charge",PowerNodeRegistry.For(world).getPower(te, te.getPowerType()));
+				tag.setInteger("outputType", te.getPowerType().ID());
+				stack.setTagCompound(tag);
+				EntityItem entityitem = new EntityItem(world, i , j , k, stack);
 				float f3 = 0.05F;
 				entityitem.motionX = (float)world.rand.nextGaussian() * f3;
 				entityitem.motionY = (float)world.rand.nextGaussian() * f3 + 0.2F;
@@ -133,6 +124,7 @@ public class BlockManaBattery extends PoweredBlock{
 		}
 		super.breakBlock(world, i, j, k, theBlock, metadata);
 	}
+
 
 	@Override
 	public int getComparatorInputOverride(World world, int x, int y, int z, int meta){
@@ -162,8 +154,8 @@ public class BlockManaBattery extends PoweredBlock{
 		for (PowerTypes type : PowerTypes.all()){
 			stack = new ItemStack(this, 1, type.ID());
 			stack.stackTagCompound = new NBTTagCompound();
-			stack.stackTagCompound.setFloat("mana_battery_charge", new TileEntityManaBattery().getCapacity());
-			stack.stackTagCompound.setInteger("mana_battery_powertype", type.ID());
+			stack.stackTagCompound.setFloat("power_charge", new TileEntityManaBattery().getCapacity());
+			stack.stackTagCompound.setInteger("outputType", type.ID());
 			par3List.add(stack);
 		}
 	}

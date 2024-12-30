@@ -94,7 +94,7 @@ public abstract class TileEntityAMPower extends TileEntity implements IPowerNode
 
 	@Override
 	public boolean canRequestPower(){
-		return true;
+		return this.canRequestPower;
 	}
 
 	@Override

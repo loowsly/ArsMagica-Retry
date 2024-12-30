@@ -235,17 +235,6 @@ public class TileEntityAstralBarrier extends TileEntityAMPower implements IInven
 		return false;
 	}
 
-	private void writeInventory(AMDataWriter writer){
-		for (ItemStack stack : inventory){
-			if (stack == null){
-				writer.add(false);
-				continue;
-			}else{
-				writer.add(true);
-				writer.add(stack);
-			}
-		}
-	}
 
 	@Override
 	public boolean hasCustomInventoryName(){

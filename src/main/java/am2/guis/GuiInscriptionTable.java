@@ -95,11 +95,6 @@ public class GuiInscriptionTable extends GuiContainer{
 	}
 
 	@Override
-	public boolean doesGuiPauseGame(){
-		return false;
-	}
-
-	@Override
 	public void initGui(){
 		super.initGui();
 		searchFieldPosition = new AMVector2(39, 59);
