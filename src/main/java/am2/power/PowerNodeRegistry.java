@@ -118,7 +118,7 @@ public class PowerNodeRegistry{
 				typesProvided.add(type);
 			}
 		}
-		if (typesProvided.size() == 0){
+		if (typesProvided.isEmpty()){
 			//no valid power types can be provided
 			return StatCollector.translateToLocal("am2.tooltip.noSupportedPowertypes");
 		}

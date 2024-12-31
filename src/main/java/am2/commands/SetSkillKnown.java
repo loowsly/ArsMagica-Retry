@@ -49,8 +49,10 @@ public class SetSkillKnown extends CommandBase{
 			player = getCommandSenderAsPlayer(var1);
 			skill = var2[0];
 		}
-
 		if (player == null) return;
+		LearnSkill(var1, player, skill);
+	}
+	public void LearnSkill(ICommandSender sender, EntityPlayer player, String skill){
 
 		ISkillTreeEntry entry = SkillManager.instance.getSkill(skill);
 		if(SkillTreeManager.instance.getSkillPointTypeForPart(entry) == SkillPointTypes.SILVER){
@@ -58,8 +60,7 @@ public class SetSkillKnown extends CommandBase{
 		}
 		SkillData.For(player).learn(entry);
 		SkillData.For(player).forceSync();
-
-		func_152373_a(var1, this, "Unlocking " + skill + " for " + player.getCommandSenderName(), new Object[0]);
+		func_152373_a(sender, this, "Unlocking " + entry + " for " + player.getCommandSenderName(), new Object[0]);
 	}
 
 	@Override
