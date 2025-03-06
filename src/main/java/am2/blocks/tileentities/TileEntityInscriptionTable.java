@@ -477,7 +477,16 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 
 	public void addSpellPartToStageGroup(int groupIndex, ISpellPart part){
 		ArrayList<ISpellPart> group = this.shapeGroups.get(groupIndex);
-		if (!currentSpellIsReadOnly && group.size() < 6 && !(part instanceof ISpellComponent) && !ShapeIsUsed(part, groupIndex)){
+		if (!currentSpellIsReadOnly && group.size() < 6 && !(part instanceof ISpellComponent)){
+			if(AMCore.config.IsInscriptionreworked()){
+				if(!ShapeIsUsed(part, groupIndex)){
+					group.add(part);
+					if (this.worldObj.isRemote)
+						this.sendDataToServer();
+					countModifiers();
+				}
+				return;
+			}
 			group.add(part);
 			if (this.worldObj.isRemote)
 				this.sendDataToServer();
@@ -507,7 +516,16 @@ public class TileEntityInscriptionTable extends TileEntity implements IInventory
 	}
 
 	public void addSpellPart(ISpellPart part){
-		if (!currentSpellIsReadOnly && this.currentRecipe.size() < 8 && !(part instanceof ISpellShape)){
+		if (!currentSpellIsReadOnly && this.currentRecipe.size() < 8){
+			if(AMCore.config.IsInscriptionreworked()){
+				if(!(part instanceof ISpellShape)){
+					this.currentRecipe.add(part);
+					if (this.worldObj.isRemote)
+						this.sendDataToServer();
+					countModifiers();
+				}
+				return;
+			}
 			this.currentRecipe.add(part);
 			if (this.worldObj.isRemote)
 				this.sendDataToServer();

@@ -60,6 +60,7 @@ public class AMConfig extends Configuration{
 	private final String KEY_witchwoodLeavesFall = "WitchwoodLeafParticles";
 	private final String KEY_alternativeStart = "AlternativeStart";
 	private final String KEY_EasyStart = "EasyStart";
+	private final String KEY_INSCRIPTION_REWORK ="InscriptionRework";
 
 	private final String KEY_CandlesAreRovingLights = "CandlesAreRovingLights";
 	private final String KEY_Appropriation_Block_Blacklist = "Appropriation_Block_Blacklist";
@@ -289,6 +290,7 @@ public class AMConfig extends Configuration{
 	private boolean digBreaksTileEntities;
 	private boolean savePowerOnWorldSave;
 	private boolean UnlockSilverSpellWithGuardian;
+	private boolean InscriptionRework;
 
 	private boolean canDryadsDespawn;
 
@@ -384,6 +386,7 @@ public class AMConfig extends Configuration{
 		witchwoodLeafParticles = get(CATEGORY_GENERAL, KEY_witchwoodLeavesFall, true, "Disable this if you experience low FPS in witchwood forests").getBoolean(true);
 		alternativeStart = get(CATEGORY_GENERAL, KEY_alternativeStart, false, "Arcane Compendium creation requires Witchwood Trees instead of Ethereum Lakes").getBoolean(false);
 		EasyStart = get(CATEGORY_GENERAL, KEY_EasyStart, false, "start with 3 basic shapes unlocked (projectile, touch, self)").getBoolean(false);
+		InscriptionRework = get(CATEGORY_GENERAL,KEY_INSCRIPTION_REWORK, true,"modify inscription table to make shape spell only in shape box + only 1 shape. DISABLE THIS ONLY IF YOU'RE OK WITH YOUR SPELLS CAUSING ISSUES I WON'T FIX ANYTHING RELATED TO THIS").getBoolean(true);
 		debugVortex = get(CATEGORY_GENERAL, KEY_DebugVortex, false, "Enable if you're having issues with spatial vortices and want to report it. This enables a lot of verbose output about their inner workings at all stages to make it easier for me to debug.").getBoolean(false);
 		enableWitchwoodForest = get(CATEGORY_GENERAL, KEY_EnableWitchwoodForest, true, "Disable this if you prefer the witchwood forest to not generate").getBoolean(true);
 		UnlockSilverSpellWithGuardian = get(CATEGORY_GENERAL, KEY_GuardianSilverSpells, true, "Silver Spells are unlocked by killing guardian").getBoolean(true);
@@ -583,6 +586,11 @@ public class AMConfig extends Configuration{
 	public float getDamageMultiplier(){
 		return DamageMultiplier;
 	}
+
+	public boolean IsInscriptionreworked(){
+		return InscriptionRework;
+	}
+
 
 	public boolean spawnHugeTrees(){
 		return SpawnHugeTrees;
