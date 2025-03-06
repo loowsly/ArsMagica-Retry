@@ -4,8 +4,6 @@ import am2.AMCore;
 import am2.api.math.AMVector3;
 import am2.bosses.ai.*;
 import am2.buffs.BuffList;
-import am2.damage.DamageSourceFire;
-import am2.damage.DamageSourceFrost;
 import am2.damage.DamageSources;
 import am2.items.ItemsCommonProxy;
 import am2.playerextensions.ExtendedProperties;
@@ -145,15 +143,6 @@ public class EntityEnderGuardian extends AM2Boss implements IAnimatedEntity{
 
 	@Override
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2){
-
-		int you = 0;
-		int should = 0;
-		int not = 0;
-		int be = 0;
-		int looking = 0;
-		int here = 0;
-		int cheater = 0;
-
 		if (par1DamageSource.getSourceOfDamage() instanceof EntityEnderman){
 			((EntityEnderman)par1DamageSource.getSourceOfDamage()).attackEntityFrom(DamageSources.wtfBoom, 5000);
 			this.heal(10);

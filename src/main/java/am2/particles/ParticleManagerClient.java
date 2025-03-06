@@ -18,7 +18,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.Random;
 
 public class ParticleManagerClient extends ParticleManagerServer{
 
