@@ -1,27 +1,14 @@
-Ars Magica 2.5
+Ars Magica: Retry
 ==========
 
-Ars Magica 2.5 - Carrying the Torch of True Magic
+Ars Magica: Retry - Blow the torch
 
-## New Features (TL;DR)
+## New Features
 
-- Re-added Staffs
-- Re-added Caster Blocks and Runes
-- Added New Components, Shape, Modifiers and Talents
-- Added an enormous amount of new spell icons
-- Added compat with Not Enough Items and Magic Bees
-- Added recipes for multiple previously uncraftable items
-- Added multiple new items, blocks, contraptions and rituals with utility
-- Added and changed multiple core mod mechanics
-- Re-added and implemented multiple lost and unfinished features
-- Refined Altar, Burnout, Leveling and Bosses
-- Improved/optimized startup time
-- Fixed missing lang entries
-- Fixed a plethora of bugs and crashes
-- See the Arcane Compendium in-game: for a detailed and thorough documentation
-- See the commits and release notes: for a better and more specific summary
+- New level cap
+- More coming soon
 
-### License
+### License - Thx to Mithion, the team, TCL and many others.
 This mod is open sourced under the Creative Commons 3.0 Attribution Non-Commercial License
 https://creativecommons.org/licenses/by-nc/3.0/legalcode
 
