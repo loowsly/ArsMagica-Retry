@@ -36,7 +36,7 @@ public class EntityFireGuardian extends AM2Boss{
 	@Override
 	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(250);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(450);
 	}
 
 	@Override

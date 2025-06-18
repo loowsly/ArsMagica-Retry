@@ -54,7 +54,7 @@ public class ExtendedProperties implements IExtendedProperties, IExtendedEntityP
 	private EntityLivingBase entity;
 
 	public static final String identifier = "ArsMagicaExProps";
-	public static final int maxMagicLevel = 99;
+	public static final int maxMagicLevel = 999;
 
 	//private static float magicRegenPerLevelPerTick = 0.15f;
 	//private static float entityMagicPerLevelBase = 0.20f;

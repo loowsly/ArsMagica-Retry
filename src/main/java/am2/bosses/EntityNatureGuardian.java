@@ -58,7 +58,7 @@ public class EntityNatureGuardian extends AM2Boss{
 	@Override
 	protected void applyEntityAttributes(){
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(500D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(600D);
 	}
 
 	@Override
