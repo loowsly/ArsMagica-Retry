@@ -8,9 +8,10 @@ Ars Magica: Retry - Blow the torch
 - New level cap
 - Working on integration with:
 -   Fisk's Super Heroes
--     Modifier that changes magic in hand to the Dr Strange circle)
+-     Modifier that changes magic in hand to the Dr Strange circle
 -   The Titans
--     Titan Killer modifier: Only works in Titan mobs, deals damage and reduce their power; Chaotic Buff component: Ur strong. Stand proud. Don't perish.
+-     Titan Killer modifier: Only works in Titan mobs, deals damage and reduce their power;
+-     Chaotic Buff component: Ur strong. Stand proud. Don't perish.
 - More coming soon
 
 ### License - Thx to Mithion, the team, TCL and many others.
